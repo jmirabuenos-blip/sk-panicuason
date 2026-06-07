@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — Programs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+  <style>
+    /* ── Program Card with Image Header ── */
+    .prog-card-full {
+      background: var(--white, #fff);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .prog-card-full:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 36px rgba(0,0,0,0.16);
+    }
+
+    /* Image banner replacing the old icon header */
+    .prog-card-img {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+    }
+    .prog-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .prog-card-full:hover .prog-card-img img {
+      transform: scale(1.07);
+    }
+    .prog-card-img .prog-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,22,40,0.70) 30%, rgba(10,22,40,0.10) 100%);
+    }
+    /* Title sits at the bottom of the image */
+    .prog-card-img .prog-img-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 1.2rem 0.9rem;
+      z-index: 2;
+    }
+    .prog-card-img .prog-img-title h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: #fff;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .prog-card-body {
+      padding: 1rem 1.2rem 0.6rem;
+      flex: 1;
+    }
+    .prog-card-body p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #444;
+      margin: 0;
+    }
+
+    .prog-tags {
+      padding: 0.75rem 1.2rem 1.1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
+        <div class="nav-logo-text">
+          <span class="top">Sangguniang Kabataan</span>
+          <span class="sub">Barangay Panicuason · Naga City</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>Our Programs</h1>
+      <p>Initiatives crafted to empower, educate, and uplift every young person in our barangay.</p>
+    </div>
+  </section>
+
+  <!-- ══ PROGRAMS GRID ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-label" style="justify-content:center;">What We Offer</div>
+        <h2 class="section-title">Programs &amp; Initiatives</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          Each program is designed with the youth in mind — accessible, impactful, and community-driven.
+        </p>
+      </div>
+
+      <div class="programs-full-grid">
+
+        <!-- 1. Educational Assistance -->
+        <div class="prog-card-full reveal reveal-delay-1">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600&auto=format&fit=crop" alt="Educational Assistance" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Educational Assistance Program</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Provides scholarships, school supplies, and academic support to deserving youth who face financial barriers. We partner with local schools to identify and assist students in need.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-blue">Education</span>
+            <span class="prog-tag tag-gold">Scholarship</span>
+          </div>
+        </div>
+
+        <!-- 2. Sports & Recreation -->
+        <div class="prog-card-full reveal reveal-delay-2">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?w=600&auto=format&fit=crop" alt="Sports and Recreation" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Sports &amp; Recreation Program</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Organizes inter-barangay leagues, fitness sessions, and sports clinics to promote physical health and teamwork. Open to all youth aged 15 to 30 regardless of skill level.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-blue">Sports</span>
+            <span class="prog-tag tag-navy">Health</span>
+          </div>
+        </div>
+
+        <!-- 3. Livelihood & Skills Training -->
+        <div class="prog-card-full reveal reveal-delay-3">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&auto=format&fit=crop" alt="Livelihood and Skills Training" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Livelihood &amp; Skills Training</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Free workshops on entrepreneurship, cooking, handicrafts, digital skills, and more. Designed to give out-of-school youth and young adults practical tools for employment.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-gold">Livelihood</span>
+            <span class="prog-tag tag-blue">Skills</span>
+          </div>
+        </div>
+
+        <!-- 4. Youth Health & Wellness -->
+        <div class="prog-card-full reveal reveal-delay-1">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&auto=format&fit=crop" alt="Youth Health and Wellness" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Youth Health &amp; Wellness</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Free medical and dental missions, mental health awareness sessions, and health seminars to ensure every young person has access to basic healthcare services.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-navy">Health</span>
+            <span class="prog-tag tag-blue">Wellness</span>
+          </div>
+        </div>
+
+        <!-- 5. Arts & Culture -->
+        <div class="prog-card-full reveal reveal-delay-2">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&auto=format&fit=crop" alt="Arts and Culture" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Arts &amp; Culture Program</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Celebrates local talent through festivals, art exhibits, cultural performances, and creative workshops that preserve heritage and nurture artistic expression among youth.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-gold">Arts</span>
+            <span class="prog-tag tag-blue">Culture</span>
+          </div>
+        </div>
+
+        <!-- 6. Environmental Awareness -->
+        <div class="prog-card-full reveal reveal-delay-3">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1542601906897-ecd5e5e2dd12?w=600&auto=format&fit=crop" alt="Environmental Awareness" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Environmental Awareness</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Tree planting drives, clean-up campaigns, and eco-education seminars that teach youth to be stewards of the environment and take action against climate change locally.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-blue">Environment</span>
+            <span class="prog-tag tag-navy">Advocacy</span>
+          </div>
+        </div>
+
+        <!-- 7. Digital Literacy -->
+        <div class="prog-card-full reveal reveal-delay-1">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&auto=format&fit=crop" alt="Digital Literacy Program" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Digital Literacy Program</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Basic computer training, internet safety, and digital skills workshops to bridge the digital divide and equip youth with 21st-century competencies for the modern workforce.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-gold">Technology</span>
+            <span class="prog-tag tag-blue">Digital</span>
+          </div>
+        </div>
+
+        <!-- 8. Leadership & Governance -->
+        <div class="prog-card-full reveal reveal-delay-2">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&auto=format&fit=crop" alt="Leadership and Governance" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Leadership &amp; Governance</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Youth leadership camps, seminars on civic responsibility, and governance training to prepare the next generation of community leaders and public servants.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-navy">Leadership</span>
+            <span class="prog-tag tag-blue">Governance</span>
+          </div>
+        </div>
+
+        <!-- 9. Community Service & Outreach -->
+        <div class="prog-card-full reveal reveal-delay-3">
+          <div class="prog-card-img">
+            <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&auto=format&fit=crop" alt="Community Service and Outreach" />
+            <div class="prog-img-overlay"></div>
+            <div class="prog-img-title"><h3>Community Service &amp; Outreach</h3></div>
+          </div>
+          <div class="prog-card-body">
+            <p>Feeding programs, disaster response volunteers, and community clean-up drives that instill the value of bayanihan and genuine service to those most in need.</p>
+          </div>
+          <div class="prog-tags">
+            <span class="prog-tag tag-gold">Community</span>
+            <span class="prog-tag tag-blue">Outreach</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Want to Join a Program?</h2>
+        <p>Send us a message and we'll get you started on the right program for you.</p>
+      </div>
+      <a href="contact.html" class="btn btn-white">Get In Touch</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

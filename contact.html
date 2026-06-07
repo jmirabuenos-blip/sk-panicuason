@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — Contact</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0a1628;
+      --blue:     #1a3a6b;
+      --gold:     #c8992a;
+      --gold-lt:  #e6b84a;
+      --offwhite: #f5f4f0;
+      --white:    #ffffff;
+      --text:     #2c2c2c;
+      --muted:    #666;
+      --border:   #ddd;
+      --red:      #dc2626;
+      --green:    #16a34a;
+    }
+
+    body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--offwhite); }
+
+    /* ── NAVBAR ── */
+    .navbar { position: sticky; top: 0; z-index: 100; background: var(--navy); box-shadow: 0 2px 16px rgba(0,0,0,0.25); }
+    .nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-logo img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+    .nav-logo-text { display: flex; flex-direction: column; }
+    .nav-logo-text .top { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--white); line-height: 1.2; }
+    .nav-logo-text .sub { font-size: 0.7rem; color: var(--gold-lt); letter-spacing: 0.04em; }
+    .nav-links { list-style: none; display: flex; gap: 0.25rem; }
+    .nav-links a { text-decoration: none; color: rgba(255,255,255,0.8); font-size: 0.88rem; font-weight: 500; padding: 0.45rem 0.85rem; border-radius: 6px; transition: background 0.2s, color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { background: rgba(200,153,42,0.18); color: var(--gold-lt); }
+    .nav-hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 6px; }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #0f2a55 100%);
+      padding: 4rem 1.5rem 3.5rem; position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8992a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-hero-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .gold-bar { width: 52px; height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 1.2rem; }
+    .page-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.2rem); color: var(--white); margin-bottom: 0.75rem; }
+    .page-hero p { font-size: 1.05rem; color: rgba(255,255,255,0.75); max-width: 540px; }
+
+    /* ── SECTION ── */
+    .section-pad { padding: 4rem 1.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .text-center { text-align: center; margin-bottom: 2.5rem; }
+    .section-label { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; justify-content: center; }
+    .section-label::before, .section-label::after { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: var(--navy); margin-bottom: 0.75rem; }
+    .section-sub { color: var(--muted); font-size: 0.97rem; line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+    /* ── CONTACT GRID ── */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.45fr;
+      gap: 2.5rem;
+      align-items: start;
+      margin-top: 1rem;
+    }
+
+    /* ── CONTACT INFO PANEL ── */
+    .contact-info {
+      background: var(--navy);
+      border-radius: 16px;
+      padding: 2rem 1.75rem;
+      color: rgba(255,255,255,0.85);
+    }
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .contact-info .info-tagline {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .contact-detail:last-child { margin-bottom: 0; }
+
+    .detail-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: rgba(200,153,42,0.15);
+      border: 1px solid rgba(200,153,42,0.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .detail-icon svg { width: 18px; height: 18px; fill: var(--gold-lt); }
+
+    .detail-text strong {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+      margin-bottom: 0.2rem;
+    }
+    .detail-text span, .detail-text a {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.55;
+      display: block;
+    }
+    .detail-text a { color: rgba(255,255,255,0.75); text-decoration: none; transition: color 0.2s; }
+    .detail-text a:hover { color: var(--gold-lt); text-decoration: underline; }
+
+    .info-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0; }
+
+    .social-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .social-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 1rem;
+      background: rgba(200,153,42,0.12);
+      border: 1px solid rgba(200,153,42,0.3);
+      border-radius: 8px;
+      color: var(--gold-lt);
+      font-size: 0.8rem; font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .social-btn:hover { background: rgba(200,153,42,0.25); border-color: var(--gold); }
+    .social-btn svg { width: 15px; height: 15px; fill: var(--gold-lt); }
+
+    /* ── CONTACT FORM PANEL ── */
+    .contact-form-wrap {
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem 2rem 2.2rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .contact-form-wrap h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--navy);
+      margin-bottom: 0.3rem;
+    }
+    .contact-form-wrap .form-tagline {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.03em;
+    }
+    .form-group label .req { color: var(--gold); margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: #fafafa;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      outline: none;
+      appearance: none;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #bbb; }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--blue);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(26,58,107,0.1);
+    }
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.08); }
+
+    /* Select arrow */
+    .select-wrap { position: relative; }
+    .select-wrap::after {
+      content: '';
+      position: absolute; right: 0.85rem; top: 50%; transform: translateY(-50%);
+      width: 0; height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--muted);
+      pointer-events: none;
+    }
+    .select-wrap select { padding-right: 2.2rem; cursor: pointer; }
+
+    .form-group textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+    .field-error { font-size: 0.75rem; color: var(--red); margin-top: 0.3rem; display: none; }
+    .field-error.visible { display: block; }
+
+    /* Submit button */
+    .btn-submit {
+      width: 100%;
+      padding: 0.85rem 1.5rem;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      margin-top: 0.5rem;
+      letter-spacing: 0.02em;
+    }
+    .btn-submit:hover { background: var(--blue); transform: translateY(-2px); }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit svg { width: 17px; height: 17px; fill: currentColor; }
+    .btn-submit:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+    /* ── FORM SUCCESS / ERROR STATES ── */
+    .form-alert {
+      display: none;
+      padding: 0.9rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 1.2rem;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .form-alert.visible { display: flex; }
+    .form-alert.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+    .form-alert.error   { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+    .form-alert svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+
+    /* ── CTA BAND ── */
+    .cta-band { background: linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%); padding: 3rem 1.5rem; }
+    .cta-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+    .cta-inner h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 0.4rem; }
+    .cta-inner p { color: rgba(255,255,255,0.72); font-size: 0.95rem; }
+    .btn-white { display: inline-block; padding: 0.8rem 2rem; background: var(--gold); color: var(--navy); font-weight: 600; font-size: 0.9rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: background 0.2s, transform 0.2s; }
+    .btn-white:hover { background: var(--gold-lt); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--navy); color: rgba(255,255,255,0.72); padding: 3rem 1.5rem 1.5rem; }
+    .footer-grid { max-width: 1200px; margin: 0 auto 2.5rem; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem; }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 1rem; }
+    .footer h4 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1rem; margin-bottom: 1rem; }
+    .footer-links, .footer-contact { list-style: none; }
+    .footer-links li + li, .footer-contact li + li { margin-top: 0.5rem; }
+    .footer-links a, .footer-contact a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-links a:hover, .footer-contact a:hover { color: var(--gold-lt); }
+    .footer-contact li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.88rem; }
+    .footer-contact li span { flex-shrink: 0; }
+    .footer-bottom { max-width: 1200px; margin: 0 auto; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.2rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+
+    /* ── ANIMATIONS ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-2.visible { transition-delay: 0.15s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--navy); padding: 1rem 1.5rem 1.5rem; gap: 0.25rem; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cta-inner { flex-direction: column; align-items: flex-start; }
+      .contact-form-wrap { padding: 1.5rem 1.25rem 1.75rem; }
+      .contact-info { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
+        <div class="nav-logo-text">
+          <span class="top">Sangguniang Kabataan</span>
+          <span class="sub">Barangay Panicuason · Naga City</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>Contact Us</h1>
+      <p>Have a question, concern, or suggestion? We'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <!-- ══ CONTACT SECTION ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-label">Get In Touch</div>
+        <h2 class="section-title">We're Here to Help</h2>
+        <p class="section-sub">
+          Reach out to the SK council for inquiries, program registration, event proposals, or any concern.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+
+        <!-- ── Contact Info Panel ── -->
+        <div class="contact-info reveal">
+          <h3>Contact Information</h3>
+          <p class="info-tagline">We're available Monday to Friday during office hours.</p>
+
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+            <div class="detail-text">
+              <strong>Office Address</strong>
+              <span>SK Office, Barangay Panicuason Hall<br>Naga City, Camarines Sur, Philippines</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            </div>
+            <div class="detail-text">
+              <strong>Phone Number</strong>
+              <span>(123) 456-7890</span>
+              <span>Available Mon–Fri, 8AM–5PM</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </div>
+            <div class="detail-text">
+              <strong>Email Address</strong>
+              <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a>
+              <span>We reply within 1–2 business days</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>
+            </div>
+            <div class="detail-text">
+              <strong>Facebook Page</strong>
+              <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a>
+              <span>Follow us for updates &amp; announcements</span>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+            </div>
+            <div class="detail-text">
+              <strong>Office Hours</strong>
+              <span>Monday – Friday: 8:00 AM – 5:00 PM</span>
+              <span>Saturday &amp; Sunday: Closed</span>
+            </div>
+          </div>
+
+          <div class="social-row">
+            <a href="https://www.facebook.com/skpanicuason2023" target="_blank" class="social-btn">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.129 22 16.99 22 12c0-5.523-4.477-10-10-10z"/></svg>
+              Visit Facebook
+            </a>
+            <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank" class="social-btn">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              Send Email
+            </a>
+          </div>
+        </div>
+
+        <!-- ── Contact Form Panel ── -->
+        <div class="contact-form-wrap reveal reveal-delay-2">
+          <h3>Send Us a Message</h3>
+          <p class="form-tagline">Fill out the form and we'll get back to you as soon as possible.</p>
+
+          <!-- Alert box -->
+          <div class="form-alert success" id="formSuccess">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            <span>Message sent! We'll get back to you within 1–2 business days.</span>
+          </div>
+          <div class="form-alert error" id="formError">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <span>Something went wrong. Please try again or email us directly.</span>
+          </div>
+
+          <form id="contactForm" action="https://formspree.io/f/mgobalqj" method="POST" novalidate>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstname">First Name <span class="req">*</span></label>
+                <input type="text" id="firstname" name="firstname" placeholder="Juan" autocomplete="given-name" />
+                <span class="field-error" id="err-firstname">Please enter your first name.</span>
+              </div>
+              <div class="form-group">
+                <label for="lastname">Last Name <span class="req">*</span></label>
+                <input type="text" id="lastname" name="lastname" placeholder="dela Cruz" autocomplete="family-name" />
+                <span class="field-error" id="err-lastname">Please enter your last name.</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address <span class="req">*</span></label>
+              <input type="email" id="email" name="email" placeholder="juan@email.com" autocomplete="email" />
+              <span class="field-error" id="err-email">Please enter a valid email address.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number <span style="color:var(--muted);font-weight:400;">(optional)</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="09XX XXX XXXX" autocomplete="tel" />
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject <span class="req">*</span></label>
+              <div class="select-wrap">
+                <select id="subject" name="subject">
+                  <option value="" disabled selected>Select a subject</option>
+                  <option value="program">Program Inquiry</option>
+                  <option value="event">Event Proposal</option>
+                  <option value="registration">Program Registration</option>
+                  <option value="complaint">Complaint / Concern</option>
+                  <option value="suggestion">Suggestion</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <span class="field-error" id="err-subject">Please select a subject.</span>
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message <span class="req">*</span></label>
+              <textarea id="message" name="message" placeholder="Write your message here..."></textarea>
+              <span class="field-error" id="err-message">Please enter your message.</span>
+            </div>
+
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              Send Message
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Follow Us on Facebook</h2>
+        <p>Stay connected and get real-time updates on events, programs, and announcements.</p>
+      </div>
+      <a href="https://www.facebook.com/skpanicuason2023" target="_blank" class="btn-white">Visit Our Facebook Page</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger?.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+    // ── Scroll Reveal ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => obs.observe(el));
+
+    // ── Form Validation & Submission ──
+    const form       = document.getElementById('contactForm');
+    const submitBtn  = document.getElementById('submitBtn');
+    const successBox = document.getElementById('formSuccess');
+    const errorBox   = document.getElementById('formError');
+
+    const rules = {
+      firstname: { el: document.getElementById('firstname'), err: document.getElementById('err-firstname'), validate: v => v.trim().length > 0 },
+      lastname:  { el: document.getElementById('lastname'),  err: document.getElementById('err-lastname'),  validate: v => v.trim().length > 0 },
+      email:     { el: document.getElementById('email'),     err: document.getElementById('err-email'),     validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) },
+      subject:   { el: document.getElementById('subject'),   err: document.getElementById('err-subject'),   validate: v => v !== '' },
+      message:   { el: document.getElementById('message'),   err: document.getElementById('err-message'),   validate: v => v.trim().length > 5 },
+    };
+
+    function validateField(key) {
+      const r = rules[key];
+      const valid = r.validate(r.el.value);
+      r.el.classList.toggle('error', !valid);
+      r.err.classList.toggle('visible', !valid);
+      return valid;
+    }
+
+    // Live validation on blur
+    Object.keys(rules).forEach(key => {
+      rules[key].el.addEventListener('blur', () => validateField(key));
+      rules[key].el.addEventListener('input', () => {
+        if (rules[key].el.classList.contains('error')) validateField(key);
+      });
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validate all
+      const allValid = Object.keys(rules).map(validateField).every(Boolean);
+      if (!allValid) return;
+
+      // Disable button & show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17" style="animation:spin 1s linear infinite"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" opacity=".3"/><path d="M12 2v4a8 8 0 0 1 8 8h4A12 12 0 0 0 12 2z"/></svg> Sending...`;
+
+      successBox.classList.remove('visible');
+      errorBox.classList.remove('visible');
+
+      try {
+        const data = new FormData(form);
+        const res  = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+
+        if (res.ok) {
+          successBox.classList.add('visible');
+          form.reset();
+          Object.keys(rules).forEach(key => { rules[key].el.classList.remove('error'); rules[key].err.classList.remove('visible'); });
+          form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          errorBox.classList.add('visible');
+        }
+      } catch {
+        errorBox.classList.add('visible');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="17" height="17"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg> Send Message`;
+      }
+    });
+  </script>
+
+  <style>
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+
+</body>
+</html>

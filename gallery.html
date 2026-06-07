@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0a1628;
+      --blue:     #1a3a6b;
+      --gold:     #c8992a;
+      --gold-lt:  #e6b84a;
+      --offwhite: #f5f4f0;
+      --white:    #ffffff;
+      --text:     #2c2c2c;
+      --muted:    #666;
+    }
+
+    body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--offwhite); }
+
+    /* ── NOTICE BANNER ── */
+    .photo-notice {
+      background: linear-gradient(90deg, #1a3a6b 0%, #0a1628 100%);
+      border-bottom: 2px solid var(--gold);
+      padding: 0.65rem 1.5rem;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--gold-lt);
+      letter-spacing: 0.03em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .photo-notice .notice-icon {
+      width: 18px; height: 18px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: var(--navy);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--navy);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .nav-logo img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--gold); }
+    .nav-logo-text { display: flex; flex-direction: column; }
+    .nav-logo-text .top { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--white); line-height: 1.2; }
+    .nav-logo-text .sub { font-size: 0.7rem; color: var(--gold-lt); letter-spacing: 0.04em; }
+    .nav-links { list-style: none; display: flex; gap: 0.25rem; }
+    .nav-links a {
+      text-decoration: none; color: rgba(255,255,255,0.8);
+      font-size: 0.88rem; font-weight: 500;
+      padding: 0.45rem 0.85rem; border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(200,153,42,0.18); color: var(--gold-lt);
+    }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px;
+    }
+    .nav-hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 60%, #0f2a55 100%);
+      padding: 4rem 1.5rem 3.5rem;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8992a' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .page-hero-content { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+    .gold-bar { width: 52px; height: 4px; background: var(--gold); border-radius: 2px; margin-bottom: 1.2rem; }
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--white); margin-bottom: 0.75rem;
+    }
+    .page-hero p { font-size: 1.05rem; color: rgba(255,255,255,0.75); max-width: 540px; }
+
+    /* ── SECTION ── */
+    .section-pad { padding: 4rem 1.5rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .text-center { text-align: center; margin-bottom: 2rem; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem;
+      justify-content: center;
+    }
+    .section-label::before, .section-label::after {
+      content: ''; display: block; width: 28px; height: 1px; background: var(--gold);
+    }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 3.5vw, 2.4rem); color: var(--navy); margin-bottom: 0.75rem; }
+    .section-sub { color: var(--muted); font-size: 0.97rem; line-height: 1.7; max-width: 560px; margin: 0 auto; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+      justify-content: center; margin-bottom: 2rem;
+    }
+    .filter-btn {
+      padding: 0.45rem 1.1rem;
+      border: 2px solid var(--blue);
+      background: transparent;
+      color: var(--blue);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      border-radius: 30px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .filter-btn:hover { background: var(--blue); color: #fff; }
+    .filter-btn.active { background: var(--navy); color: var(--gold-lt); border-color: var(--navy); }
+
+    /* ── GALLERY GRID ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .gallery-item {
+      position: relative; overflow: hidden;
+      border-radius: 10px;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    }
+    .gallery-item.hidden { display: none; }
+    .gallery-item:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.22); }
+    .gallery-item img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.45s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.08); }
+
+    /* Overlay label */
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,22,40,0.80) 30%, transparent 70%);
+      display: flex; align-items: flex-end;
+      padding: 0.9rem 1rem;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-overlay span {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem; color: #fff;
+      line-height: 1.3;
+    }
+
+    /* Sample badge */
+    .sample-badge {
+      position: absolute; top: 9px; right: 9px; z-index: 3;
+      background: rgba(10,22,40,0.75);
+      border: 1px solid rgba(200,153,42,0.55);
+      color: var(--gold-lt);
+      font-size: 0.6rem; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 7px; border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(10,22,40,0.94);
+      align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner { position: relative; max-width: 860px; width: 100%; }
+    .lightbox-inner img {
+      width: 100%; border-radius: 10px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      max-height: 80vh; object-fit: contain;
+    }
+    .lightbox-caption {
+      text-align: center; margin-top: 1rem;
+      font-family: 'Playfair Display', serif;
+      color: rgba(255,255,255,0.85); font-size: 1rem;
+    }
+    .lightbox-close {
+      position: absolute; top: -14px; right: -14px;
+      width: 36px; height: 36px;
+      background: var(--gold); border: none; border-radius: 50%;
+      color: var(--navy); font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-close:hover { background: var(--gold-lt); }
+    .lightbox-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(255,255,255,0.12); border: none;
+      color: #fff; font-size: 1.5rem;
+      width: 44px; height: 44px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.25); }
+    .lightbox-prev { left: -56px; }
+    .lightbox-next { right: -56px; }
+
+    /* ── CTA BAND ── */
+    .cta-band { background: linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%); padding: 3rem 1.5rem; }
+    .cta-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .cta-inner h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--white); margin-bottom: 0.4rem; }
+    .cta-inner p { color: rgba(255,255,255,0.72); font-size: 0.95rem; }
+    .btn-white {
+      display: inline-block; padding: 0.8rem 2rem;
+      background: var(--gold); color: var(--navy);
+      font-weight: 600; font-size: 0.9rem;
+      border-radius: 8px; text-decoration: none; white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-white:hover { background: var(--gold-lt); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    .footer { background: var(--navy); color: rgba(255,255,255,0.72); padding: 3rem 1.5rem 1.5rem; }
+    .footer-grid {
+      max-width: 1200px; margin: 0 auto 2.5rem;
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 2.5rem;
+    }
+    .footer-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 1rem; }
+    .footer h4 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 1rem; margin-bottom: 1rem; }
+    .footer-links, .footer-contact { list-style: none; }
+    .footer-links li + li, .footer-contact li + li { margin-top: 0.5rem; }
+    .footer-links a, .footer-contact a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-links a:hover, .footer-contact a:hover { color: var(--gold-lt); }
+    .footer-contact li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.88rem; }
+    .footer-contact li span { flex-shrink: 0; }
+    .footer-bottom {
+      max-width: 1200px; margin: 0 auto;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.2rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap;
+      gap: 0.5rem; font-size: 0.78rem; color: rgba(255,255,255,0.4);
+    }
+
+    /* ── ANIMATIONS ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1.visible { transition-delay: 0.1s; }
+    .reveal-delay-2.visible { transition-delay: 0.2s; }
+    .reveal-delay-3.visible { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-brand { grid-column: 1 / -1; }
+      .lightbox-prev { left: -40px; }
+      .lightbox-next { right: -40px; }
+    }
+    @media (max-width: 640px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 68px; left: 0; right: 0;
+        background: var(--navy);
+        padding: 1rem 1.5rem 1.5rem; gap: 0.25rem;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      }
+      .footer-grid { grid-template-columns: 1fr; }
+      .cta-inner { flex-direction: column; align-items: flex-start; }
+      .lightbox-prev { left: 4px; }
+      .lightbox-next { right: 4px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ SAMPLE PHOTO NOTICE ══ -->
+  <div class="photo-notice">
+    <span class="notice-icon">i</span>
+    <span><strong>Note:</strong> All photos shown are sample images only and serve as placeholders. Actual photos will be updated once provided by the admin.</span>
+  </div>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
+        <div class="nav-logo-text">
+          <span class="top">Sangguniang Kabataan</span>
+          <span class="sub">Barangay Panicuason · Naga City</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>Gallery</h1>
+      <p>A glimpse of the moments, milestones, and memories we've built together.</p>
+    </div>
+  </section>
+
+  <!-- ══ GALLERY ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-label">Our Moments</div>
+        <h2 class="section-title">Photo Gallery</h2>
+        <p class="section-sub">
+          Browse through photos from our events, programs, and community activities.
+        </p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="events">Events</button>
+        <button class="filter-btn" data-filter="sports">Sports</button>
+        <button class="filter-btn" data-filter="programs">Programs</button>
+        <button class="filter-btn" data-filter="outreach">Outreach</button>
+        <button class="filter-btn" data-filter="culture">Culture</button>
+      </div>
+
+      <!-- Gallery Grid -->
+      <!-- All images from Unsplash (free-to-use stock photos) -->
+      <div class="gallery-grid" id="galleryGrid">
+
+        <div class="gallery-item reveal" data-category="events">
+          <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&auto=format&fit=crop&q=80" alt="Youth Leadership Summit" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Youth Leadership Summit</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-1" data-category="sports">
+          <img src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&auto=format&fit=crop&q=80" alt="Basketball Cup" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Barangay Basketball Cup</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-2" data-category="programs">
+          <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&auto=format&fit=crop&q=80" alt="Skills Workshop" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Livelihood Skills Workshop</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-1" data-category="outreach">
+          <img src="https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&auto=format&fit=crop&q=80" alt="Feeding Program" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Nutrition &amp; Feeding Program</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-2" data-category="culture">
+          <img src="https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&auto=format&fit=crop&q=80" alt="Cultural Night" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>SK Cultural Night</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-3" data-category="events">
+          <img src="https://images.unsplash.com/photo-1542601906897-ecd5e5e2dd12?w=600&auto=format&fit=crop&q=80" alt="Clean Up Drive" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Environmental Clean-Up Drive</span></div>
+        </div>
+
+        <div class="gallery-item reveal" data-category="programs">
+          <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600&auto=format&fit=crop&q=80" alt="Digital Literacy" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Digital Literacy Seminar</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-1" data-category="outreach">
+          <img src="https://images.unsplash.com/photo-1551076805-e1869033e561?w=600&auto=format&fit=crop&q=80" alt="Medical Mission" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Free Medical &amp; Dental Mission</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-2" data-category="sports">
+          <img src="https://images.unsplash.com/photo-1526676037777-05a232554f77?w=600&auto=format&fit=crop&q=80" alt="Sports Fest" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Barangay Sports Fest</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-1" data-category="culture">
+          <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?w=600&auto=format&fit=crop&q=80" alt="Art Exhibit" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Youth Art Exhibit</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-2" data-category="events">
+          <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80" alt="SK Assembly" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>SK General Assembly</span></div>
+        </div>
+
+        <div class="gallery-item reveal reveal-delay-3" data-category="outreach">
+          <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600&auto=format&fit=crop&q=80" alt="Tree Planting" loading="lazy" />
+          <span class="sample-badge">Sample Photo</span>
+          <div class="gallery-overlay"><span>Tree Planting Activity</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ LIGHTBOX ══ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image lightbox">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightboxClose" aria-label="Close">✕</button>
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+      <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&#8250;</button>
+      <img id="lightboxImg" src="" alt="" />
+      <p class="lightbox-caption" id="lightboxCaption"></p>
+    </div>
+  </div>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Want to Share Your Photos?</h2>
+        <p>Send us your event photos and we'll feature them in our gallery.</p>
+      </div>
+      <a href="contact.html" class="btn-white">Send Us Photos</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script>
+    // ── Hamburger ──
+    const hamburger = document.getElementById('hamburger');
+    const navLinks  = document.getElementById('navLinks');
+    hamburger?.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', open);
+    });
+
+    // ── Scroll Reveal ──
+    const revealEls = document.querySelectorAll('.reveal');
+    const revealObs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    revealEls.forEach(el => revealObs.observe(el));
+
+    // ── Filter ──
+    const filterBtns  = document.querySelectorAll('.filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        galleryItems.forEach(item => {
+          const show = f === 'all' || item.dataset.category === f;
+          item.classList.toggle('hidden', !show);
+        });
+      });
+    });
+
+    // ── Lightbox ──
+    const lightbox        = document.getElementById('lightbox');
+    const lightboxImg     = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const lightboxClose   = document.getElementById('lightboxClose');
+    const lightboxPrev    = document.getElementById('lightboxPrev');
+    const lightboxNext    = document.getElementById('lightboxNext');
+
+    let currentIndex = 0;
+    const getVisible = () => [...galleryItems].filter(i => !i.classList.contains('hidden'));
+
+    function openLightbox(index) {
+      const visible = getVisible();
+      if (!visible[index]) return;
+      currentIndex = index;
+      const img = visible[index].querySelector('img');
+      const cap = visible[index].querySelector('.gallery-overlay span');
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightboxCaption.textContent = cap?.textContent || '';
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function navigate(dir) {
+      const visible = getVisible();
+      currentIndex = (currentIndex + dir + visible.length) % visible.length;
+      openLightbox(currentIndex);
+    }
+
+    galleryItems.forEach((item, i) => {
+      item.addEventListener('click', () => {
+        const visible = getVisible();
+        const visIdx = visible.indexOf(item);
+        if (visIdx !== -1) openLightbox(visIdx);
+      });
+    });
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', () => navigate(-1));
+    lightboxNext.addEventListener('click', () => navigate(1));
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', e => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigate(-1);
+      if (e.key === 'ArrowRight') navigate(1);
+    });
+  </script>
+
+</body>
+</html>

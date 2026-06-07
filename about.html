@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — About</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+
+  <style>
+    /* ── Core Values Image Cards ── */
+    .value-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    }
+    .value-card .value-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+      transition: transform 0.4s ease;
+    }
+    .value-card:hover .value-bg {
+      transform: scale(1.06);
+    }
+    .value-card .value-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,22,40,0.92) 40%, rgba(10,22,40,0.3) 100%);
+      z-index: 1;
+    }
+    .value-card .value-body {
+      position: relative;
+      z-index: 2;
+      padding: 1.4rem 1.2rem 1.2rem;
+      color: #fff;
+    }
+    .value-card .value-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--gold, #f5c518);
+      margin: 0 0 0.35rem;
+    }
+    .value-card .value-body p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0;
+      color: #e0e0e0;
+    }
+
+    /* ── SK Officials Photo Placeholder ── */
+    .official-photo-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: #0e1f3d;
+      overflow: hidden;
+      border-radius: 8px 8px 0 0;
+    }
+    .official-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-note {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 22, 40, 0.78);
+      gap: 0.5rem;
+    }
+    .photo-note .note-icon {
+      font-size: 2rem;
+    }
+    .photo-note .note-text {
+      font-size: 0.78rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      color: #f5c518;
+      background: rgba(245,197,24,0.12);
+      border: 1.5px dashed #f5c518;
+      border-radius: 6px;
+      padding: 0.3rem 0.75rem;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .photo-note .note-sub {
+      font-size: 0.72rem;
+      color: #aaa;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* Chairman card slightly taller */
+    .official-card.chairman .official-photo-wrap {
+      aspect-ratio: 3/2.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
+        <div class="nav-logo-text">
+          <span class="top">Sangguniang Kabataan</span>
+          <span class="sub">Barangay Panicuason · Naga City</span>
+        </div>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="programs.html">Programs</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>About Us</h1>
+      <p>Learn who we are, what we stand for, and the people behind the council.</p>
+    </div>
+  </section>
+
+  <!-- ══ MISSION & VISION ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-tag" style="justify-content:center;">Our Foundation</div>
+        <h2 class="section-h">Mission &amp; Vision</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          The principles that guide every program, decision, and action of our council.
+        </p>
+      </div>
+      <div class="mv-grid">
+        <div class="mv-card reveal reveal-delay-1">
+          <h3>Our Mission</h3>
+          <p>
+            To empower the youth of our barangay by providing meaningful programs,
+            accessible opportunities, and a platform for active civic participation.
+            We are committed to nurturing responsible, skilled, and compassionate
+            young leaders who will serve their community with integrity and passion.
+          </p>
+        </div>
+        <div class="mv-card reveal reveal-delay-2">
+          <h3>Our Vision</h3>
+          <p>
+            A barangay where every young person is heard, valued, and empowered —
+            where youth leadership drives sustainable community development, fosters
+            unity, and creates a future of hope, progress, and opportunity for all
+            residents regardless of background or circumstance.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CORE VALUES ══ -->
+  <section class="section-pad" style="background:var(--white);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-tag" style="justify-content:center;">What We Believe</div>
+        <h2 class="section-h">Our Core Values</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          Six values that define how we lead, serve, and grow together.
+        </p>
+      </div>
+      <div class="values-grid">
+
+        <!-- Integrity -->
+        <div class="value-card reveal reveal-delay-1">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&auto=format&fit=crop"
+               alt="Integrity — handshake" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Integrity</h4>
+            <p>We lead with honesty and transparency in every action and decision we make.</p>
+          </div>
+        </div>
+
+        <!-- Innovation -->
+        <div class="value-card reveal reveal-delay-2">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop"
+               alt="Innovation — teamwork and technology" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Innovation</h4>
+            <p>We seek creative solutions to community challenges through fresh ideas.</p>
+          </div>
+        </div>
+
+        <!-- Service -->
+        <div class="value-card reveal reveal-delay-3">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&auto=format&fit=crop"
+               alt="Service — community volunteers" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Service</h4>
+            <p>We put the needs of our youth and community above personal interests.</p>
+          </div>
+        </div>
+
+        <!-- Passion -->
+        <div class="value-card reveal reveal-delay-1">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop"
+               alt="Passion — youth energy" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Passion</h4>
+            <p>We pour enthusiasm and dedication into every program and initiative we run.</p>
+          </div>
+        </div>
+
+        <!-- Unity -->
+        <div class="value-card reveal reveal-delay-2">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&auto=format&fit=crop"
+               alt="Unity — people together" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Unity</h4>
+            <p>We celebrate diversity and work together as one team for one community.</p>
+          </div>
+        </div>
+
+        <!-- Excellence -->
+        <div class="value-card reveal reveal-delay-3">
+          <img class="value-bg"
+               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop"
+               alt="Excellence — achievement and hard work" />
+          <div class="value-overlay"></div>
+          <div class="value-body">
+            <h4>Excellence</h4>
+            <p>We hold ourselves to the highest standards in governance and delivery.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SK OFFICIALS ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+      <div class="text-center reveal">
+        <div class="section-tag" style="justify-content:center;">The Council</div>
+        <h2 class="section-h">Meet Our SK Officials</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          Elected by the youth, serving the youth — your Sangguniang Kabataan council.
+        </p>
+      </div>
+      <div class="officials-grid">
+
+        <!-- Chairman -->
+        <div class="official-card chairman reveal">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace src with actual photo of the SK Chairman</span>
+            </div>
+          </div>
+          <div class="official-info">
+            <h4>John Mark Cosa</h4>
+            <span>SK Chairman</span>
+          </div>
+        </div>
+
+        <!-- Kagawad 1 -->
+        <div class="official-card reveal reveal-delay-1">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 1</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Maria Santos</h4><span>SK Kagawad</span></div>
+        </div>
+
+        <!-- Kagawad 2 -->
+        <div class="official-card reveal reveal-delay-2">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 2</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Jose Reyes</h4><span>SK Kagawad</span></div>
+        </div>
+
+        <!-- Kagawad 3 -->
+        <div class="official-card reveal reveal-delay-3">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 3</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Ana Gomez</h4><span>SK Kagawad</span></div>
+        </div>
+
+        <!-- Kagawad 4 -->
+        <div class="official-card reveal reveal-delay-1">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 4</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Carlo Bautista</h4><span>SK Kagawad</span></div>
+        </div>
+
+        <!-- Kagawad 5 -->
+        <div class="official-card reveal reveal-delay-2">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 5</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Liza Flores</h4><span>SK Kagawad</span></div>
+        </div>
+
+        <!-- Kagawad 6 -->
+        <div class="official-card reveal reveal-delay-3">
+          <div class="official-photo-wrap">
+            <div class="photo-note">
+              <span class="note-icon">📷</span>
+              <span class="note-text">⚠ Photo to be replaced</span>
+              <span class="note-sub">Replace with actual photo of Kagawad 6</span>
+            </div>
+          </div>
+          <div class="official-info"><h4>Ramon Torres</h4><span>SK Kagawad</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Want to Get Involved?</h2>
+        <p>Join us in serving the youth. Reach out and let's work together.</p>
+      </div>
+      <a href="contact.html" class="btn btn-white">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
