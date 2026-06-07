@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — SK Council</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <script src="js/nav.js" defer></script>
+
+  <style>
+    /* ── COUNCIL PAGE STYLES ── */
+
+    /* Chairman Feature Card */
+    .chairman-feature {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      background: var(--navy);
+      margin-top: 56px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(10,22,40,0.18);
+    }
+
+    .chairman-photo-wrap {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      background: var(--navy2);
+      overflow: hidden;
+    }
+    .chairman-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .chairman-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: linear-gradient(135deg, #0a1628 60%, #1a5fb4 100%);
+    }
+    .chairman-photo-placeholder .ph-icon { font-size: 3.5rem; opacity: 0.5; }
+    .chairman-photo-placeholder .ph-label {
+      font-size: 0.75rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(245,197,24,0.1);
+      border: 1.5px dashed var(--gold);
+      border-radius: 6px;
+      padding: 0.35rem 1rem;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+    .chairman-photo-placeholder .ph-sub {
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.35);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .chairman-gold-bar {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--gold);
+    }
+
+    .chairman-details {
+      padding: 56px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 4px solid var(--gold);
+      background: var(--navy2);
+      position: relative;
+    }
+    .chairman-details::before {
+      content: 'SK';
+      position: absolute;
+      right: 24px;
+      bottom: 16px;
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .council-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .council-badge::before {
+      content: '';
+      width: 24px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .chairman-details h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .chairman-position {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.25);
+    }
+    .chairman-bio {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.85;
+      max-width: 480px;
+      margin-bottom: 32px;
+    }
+    .chairman-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chairman-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.45);
+    }
+    .chairman-meta-item strong {
+      color: rgba(255,255,255,0.75);
+    }
+    .meta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ── Kagawad Grid ── */
+    .kagawad-section {
+      margin-top: 80px;
+    }
+    .kagawad-section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .kagawad-count {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      background: var(--offwhite);
+      border: 1px solid var(--lightgray);
+      padding: 6px 16px;
+    }
+
+    .kagawad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .kagawad-card {
+      background: var(--white);
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      position: relative;
+    }
+    .kagawad-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(10,22,40,0.12);
+      z-index: 2;
+    }
+
+    .kagawad-photo-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/3.2;
+      background: var(--navy2);
+      overflow: hidden;
+    }
+    .kagawad-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .kagawad-card:hover .kagawad-photo-wrap img {
+      transform: scale(1.05);
+    }
+
+    .kagawad-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: linear-gradient(160deg, #0e1f3d 40%, #1a5fb4 100%);
+    }
+    .kagawad-photo-placeholder .ph-icon { font-size: 2.8rem; opacity: 0.4; }
+    .kagawad-photo-placeholder .ph-label {
+      font-size: 0.7rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(245,197,24,0.1);
+      border: 1.5px dashed var(--gold);
+      border-radius: 6px;
+      padding: 0.3rem 0.8rem;
+      text-align: center;
+    }
+    .kagawad-photo-placeholder .ph-sub {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.3);
+      font-family: 'DM Sans', sans-serif;
+      text-align: center;
+      padding: 0 1rem;
+    }
+
+    .card-number {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 32px;
+      height: 32px;
+      background: var(--gold);
+      color: var(--navy);
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .kagawad-info {
+      padding: 20px 24px 24px;
+      border-top: 3px solid var(--blue);
+      position: relative;
+    }
+    .kagawad-card:nth-child(2) .kagawad-info { border-top-color: var(--red); }
+    .kagawad-card:nth-child(3) .kagawad-info { border-top-color: var(--green); }
+    .kagawad-card:nth-child(4) .kagawad-info { border-top-color: var(--gold2); }
+    .kagawad-card:nth-child(5) .kagawad-info { border-top-color: var(--blue); }
+    .kagawad-card:nth-child(6) .kagawad-info { border-top-color: var(--red); }
+
+    .kagawad-info h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .kagawad-info .position-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .kagawad-info .kagawad-bio {
+      font-size: 0.82rem;
+      color: var(--gray);
+      line-height: 1.7;
+      margin-bottom: 0;
+    }
+
+    /* ── Secretary/Treasurer row ── */
+    .officer-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .officer-card {
+      background: var(--offwhite);
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      align-items: center;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .officer-card:hover { transform: translateX(4px); }
+    .officer-photo-wrap {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      background: var(--navy2);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .officer-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .officer-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0a1628, #1a5fb4);
+      font-size: 1.8rem;
+      opacity: 0.5;
+    }
+    .officer-info {
+      padding: 16px 20px;
+      border-left: 3px solid var(--gold);
+    }
+    .officer-info h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .officer-info span {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    /* ── Term info band ── */
+    .term-band {
+      background: var(--navy);
+      padding: 40px 32px;
+      margin-top: 80px;
+    }
+    .term-band-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .term-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .term-detail .t-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .term-detail .t-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .term-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .chairman-feature {
+        grid-template-columns: 1fr;
+      }
+      .chairman-photo-wrap {
+        min-height: 260px;
+      }
+      .chairman-details {
+        padding: 36px 28px;
+        border-left: none;
+        border-top: 4px solid var(--gold);
+      }
+      .kagawad-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .officer-row {
+        grid-template-columns: 1fr;
+      }
+      .term-band-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .term-divider { display: none; }
+    }
+    @media (max-width: 560px) {
+      .kagawad-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+    <div id="sk-nav"></div>
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>SK Council</h1>
+      <p>Meet the elected officials serving the youth of Barangay Panicuason — dedicated, passionate, and committed to community.</p>
+    </div>
+  </section>
+
+  <!-- ══ MAIN COUNCIL CONTENT ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+
+      <!-- Section Header -->
+      <div class="text-center reveal">
+        <div class="section-tag" style="justify-content:center;">Your Representatives</div>
+        <h2 class="section-h">The Council Officers</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          Elected by the youth, serving the youth — your Sangguniang Kabataan council for Barangay Panicuason, Naga City.
+        </p>
+      </div>
+
+      <!-- ── SK CHAIRMAN ── -->
+      <div class="chairman-feature reveal">
+        <div class="chairman-photo-wrap">
+          <!-- Replace the placeholder below with: <img src="images/chairman.jpg" alt="SK Chairman"> -->
+          <div class="chairman-photo-placeholder">
+            <span class="ph-icon">📷</span>
+            <span class="ph-label">⚠ Photo to be replaced</span>
+            <span class="ph-sub">Replace with actual photo of the SK Chairman</span>
+          </div>
+        </div>
+        <div class="chairman-details">
+          <span class="council-badge">SK Chairman</span>
+          <h2>[Chairman Full Name]</h2>
+          <span class="chairman-position">Sangguniang Kabataan Chairman</span>
+          <p class="chairman-bio">
+            <!-- Replace this with actual bio -->
+            A dedicated leader committed to the welfare and development of the youth of Barangay Panicuason. 
+            As SK Chairman, [he/she] spearheads all youth programs, community initiatives, and represents 
+            the interests of the young constituents in local governance.
+          </p>
+          <div class="chairman-meta">
+            <div class="chairman-meta-item">
+              <span class="meta-dot"></span>
+              <span>Term: <strong>2023 – 2026</strong></span>
+            </div>
+            <div class="chairman-meta-item">
+              <span class="meta-dot"></span>
+              <span>Barangay: <strong>Panicuason, Naga City</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SK KAGAWADS ── -->
+      <div class="kagawad-section">
+        <div class="kagawad-section-header reveal">
+          <div>
+            <div class="section-tag">Council Members</div>
+            <h2 class="section-h" style="margin-bottom:0;">SK Kagawads</h2>
+          </div>
+          <span class="kagawad-count">7 Council Members</span>
+        </div>
+
+        <div class="kagawad-grid">
+
+          <!-- Kagawad 1 -->
+          <div class="kagawad-card reveal reveal-delay-1">
+            <div class="kagawad-photo-wrap">
+              <!-- Replace placeholder with: <img src="images/kagawad1.jpg" alt="Kagawad 1"> -->
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">1</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 1 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Education & Livelihood]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 2 -->
+          <div class="kagawad-card reveal reveal-delay-2">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">2</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 2 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Sports & Health]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 3 -->
+          <div class="kagawad-card reveal reveal-delay-3">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">3</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 3 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Environment & Livelihood]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 4 -->
+          <div class="kagawad-card reveal reveal-delay-1">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">4</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 4 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Peace & Order]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 5 -->
+          <div class="kagawad-card reveal reveal-delay-2">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">5</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 5 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Social Services]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 6 -->
+          <div class="kagawad-card reveal reveal-delay-3">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">6</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 6 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Arts & Culture]</p>
+            </div>
+          </div>
+
+          <!-- Kagawad 7 -->
+          <div class="kagawad-card reveal reveal-delay-1">
+            <div class="kagawad-photo-wrap">
+              <div class="kagawad-photo-placeholder">
+                <span class="ph-icon">📷</span>
+                <span class="ph-label">⚠ Photo to be replaced</span>
+                <span class="ph-sub">Replace with actual photo</span>
+              </div>
+              <div class="card-number">7</div>
+            </div>
+            <div class="kagawad-info">
+              <h4>[Kagawad 7 Full Name]</h4>
+              <span class="position-tag">SK Kagawad</span>
+              <p class="kagawad-bio">Committee on [assign committee, e.g. Youth Development]</p>
+            </div>
+          </div>
+
+        </div><!-- end kagawad-grid -->
+
+        <!-- ── Secretary & Treasurer ── -->
+        <div class="officer-row">
+
+          <div class="officer-card reveal reveal-delay-1">
+            <div class="officer-photo-wrap">
+              <!-- Replace with: <img src="images/secretary.jpg" alt="SK Secretary"> -->
+              <div class="officer-photo-placeholder">📷</div>
+            </div>
+            <div class="officer-info">
+              <h4>[Secretary Full Name]</h4>
+              <span>SK Secretary</span>
+            </div>
+          </div>
+
+          <div class="officer-card reveal reveal-delay-2">
+            <div class="officer-photo-wrap">
+              <!-- Replace with: <img src="images/treasurer.jpg" alt="SK Treasurer"> -->
+              <div class="officer-photo-placeholder">📷</div>
+            </div>
+            <div class="officer-info">
+              <h4>[Treasurer Full Name]</h4>
+              <span>SK Treasurer</span>
+            </div>
+          </div>
+
+        </div><!-- end officer-row -->
+
+      </div><!-- end kagawad-section -->
+    </div>
+  </section>
+
+  <!-- ── TERM INFO BAND ── -->
+  <div class="term-band">
+    <div class="term-band-inner">
+      <div class="term-detail">
+        <span class="t-label">Current Term</span>
+        <span class="t-value">2023 – 2026</span>
+      </div>
+      <div class="term-divider"></div>
+      <div class="term-detail">
+        <span class="t-label">Barangay</span>
+        <span class="t-value">Panicuason, Naga City</span>
+      </div>
+      <div class="term-divider"></div>
+      <div class="term-detail">
+        <span class="t-label">Council Composition</span>
+        <span class="t-value">1 Chairman · 7 Kagawads · 1 Secretary · 1 Treasurer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Want to Get Involved?</h2>
+        <p>Join us in serving the youth. Reach out and let's work together.</p>
+      </div>
+      <a href="contact.html" class="btn btn-white">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="council.html">Council</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

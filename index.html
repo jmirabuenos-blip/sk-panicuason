@@ -4,34 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SK Barangay Panicuason — Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <script src="js/nav.js" defer></script>
 </head>
 <body>
 
-  <!-- ══ NAVBAR ══ -->
-  <nav class="navbar">
-    <div class="nav-inner"> 
-      <a href="index.html" class="nav-logo">
-        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
-        <div class="nav-logo-text">
-          <span class="top">Sangguniang Kabataan</span>
-          <span class="sub">Barangay Panicuason · Naga City</span>
-        </div>
-      </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+  <!-- ══ NAVBAR (shared) ══ -->
+  <div id="sk-nav"></div>
 
   <!-- ══ HERO ══ -->
   <section class="hero">
@@ -134,11 +117,9 @@
         <h2 class="section-h">Upcoming Events</h2>
         <p class="section-sub">Stay updated on the latest activities and gatherings in our barangay.</p>
       </div>
-
       <div class="no-events reveal">
         <p>No upcoming events at the moment. Check back soon.</p>
       </div>
-
     </div>
   </section>
 
@@ -171,9 +152,11 @@
         <ul class="footer-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
+          <li><a href="council.html">Council</a></li>
           <li><a href="programs.html">Programs</a></li>
           <li><a href="events.html">Events</a></li>
           <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="budget.html">Financial Report</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -182,7 +165,8 @@
         <ul class="footer-contact">
           <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
           <li><span>📞</span> (123) 456-7890</li>
-          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
           <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
         </ul>
       </div>

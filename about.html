@@ -10,7 +10,6 @@
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
 
-
   <style>
     /* ── Core Values Image Cards ── */
     .value-card {
@@ -32,9 +31,7 @@
       z-index: 0;
       transition: transform 0.4s ease;
     }
-    .value-card:hover .value-bg {
-      transform: scale(1.06);
-    }
+    .value-card:hover .value-bg { transform: scale(1.06); }
     .value-card .value-overlay {
       position: absolute;
       inset: 0;
@@ -59,84 +56,12 @@
       margin: 0;
       color: #e0e0e0;
     }
-
-    /* ── SK Officials Photo Placeholder ── */
-    .official-photo-wrap {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 4/3;
-      background: #0e1f3d;
-      overflow: hidden;
-      border-radius: 8px 8px 0 0;
-    }
-    .official-photo-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .photo-note {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: rgba(10, 22, 40, 0.78);
-      gap: 0.5rem;
-    }
-    .photo-note .note-icon {
-      font-size: 2rem;
-    }
-    .photo-note .note-text {
-      font-size: 0.78rem;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      color: #f5c518;
-      background: rgba(245,197,24,0.12);
-      border: 1.5px dashed #f5c518;
-      border-radius: 6px;
-      padding: 0.3rem 0.75rem;
-      text-align: center;
-      line-height: 1.4;
-    }
-    .photo-note .note-sub {
-      font-size: 0.72rem;
-      color: #aaa;
-      font-family: 'DM Sans', sans-serif;
-    }
-
-    /* Chairman card slightly taller */
-    .official-card.chairman .official-photo-wrap {
-      aspect-ratio: 3/2.5;
-    }
   </style>
 </head>
 <body>
 
-  <!-- ══ NAVBAR ══ -->
-  <nav class="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">
-        <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
-        <div class="nav-logo-text">
-          <span class="top">Sangguniang Kabataan</span>
-          <span class="sub">Barangay Panicuason · Naga City</span>
-        </div>
-      </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="programs.html">Programs</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-      <button class="nav-hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+  <!-- ══ NAVBAR (shared) ══ -->
+  <div id="sk-nav"></div>
 
   <!-- ══ PAGE HERO ══ -->
   <section class="page-hero">
@@ -191,183 +116,45 @@
         </p>
       </div>
       <div class="values-grid">
-
-        <!-- Integrity -->
         <div class="value-card reveal reveal-delay-1">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&auto=format&fit=crop"
-               alt="Integrity — handshake" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&auto=format&fit=crop" alt="Integrity" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Integrity</h4>
-            <p>We lead with honesty and transparency in every action and decision we make.</p>
-          </div>
+          <div class="value-body"><h4>Integrity</h4><p>We lead with honesty and transparency in every action and decision we make.</p></div>
         </div>
-
-        <!-- Innovation -->
         <div class="value-card reveal reveal-delay-2">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop"
-               alt="Innovation — teamwork and technology" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=600&auto=format&fit=crop" alt="Innovation" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Innovation</h4>
-            <p>We seek creative solutions to community challenges through fresh ideas.</p>
-          </div>
+          <div class="value-body"><h4>Innovation</h4><p>We seek creative solutions to community challenges through fresh ideas.</p></div>
         </div>
-
-        <!-- Service -->
         <div class="value-card reveal reveal-delay-3">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&auto=format&fit=crop"
-               alt="Service — community volunteers" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600&auto=format&fit=crop" alt="Service" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Service</h4>
-            <p>We put the needs of our youth and community above personal interests.</p>
-          </div>
+          <div class="value-body"><h4>Service</h4><p>We put the needs of our youth and community above personal interests.</p></div>
         </div>
-
-        <!-- Passion -->
         <div class="value-card reveal reveal-delay-1">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop"
-               alt="Passion — youth energy" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop" alt="Passion" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Passion</h4>
-            <p>We pour enthusiasm and dedication into every program and initiative we run.</p>
-          </div>
+          <div class="value-body"><h4>Passion</h4><p>We pour enthusiasm and dedication into every program and initiative we run.</p></div>
         </div>
-
-        <!-- Unity -->
         <div class="value-card reveal reveal-delay-2">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&auto=format&fit=crop"
-               alt="Unity — people together" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=600&auto=format&fit=crop" alt="Unity" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Unity</h4>
-            <p>We celebrate diversity and work together as one team for one community.</p>
-          </div>
+          <div class="value-body"><h4>Unity</h4><p>We celebrate diversity and work together as one team for one community.</p></div>
         </div>
-
-        <!-- Excellence -->
         <div class="value-card reveal reveal-delay-3">
-          <img class="value-bg"
-               src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop"
-               alt="Excellence — achievement and hard work" />
+          <img class="value-bg" src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop" alt="Excellence" />
           <div class="value-overlay"></div>
-          <div class="value-body">
-            <h4>Excellence</h4>
-            <p>We hold ourselves to the highest standards in governance and delivery.</p>
-          </div>
+          <div class="value-body"><h4>Excellence</h4><p>We hold ourselves to the highest standards in governance and delivery.</p></div>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ══ SK OFFICIALS ══ -->
-  <section class="section-pad" style="background:var(--offwhite);">
-    <div class="container">
-      <div class="text-center reveal">
-        <div class="section-tag" style="justify-content:center;">The Council</div>
-        <h2 class="section-h">Meet Our SK Officials</h2>
-        <p class="section-sub" style="margin-inline:auto;">
-          Elected by the youth, serving the youth — your Sangguniang Kabataan council.
-        </p>
-      </div>
-      <div class="officials-grid">
-
-        <!-- Chairman -->
-        <div class="official-card chairman reveal">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace src with actual photo of the SK Chairman</span>
-            </div>
-          </div>
-          <div class="official-info">
-            <h4>John Mark Cosa</h4>
-            <span>SK Chairman</span>
-          </div>
-        </div>
-
-        <!-- Kagawad 1 -->
-        <div class="official-card reveal reveal-delay-1">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 1</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Maria Santos</h4><span>SK Kagawad</span></div>
-        </div>
-
-        <!-- Kagawad 2 -->
-        <div class="official-card reveal reveal-delay-2">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 2</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Jose Reyes</h4><span>SK Kagawad</span></div>
-        </div>
-
-        <!-- Kagawad 3 -->
-        <div class="official-card reveal reveal-delay-3">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 3</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Ana Gomez</h4><span>SK Kagawad</span></div>
-        </div>
-
-        <!-- Kagawad 4 -->
-        <div class="official-card reveal reveal-delay-1">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 4</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Carlo Bautista</h4><span>SK Kagawad</span></div>
-        </div>
-
-        <!-- Kagawad 5 -->
-        <div class="official-card reveal reveal-delay-2">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 5</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Liza Flores</h4><span>SK Kagawad</span></div>
-        </div>
-
-        <!-- Kagawad 6 -->
-        <div class="official-card reveal reveal-delay-3">
-          <div class="official-photo-wrap">
-            <div class="photo-note">
-              <span class="note-icon">📷</span>
-              <span class="note-text">⚠ Photo to be replaced</span>
-              <span class="note-sub">Replace with actual photo of Kagawad 6</span>
-            </div>
-          </div>
-          <div class="official-info"><h4>Ramon Torres</h4><span>SK Kagawad</span></div>
-        </div>
-
-      </div>
+  <!-- ══ MEET THE COUNCIL CTA ══ -->
+  <section class="section-pad" style="background:var(--offwhite); padding-top:0;">
+    <div class="container text-center reveal">
+      <p style="color:var(--gray); margin-bottom:24px;">Want to know the people behind the council?</p>
+      <a href="council.html" class="btn btn-navy">Meet the SK Council →</a>
     </div>
   </section>
 
@@ -400,9 +187,11 @@
         <ul class="footer-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
+          <li><a href="council.html">Council</a></li>
           <li><a href="programs.html">Programs</a></li>
           <li><a href="events.html">Events</a></li>
           <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="budget.html">Financial Report</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
       </div>
@@ -423,6 +212,7 @@
     </div>
   </footer>
 
+  <script src="js/nav.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

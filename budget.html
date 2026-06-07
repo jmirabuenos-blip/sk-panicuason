@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — Financial Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+
+  <style>
+    /* ── FINANCIAL REPORT PAGE STYLES ── */
+
+    /* ── Summary Cards ── */
+    .finance-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+    }
+
+    .summary-card {
+      background: var(--white);
+      padding: 36px 32px;
+      border-top: 4px solid var(--lightgray);
+      position: relative;
+      overflow: hidden;
+    }
+    .summary-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .summary-card:hover::after { transform: scaleX(1); }
+
+    .summary-card.income  { border-top-color: var(--green); }
+    .summary-card.expense { border-top-color: var(--red); }
+    .summary-card.balance { border-top-color: var(--blue); background: var(--navy); }
+
+    .summary-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .summary-card.balance .summary-label { color: rgba(255,255,255,0.4); }
+
+    .summary-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 900;
+      color: var(--navy);
+      display: block;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .summary-card.income  .summary-amount { color: var(--green); }
+    .summary-card.expense .summary-amount { color: var(--red); }
+    .summary-card.balance .summary-amount { color: var(--gold); }
+
+    .summary-note {
+      font-size: 0.78rem;
+      color: var(--gray);
+    }
+    .summary-card.balance .summary-note { color: rgba(255,255,255,0.35); }
+
+    .summary-icon {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 1.8rem;
+      opacity: 0.15;
+    }
+
+    /* ── Report Table ── */
+    .report-block {
+      margin-top: 64px;
+    }
+    .report-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2px;
+      padding: 20px 28px;
+      background: var(--navy);
+    }
+    .report-block-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .report-block-header span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(245,197,24,0.1);
+      border: 1px solid rgba(245,197,24,0.2);
+      padding: 4px 12px;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+    }
+    .report-table thead tr {
+      background: var(--navy2);
+    }
+    .report-table thead th {
+      padding: 14px 24px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      text-align: left;
+    }
+    .report-table thead th:last-child { text-align: right; }
+
+    .report-table tbody tr {
+      border-bottom: 1px solid var(--lightgray);
+      transition: background 0.15s;
+    }
+    .report-table tbody tr:hover { background: var(--offwhite); }
+
+    .report-table tbody td {
+      padding: 16px 24px;
+      font-size: 0.9rem;
+      color: var(--navy);
+      vertical-align: middle;
+    }
+    .report-table tbody td:last-child {
+      text-align: right;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .report-table .row-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .row-label .main { font-weight: 600; color: var(--navy); }
+    .row-label .sub  { font-size: 0.78rem; color: var(--gray); }
+
+    .amount-income  { color: var(--green) !important; }
+    .amount-expense { color: var(--red) !important; }
+
+    .row-total td {
+      background: var(--offwhite);
+      border-top: 2px solid var(--navy);
+      font-weight: 700 !important;
+    }
+    .row-total td:first-child {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--navy);
+    }
+    .row-total td:last-child {
+      font-size: 1.05rem !important;
+    }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 2px;
+    }
+    .badge-done    { background: rgba(45,138,78,0.12);  color: var(--green); border: 1px solid rgba(45,138,78,0.25); }
+    .badge-pending { background: rgba(245,197,24,0.12); color: var(--gold2); border: 1px solid rgba(245,197,24,0.3); }
+    .badge-noted   { background: rgba(26,95,180,0.10);  color: var(--blue);  border: 1px solid rgba(26,95,180,0.2); }
+
+    /* ── Certification / Note ── */
+    .cert-box {
+      margin-top: 64px;
+      background: var(--navy);
+      padding: 48px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .cert-left h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 16px;
+    }
+    .cert-left p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.8;
+    }
+    .cert-signatures {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    .sig-line {
+      border-top: 1px solid rgba(255,255,255,0.15);
+      padding-top: 10px;
+    }
+    .sig-line .sig-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .sig-line .sig-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+
+    /* ── Download Notice ── */
+    .download-notice {
+      margin-top: 2px;
+      background: var(--offwhite);
+      border: 2px dashed var(--lightgray);
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .download-notice .dl-icon { font-size: 2.5rem; }
+    .download-notice .dl-text h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .download-notice .dl-text p {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    .download-notice .dl-btn {
+      margin-left: auto;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .finance-summary { grid-template-columns: 1fr; }
+      .cert-box { grid-template-columns: 1fr; gap: 32px; }
+      .report-table thead th:nth-child(2),
+      .report-table tbody td:nth-child(2) { display: none; }
+    }
+    @media (max-width: 560px) {
+      .report-block-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .download-notice { flex-direction: column; }
+      .download-notice .dl-btn { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR (shared) ══ -->
+  <div id="sk-nav"></div>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>Financial Report</h1>
+      <p>Transparent and accountable — an overview of SK Barangay Panicuason's income, expenditures, and fund utilization.</p>
+    </div>
+  </section>
+
+  <!-- ══ MAIN CONTENT ══ -->
+  <section class="section-pad" style="background:var(--offwhite);">
+    <div class="container">
+
+      <!-- Header -->
+      <div class="text-center reveal">
+        <div class="section-tag" style="justify-content:center;">Fiscal Transparency</div>
+        <h2 class="section-h">Annual Financial Summary</h2>
+        <p class="section-sub" style="margin-inline:auto;">
+          In accordance with the Sangguniang Kabataan Reform Act (RA 10742), all SK funds and
+          expenditures are reported publicly for the youth of Barangay Panicuason.
+        </p>
+        <!-- Replace [YEAR] with actual fiscal year -->
+        <p style="margin-top:12px; font-size:0.78rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--blue);">
+          Fiscal Year: <strong>[YEAR]</strong> &nbsp;|&nbsp; As of: <strong>[DATE]</strong>
+        </p>
+      </div>
+
+      <!-- ── Summary Cards ── -->
+      <div class="finance-summary">
+
+        <div class="summary-card income reveal reveal-delay-1">
+          <span class="summary-icon">💰</span>
+          <span class="summary-label">Total Income / Receipts</span>
+          <span class="summary-amount">₱ [0,000.00]</span>
+          <span class="summary-note">Total funds received for the fiscal year</span>
+        </div>
+
+        <div class="summary-card expense reveal reveal-delay-2">
+          <span class="summary-icon">📋</span>
+          <span class="summary-label">Total Expenditures</span>
+          <span class="summary-amount">₱ [0,000.00]</span>
+          <span class="summary-note">Total disbursements and obligations</span>
+        </div>
+
+        <div class="summary-card balance reveal reveal-delay-3">
+          <span class="summary-icon">⚖️</span>
+          <span class="summary-label">Remaining Balance</span>
+          <span class="summary-amount">₱ [0,000.00]</span>
+          <span class="summary-note">Unexpended balance as of report date</span>
+        </div>
+
+      </div>
+
+      <!-- ── INCOME TABLE ── -->
+      <div class="report-block reveal">
+        <div class="report-block-header">
+          <h3>📥 Sources of Income</h3>
+          <span>Fund Receipts</span>
+        </div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Source / Particulars</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Amount (₱)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">SKFP — Barangay Share (10%)</span>
+                  <span class="sub">Barangay Fund Transfer</span>
+                </div>
+              </td>
+              <td>Annual SK Fund from Barangay</td>
+              <td><span class="status-badge badge-done">Received</span></td>
+              <td class="amount-income">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">SKFP — Municipal Share</span>
+                  <span class="sub">Municipal Fund Transfer</span>
+                </div>
+              </td>
+              <td>Annual SK Fund from Municipality</td>
+              <td><span class="status-badge badge-done">Received</span></td>
+              <td class="amount-income">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Other Sources / Donations</span>
+                  <span class="sub">Miscellaneous Income</span>
+                </div>
+              </td>
+              <td>Other receipts, if any</td>
+              <td><span class="status-badge badge-noted">Noted</span></td>
+              <td class="amount-income">₱ [0,000.00]</td>
+            </tr>
+            <tr class="row-total">
+              <td colspan="3">Total Income</td>
+              <td class="amount-income">₱ [0,000.00]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── EXPENDITURES TABLE ── -->
+      <div class="report-block reveal">
+        <div class="report-block-header">
+          <h3>📤 Expenditures & Disbursements</h3>
+          <span>Fund Utilization</span>
+        </div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Program / Activity / Project</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Amount (₱)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Youth Development Program</span>
+                  <span class="sub">Skills Training &amp; Livelihood</span>
+                </div>
+              </td>
+              <td>Training materials, venue, facilitators</td>
+              <td><span class="status-badge badge-done">Completed</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Sports &amp; Health Program</span>
+                  <span class="sub">Sports Equipment &amp; Events</span>
+                </div>
+              </td>
+              <td>Sports fest, equipment purchase</td>
+              <td><span class="status-badge badge-done">Completed</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Educational Assistance</span>
+                  <span class="sub">Scholarships &amp; School Supplies</span>
+                </div>
+              </td>
+              <td>School supplies distribution, aid</td>
+              <td><span class="status-badge badge-done">Completed</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Environmental Program</span>
+                  <span class="sub">Clean-up &amp; Tree Planting</span>
+                </div>
+              </td>
+              <td>Materials, coordination, logistics</td>
+              <td><span class="status-badge badge-done">Completed</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">Administrative Expenses</span>
+                  <span class="sub">Office Supplies &amp; Operations</span>
+                </div>
+              </td>
+              <td>Office needs, printing, communications</td>
+              <td><span class="status-badge badge-noted">Ongoing</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="row-label">
+                  <span class="main">[Add Program/Activity]</span>
+                  <span class="sub">Replace with actual item</span>
+                </div>
+              </td>
+              <td>—</td>
+              <td><span class="status-badge badge-pending">Pending</span></td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+            <tr class="row-total">
+              <td colspan="3">Total Expenditures</td>
+              <td class="amount-expense">₱ [0,000.00]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── BALANCE TABLE ── -->
+      <div class="report-block reveal">
+        <div class="report-block-header">
+          <h3>⚖️ Fund Balance Summary</h3>
+          <span>As of [DATE]</span>
+        </div>
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>Particulars</th>
+              <th>Notes</th>
+              <th>&nbsp;</th>
+              <th>Amount (₱)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Total Receipts / Income</strong></td>
+              <td>All sources combined</td>
+              <td></td>
+              <td class="amount-income">₱ [0,000.00]</td>
+            </tr>
+            <tr>
+              <td><strong>Less: Total Expenditures</strong></td>
+              <td>All disbursements</td>
+              <td></td>
+              <td class="amount-expense">( ₱ [0,000.00] )</td>
+            </tr>
+            <tr class="row-total">
+              <td colspan="3">Remaining / Unexpended Balance</td>
+              <td style="color:var(--blue);">₱ [0,000.00]</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ── Download / Full Report Notice ── -->
+      <div class="download-notice reveal">
+        <span class="dl-icon">📄</span>
+        <div class="dl-text">
+          <h4>Full Financial Report Available</h4>
+          <p>The complete audited financial report including supporting documents is available upon request at the Barangay Hall.</p>
+        </div>
+        <a href="contact.html" class="btn btn-navy dl-btn">Request a Copy</a>
+      </div>
+
+      <!-- ── Certification Box ── -->
+      <div class="cert-box reveal">
+        <div class="cert-left">
+          <h3>Certification</h3>
+          <p>
+            I hereby certify that the foregoing financial report is true and correct based on
+            the books of accounts and official receipts on file with the Sangguniang Kabataan
+            of Barangay Panicuason, Naga City, for Fiscal Year <strong style="color:var(--gold);">[YEAR]</strong>.
+          </p>
+          <p style="margin-top:16px;">
+            This report is prepared in compliance with the SK Reform Act (RA 10742) and
+            the Commission on Audit (COA) regulations on SK fund utilization and transparency.
+          </p>
+        </div>
+        <div class="cert-signatures">
+          <div class="sig-line">
+            <div class="sig-name">[Treasurer Full Name]</div>
+            <div class="sig-title">SK Treasurer · Barangay Panicuason</div>
+          </div>
+          <div class="sig-line">
+            <div class="sig-name">[Chairman Full Name]</div>
+            <div class="sig-title">SK Chairman · Barangay Panicuason</div>
+          </div>
+          <div class="sig-line">
+            <div class="sig-name">[Barangay Captain Name]</div>
+            <div class="sig-title">Barangay Captain · Noted</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ CTA BAND ══ -->
+  <section class="cta-band">
+    <div class="cta-inner">
+      <div>
+        <h2>Questions About Our Funds?</h2>
+        <p>We are committed to full transparency. Reach out to us for any concerns or inquiries.</p>
+      </div>
+      <a href="contact.html" class="btn btn-white">Contact Us</a>
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="nav-logo">
+          <img src="images/logo.jpg" alt="SK seal" />
+          <div class="nav-logo-text">
+            <span class="top">Sangguniang Kabataan</span>
+            <span class="sub">Barangay Panicuason · Naga City</span>
+          </div>
+        </a>
+        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="council.html">Council</a></li>
+          <li><a href="programs.html">Programs</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="budget.html">Financial Report</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul class="footer-contact">
+          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
+          <li><span>📞</span> (123) 456-7890</li>
+          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
+          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
+          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
+      <span>Built with 💛 for the Youth of Naga City</span>
+    </div>
+  </footer>
+
+  <script src="js/nav.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
