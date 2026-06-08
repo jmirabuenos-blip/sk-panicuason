@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demographics & Disaster Profile — Barangay Panicuason</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- Asset Folder Paths -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />    
+  
+  <script src="js/nav.js" defer></script>
+  <script src="js/footer.js" defer></script>
+  
+  <style>
+    /* ── BASE GRID LAYOUTS ── */
+    .profile-section { background: var(--white); }
+    
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 56px;
+    }
+
+    /* ── HAZARD RISK MAP WRAPPER ── */
+    .map-frame-container {
+      background: var(--offwhite);
+      border: 1px solid var(--lightgray);
+      padding: 16px;
+      border-radius: 6px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+    .map-placeholder {
+      width: 100%;
+      height: 380px;
+      background: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px dashed #cbd5e1;
+      position: relative;
+    }
+    .map-icon-vector {
+      font-size: 2.5rem;
+      color: var(--blue);
+      margin-bottom: 12px;
+    }
+    .map-caption-bar {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* ── HAZARD SEVERITY INDICATORS ── */
+    .hazard-card-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .hazard-badge-strip {
+      background: var(--white);
+      border: 1px solid var(--lightgray);
+      padding: 20px 24px;
+      border-left: 5px solid transparent;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .hazard-badge-strip.high-risk { border-left-color: var(--red); }
+    .hazard-badge-strip.med-risk  { border-left-color: var(--gold); }
+    .hazard-badge-strip.low-risk  { border-left-color: var(--blue); }
+    
+    .risk-indicator-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      letter-spacing: 0.05em;
+      border-radius: 3px;
+      color: var(--white);
+      display: inline-block;
+      margin-bottom: 6px;
+    }
+    .high-risk .risk-indicator-tag { background: var(--red); }
+    .med-risk .risk-indicator-tag  { background: var(--gold); color: var(--navy); }
+    .low-risk .risk-indicator-tag  { background: var(--blue); }
+
+    .hazard-strip-text h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin: 0 0 4px 0;
+    }
+    .hazard-strip-text p {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── BPC CHARACTERISTICS PANEL ── */
+    .bpc-card-wrapper {
+      background: var(--navy);
+      color: var(--white);
+      padding: 44px 40px;
+    }
+    .bpc-card-wrapper h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+    .bpc-card-wrapper p.bpc-intro-lead {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .bpc-data-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .bpc-metric-node {
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 14px;
+    }
+    .bpc-metric-node:last-child, .bpc-metric-node:nth-last-child(2) {
+      border-bottom: none;
+    }
+    .bpc-metric-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.4);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .bpc-metric-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    /* ── EMERGENCY HOTLINES SECTION ── */
+    .hotline-section { background: var(--offwhite); }
+    .hotline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .hotline-card {
+      background: var(--white);
+      border: 1px solid var(--lightgray);
+      padding: 32px 28px;
+      text-align: center;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .hotline-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    }
+    .hotline-card.emergency-accent {
+      border-top: 4px solid var(--red);
+    }
+    .hotline-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .hotline-dept-sub {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray);
+      display: block;
+      margin-bottom: 16px;
+    }
+    .hotline-number-anchor {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .hotline-number-anchor:hover { text-decoration: underline; }
+    .hotline-alt-text {
+      font-size: 0.8rem;
+      color: var(--gray);
+    }
+
+    @media (max-width: 860px) {
+      .grid-2col { grid-template-columns: 1fr; gap: 32px; }
+      .bpc-data-matrix { grid-template-columns: 1fr; gap: 16px; }
+      .bpc-metric-node { border-bottom: 1px solid rgba(255,255,255,0.1) !important; padding-bottom: 16px; }
+      .bpc-metric-node:last-child { border-bottom: none !important; }
+      .hotline-grid { grid-template-columns: 1fr; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR INTERFACES -->
+  <div id="sk-nav"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <p class="section-tag" style="color:var(--gold);margin-bottom:12px;">
+        <span style="width:28px;height:2px;background:var(--gold);display:inline-block;"></span>
+        Public Safety &amp; Profile
+      </p>
+      <h1>Barangay Profiling<br>&amp; Hazards</h1>
+      <p>A comprehensive assessment of Barangay Panicuason's physical parameters, land assets, climate hazard exposure channels, and active emergency communication lines.</p>
+    </div>
+  </section>
+
+  <!-- SECTION 1: PROFILING & MAPS -->
+  <section class="profile-section section-pad reveal">
+    <div class="container">
+      <span class="section-tag">Barangay Profiling</span>
+      <h2 class="section-h">Geospatial Risk Mapping</h2>
+      <p class="section-sub">Panicuason's unique high-altitude geography near Mount Isarog demands targeted disaster resource allocation. Below is the exposure configuration tracked by our crisis framework maps.</p>
+      
+      <div class="grid-2col">
+        <!-- Hazard Map Container -->
+        <div class="map-frame-container reveal">
+          <div class="map-placeholder">
+            <div class="map-icon-vector">🗺️</div>
+            <p style="font-family:'Playfair Display', serif; font-size:1.1rem; font-weight:700; color:var(--navy); margin-bottom:4px;">Hazard & Susceptibility Map</p>
+            <p style="font-size:0.85rem; color:var(--gray); max-width:28px0px; padding:0 20px;">[ Replace this placeholder container with an <code>&lt;iframe&gt;</code> element pointing to your localized GIS map data or static image rendering link ]</p>
+          </div>
+          <div class="map-caption-bar">
+            <strong>Figure 1.0:</strong> Vulnerability reference zones mapping localized altitudinal lines, critical early warning nodes, and assembly routes across the main sitio complexes.
+          </div>
+        </div>
+
+        <!-- Hazard Matrix Stack -->
+        <div class="hazard-card-stack reveal reveal-delay-1">
+          
+          <!-- Hazard 1 -->
+          <div class="hazard-badge-strip high-risk">
+            <div class="hazard-strip-text">
+              <span class="risk-indicator-tag">High Susceptibility</span>
+              <h4>Rain-Induced Landslides</h4>
+              <p>Due to raw sloped terrains sitting along the foothills of Mount Isarog, seasonal heavy typhoons create elevated displacement vulnerabilities across peripheral agricultural settlement segments.</p>
+            </div>
+          </div>
+
+          <!-- Hazard 2 -->
+          <div class="hazard-badge-strip med-risk">
+            <div class="hazard-strip-text">
+              <span class="risk-indicator-tag">Moderate Risk</span>
+              <h4>Volcanic Lahar &amp; Mudflows</h4>
+              <p>Monitored directly via PHIVOLCS under Mount Isarog's sector frameworks. Heavy precipitation channels surface sediment hazards through historical riverbanks and drainage basins.</p>
+            </div>
+          </div>
+
+          <!-- Hazard 3 -->
+          <div class="hazard-badge-strip low-risk">
+            <div class="hazard-strip-text">
+              <span class="risk-indicator-tag">Low / Low-Lying Risk</span>
+              <h4>Flash Flooding</h4>
+              <p>While the overall high elevation of 334 meters completely prevents prolonged standard flooding, low-lying drainage catchments experience brief flash occurrences during extreme rain return periods.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: BPC (BARANGAY PHYSICAL CHARACTERISTICS) -->
+  <section class="profile-section style-alt reveal" style="padding-bottom: 80px;">
+    <div class="container">
+      <div class="bpc-card-wrapper reveal">
+        <span class="section-tag" style="color:var(--gold); border-left-color:var(--gold);">BPC Profile</span>
+        <h3>Barangay Physical Characteristics</h3>
+        <p class="bpc-intro-lead">Verified physical metadata baseline defining the geographic limits and structural distribution patterns across Barangay Panicuason, Naga City.</p>
+        
+        <div class="bpc-data-matrix">
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Classification Type</span>
+            <span class="bpc-metric-value">Upland / Rural Barangay</span>
+          </div>
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Mean Elevation Baseline</span>
+            <span class="bpc-metric-value">334 Meters (1,095.8 Feet)</span>
+          </div>
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Primary Topography</span>
+            <span class="bpc-metric-value">Mountainous Footslopes / High Terrain</span>
+          </div>
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Dominant Land Use</span>
+            <span class="bpc-metric-value">Agricultural &amp; Eco-Tourism Zones</span>
+          </div>
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Key Water Drainage Base</span>
+            <span class="bpc-metric-value">Bicol River Catchment Tributaries</span>
+          </div>
+          <div class="bpc-metric-node">
+            <span class="bpc-metric-label">Geospatial Coordinates</span>
+            <span class="bpc-metric-value">13.6628° N, 123.3183° E</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: EMERGENCY HOTLINES -->
+  <section class="hotline-section section-pad reveal">
+    <div class="container">
+      <span class="section-tag" style="color:var(--red); border-left-color:var(--red);">Alisto Panicuason</span>
+      <h2 class="section-h">Panicuason Emergency Hotlines</h2>
+      <p class="section-sub">Direct contact infrastructure linking residents immediately to city response centers, first responders, medical personnel, and rescue operators.</p>
+      
+      <div class="hotline-grid">
+        
+        <!-- Emergency Card 1 -->
+        <div class="hotline-card emergency-accent reveal reveal-delay-1">
+          <h4>Naga City COMCEN</h4>
+          <span class="hotline-dept-sub">Central Communications Center</span>
+          <a href="tel:+63544723000" class="hotline-number-anchor">(054) 472-3000</a>
+          <span class="hotline-alt-text">Mobile: 0917-777-2277</span>
+        </div>
+
+        <!-- Emergency Card 2 -->
+        <div class="hotline-card emergency-accent reveal reveal-delay-2">
+          <h4>CDRRMO Emergency</h4>
+          <span class="hotline-dept-sub">Disaster Operations Center</span>
+          <a href="tel:+63542052980" class="hotline-number-anchor">205-2980 <span style="font-size:0.8rem; font-weight:400; color:var(--gray)">loc 2020</span></a>
+          <span class="hotline-alt-text">Mobile: 0908-885-3000</span>
+        </div>
+
+        <!-- Emergency Card 3 -->
+        <div class="hotline-card reveal reveal-delay-3">
+          <h4>Our Lady of Lourdes</h4>
+          <span class="hotline-dept-sub">Infirmary Hospital (Carolina)</span>
+          <p style="font-weight:700; color:var(--navy); font-size:1.1rem; margin:6px 0 4px 0;">Km. 12, Carolina</p>
+          <span class="hotline-alt-text">Nearest Medical Trauma Station</span>
+        </div>
+
+        <!-- Emergency Card 4 -->
+        <div class="hotline-card reveal reveal-delay-1">
+          <h4>Naga City Police NCPO</h4>
+          <span class="hotline-dept-sub">Philippine National Police</span>
+          <a href="tel:09083254787" class="hotline-number-anchor">0908-325-4787</a>
+          <span class="hotline-alt-text">Backup: 0908-737-4228</span>
+        </div>
+
+        <!-- Emergency Card 5 -->
+        <div class="hotline-card reveal reveal-delay-2">
+          <h4>BFP Fire Station</h4>
+          <span class="hotline-dept-sub">Bureau of Fire Protection</span>
+          <a href="tel:+63544738443" class="hotline-number-anchor">(054) 473-8443</a>
+          <span class="hotline-alt-text">City Fire Dispatch Unit</span>
+        </div>
+
+        <!-- Emergency Card 6 -->
+        <div class="hotline-card reveal reveal-delay-3">
+          <h4>Bicol Medical Center</h4>
+          <span class="hotline-dept-sub">BMC Trauma / Ambulance</span>
+          <a href="tel:+63544723040" class="hotline-number-anchor">(054) 472-3040</a>
+          <span class="hotline-alt-text">Panganiban Drive Emergency Room</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER MARKUP CONTAINER -->
+  <div id="sk-footer"></div>
+
+  <!-- JavaScript Global Logic -->
+  <script src="js/main.js" defer></script>
+  <script>
+    /* Scroll Reveal Animation Execution */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

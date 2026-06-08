@@ -12,8 +12,7 @@
   <script src="js/nav.js" defer></script>
   <script src="js/footer.js" defer></script>
   <style>
-    
-    /* ── Program Card with Image Header ── */
+    /* ── Program Card Layout ── */
     .prog-card-full {
       background: var(--white, #fff);
       border-radius: 14px;
@@ -28,12 +27,13 @@
       box-shadow: 0 10px 36px rgba(0,0,0,0.16);
     }
 
-    /* Image banner replacing the old icon header */
+    /* Clickable Image Pointer Wrapper */
     .prog-card-img {
       position: relative;
       width: 100%;
       height: 180px;
       overflow: hidden;
+      cursor: pointer; /* Feedback showing the card is interactive */
     }
     .prog-card-img img {
       width: 100%;
@@ -50,7 +50,6 @@
       inset: 0;
       background: linear-gradient(to top, rgba(10,22,40,0.70) 30%, rgba(10,22,40,0.10) 100%);
     }
-    /* Title sits at the bottom of the image */
     .prog-card-img .prog-img-title {
       position: absolute;
       bottom: 0;
@@ -84,13 +83,139 @@
       flex-wrap: wrap;
       gap: 0.4rem;
     }
+
+    /* ── Accomplishment Report Section ── */
+    .report-section {
+      background: #fff;
+      padding: 60px 0;
+      border-top: 1px solid rgba(0,0,0,0.06);
+    }
+    .report-box {
+      background: linear-gradient(135deg, #0e1f3d 0%, #060e1c 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 30px;
+      box-shadow: 0 10px 30px rgba(14,31,61,0.15);
+    }
+    .report-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      margin: 0 0 10px 0;
+      color: #fff;
+    }
+    .report-text p {
+      margin: 0;
+      font-size: 1rem;
+      color: #b0c4de;
+    }
+    .report-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #dfb76c; /* Gold theme accent */
+      color: #0e1f3d;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .report-btn:hover {
+      background: #f1cb80;
+      transform: translateY(-2px);
+    }
+
+    /* ── Lightbox Modal Structure ── */
+    .prog-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 40, 0.85);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+    .prog-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .prog-modal-content {
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    }
+    .prog-modal.active .prog-modal-content {
+      transform: scale(1);
+    }
+    .prog-modal-close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: rgba(255,255,255,0.25);
+      border: none;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .prog-modal-close:hover {
+      background: rgba(255,255,255,0.4);
+    }
+    .prog-modal-img {
+      width: 100%;
+      height: 260px;
+      object-fit: cover;
+      background: #0e1f3d;
+    }
+    .prog-modal-body {
+      padding: 25px;
+    }
+    .prog-modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #0e1f3d;
+      margin: 0 0 15px 0;
+    }
+    .prog-modal-text {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #444;
+      margin: 0;
+    }
+
+    @media(max-width: 768px) {
+      .report-box { flex-direction: column; text-align: center; padding: 30px 20px; }
+      .report-btn { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>
 
   <!-- ══ NAVBAR ══ -->
   <div id="sk-nav"></div>
-
 
   <!-- ══ PAGE HERO ══ -->
   <section class="page-hero">
@@ -102,13 +227,13 @@
   </section>
 
   <!-- ══ PROGRAMS GRID ══ -->
-  <section class="section-pad" style="background:var(--offwhite);">
+  <section class="section-pad" style="background:var(--offwhite); padding-bottom: 20px;">
     <div class="container">
       <div class="text-center reveal">
         <div class="section-label" style="justify-content:center;">What We Offer</div>
         <h2 class="section-title">Programs &amp; Initiatives</h2>
         <p class="section-sub" style="margin-inline:auto;">
-          Each program is designed with the youth in mind — accessible, impactful, and community-driven.
+          Each program is designed with the youth in mind — accessible, impactful, and community-driven. Click on any picture to view its details and register!
         </p>
       </div>
 
@@ -119,9 +244,9 @@
           <div class="prog-card-img" style="background:#0e1f3d; display:flex; align-items:center; justify-content:center;">
              <img src="images/sk-scholar.png" alt="SKTEA Logo" style="object-fit:contain; padding:1rem;" />
              <div class="prog-img-title"><h3>Educational Assistance Program</h3></div>
-              </div>
+          </div>
           <div class="prog-card-body">
-            <p>Provides scholarships, school supplies, and academic support to deserving youth who face financial barriers. We partner with local schools to identify and assist students in need.</p>
+            <p>Provides scholarships, school supplies, and academic support to deserving youth facing financial barriers...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-blue">Education</span>
@@ -136,7 +261,7 @@
              <div class="prog-img-title"><h3>Sports &amp; Recreation Program</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Organizes inter-barangay leagues, fitness sessions, and sports clinics to promote physical health and teamwork. Open to all youth aged 15 to 30 regardless of skill level.</p>
+            <p>Organizes inter-barangay leagues, fitness sessions, and sports clinics to promote physical health and teamwork...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-blue">Sports</span>
@@ -152,7 +277,7 @@
             <div class="prog-img-title"><h3>Livelihood &amp; Skills Training</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Free workshops on entrepreneurship, cooking, handicrafts, digital skills, and more. Designed to give out-of-school youth and young adults practical tools for employment.</p>
+            <p>Free workshops on entrepreneurship, cooking, handicrafts, digital skills, and practical tools for employment...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-gold">Livelihood</span>
@@ -168,7 +293,7 @@
             <div class="prog-img-title"><h3>Youth Health &amp; Wellness</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Free medical and dental missions, mental health awareness sessions, and health seminars to ensure every young person has access to basic healthcare services.</p>
+            <p>Free medical and dental missions, mental health awareness sessions, and health seminars to ensure community access...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-navy">Health</span>
@@ -184,7 +309,7 @@
             <div class="prog-img-title"><h3>Arts &amp; Culture Program</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Celebrates local talent through festivals, art exhibits, cultural performances, and creative workshops that preserve heritage and nurture artistic expression among youth.</p>
+            <p>Celebrates local talent through festivals, art exhibits, and performance arts workshops preserving heritage...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-gold">Arts</span>
@@ -200,7 +325,7 @@
             <div class="prog-img-title"><h3>Environmental Awareness</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Tree planting drives, clean-up campaigns, and eco-education seminars that teach youth to be stewards of the environment and take action against climate change locally.</p>
+            <p>Tree planting drives, clean-up campaigns, and eco-education seminars that teach youth local climate action...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-blue">Environment</span>
@@ -216,7 +341,7 @@
             <div class="prog-img-title"><h3>Digital Literacy Program</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Basic computer training, internet safety, and digital skills workshops to bridge the digital divide and equip youth with 21st-century competencies for the modern workforce.</p>
+            <p>Basic computer training, internet safety, and digital workspaces to equip youth with modern workforce tools...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-gold">Technology</span>
@@ -232,7 +357,7 @@
             <div class="prog-img-title"><h3>Leadership &amp; Governance</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Youth leadership camps, seminars on civic responsibility, and governance training to prepare the next generation of community leaders and public servants.</p>
+            <p>Youth leadership camps, seminars on civic responsibility, and transparent governance training modules...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-navy">Leadership</span>
@@ -248,7 +373,7 @@
             <div class="prog-img-title"><h3>Community Service &amp; Outreach</h3></div>
           </div>
           <div class="prog-card-body">
-            <p>Feeding programs, disaster response volunteers, and community clean-up drives that instill the value of bayanihan and genuine service to those most in need.</p>
+            <p>Feeding programs, disaster response volunteer clusters, and projects instilling the values of bayanihan...</p>
           </div>
           <div class="prog-tags">
             <span class="prog-tag tag-gold">Community</span>
@@ -256,6 +381,21 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ ACCOMPLISHMENT REPORT SECTION ══ -->
+  <section class="report-section">
+    <div class="container">
+      <div class="report-box reveal">
+        <div class="report-text">
+          <h3>Annual Accomplishment Report</h3>
+          <p>Review transparency targets, program impact figures, and budget utilization metrics for this fiscal year.</p>
+        </div>
+        <a href="documents/report.pdf" target="_blank" class="report-btn">
+          📥 Download PDF Report
+        </a>
       </div>
     </div>
   </section>
@@ -274,6 +414,123 @@
   <!-- ══ FOOTER ══ -->
   <div id="sk-footer"></div>
 
+  <!-- ══ INTERACTIVE DETAILED MODAL POPUP ══ -->
+  <div class="prog-modal" id="programModal">
+    <div class="prog-modal-content">
+      <button class="prog-modal-close" id="closeModal">&times;</button>
+      <img src="" alt="Program Image" class="prog-modal-img" id="modalImg" />
+      <div class="prog-modal-body">
+        <h3 class="prog-modal-title" id="modalTitle">Program Title</h3>
+        <p class="prog-modal-text" id="modalText">Detailed brief summary goes here...</p>
+        
+        <!-- Action Button Row targeting contact.html -->
+        <div style="margin-top: 25px; text-align: right;">
+          <a href="contact.html" id="modalActionBtn" class="report-btn" style="display: inline-flex;">Action Button</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/main.js"></script>
+  
+  <!-- ── Lightbox & Dynamic Button Controller Script ── -->
+  <script>
+    // Detailed descriptions and custom button phrasing. 
+    // They all redirect cleanly to contact.html now!
+    const programDetails = {
+      "Educational Assistance Program": {
+        text: "Our Educational Assistance initiative offers targeted financial assistance, basic school kits, and tutoring support systems to outstanding yet underprivileged youth across Panicuason. By coordinating with school districts, the SK helps bridge financial deficits so scholars can focus completely on completing their secondary and higher education milestones.",
+        btnText: "🎓 Become a Scholar!"
+      },
+      "Sports & Recreation Program": {
+        text: "Designed to cultivate sportsmanship, physical longevity, and communal harmony, this program structures regular multi-purok athletic brackets (Palarong Barangay), physical fitness challenges, and technical skills bootcamps. This structure actively channels youthful energy productively away from negative habits while uncovering standout local sporting talent.",
+        btnText: "🏆 Join the League!"
+      },
+      "Livelihood & Skills Training": {
+        text: "In partnership with local vocational institutions, we sponsor specialized alternative livelihood courses spanning digital commerce, culinary enterprise, craft generation, and operational trades. These certificates empower non-traditional students and out-of-school youth with the verified toolsets required to qualify for corporate placement or kickstart sustainable micro-enterprises.",
+        btnText: "🚀 Register for Training!"
+      },
+      "Youth Health & Wellness": {
+        text: "Health security remains paramount. This system structures free local medical evaluation operations, pediatric support assemblies, clinical checkups, and critical psychological safety workshops. Our target is breaking accessibility walls, making sure comprehensive health literacy and basic physical validation services reach vulnerable young residents directly.",
+        btnText: "❤️ Book a Health Slot"
+      },
+      "Arts & Culture Program": {
+        text: "This domain champions local historical conservation and creative expression. Through community gallery curation, traditional dance ensembles, public performance showcases, and design modules during cultural fiestas, the SK gives youth historical ownership and creative venues to monetize and display their unique artistic outputs.",
+        btnText: "🎨 Join Creative Groups"
+      },
+      "Environmental Awareness": {
+        text: "Tasked with preserving the pristine ecology at the foot of Mt. Isarog, our environmental projects bring youth directly to the conservation frontline. Regular reforestation activities, community waste collection tracks, and eco-conservation training emphasize waste segregation and climate accountability on a grassroots level.",
+        btnText: "🌱 Volunteer for Eco-Drive"
+      },
+      "Digital Literacy Program": {
+        text: "Bridging the modern digital divide, this specialized course series delivers practical instructions on basic workspace software applications, programming foundations, graphic asset styling, and safe web browsing mechanics. We provide participants with foundational modern attributes crucial for surviving today’s highly integrated digital employment spaces.",
+        btnText: "💻 Sign Up Now"
+      },
+      "Leadership & Governance": {
+        text: "Developing the next line of civic stewards, our governance arrays organize immersive leadership tracks, democratic responsibility seminars, and public presentation programs. Participants learn values regarding civic transparency, corporate policy drafting, and ethical neighborhood project deployment.",
+        btnText: "⚡ Apply for Youth Camp"
+      },
+      "Community Service & Outreach": {
+        text: "Rooted heavily in the historic spirit of Bayanihan, this volunteer branch executes swift disaster response logistics, localized feeding operations, and social care initiatives. This framework bridges community relief sectors while showing participants the profound impact of organized, selfless local civic mobilization.",
+        btnText: "🤝 Be an SK Volunteer"
+      }
+    };
+
+    const modal = document.getElementById('programModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const modalActionBtn = document.getElementById('modalActionBtn');
+    const closeModal = document.getElementById('closeModal');
+
+    // Attach click triggers to all program image boxes
+    document.querySelectorAll('.prog-card-img').forEach(cardImg => {
+      cardImg.addEventListener('click', () => {
+        const titleText = cardImg.querySelector('h3').innerText;
+        const imgSrc = cardImg.querySelector('img').src;
+        const imgStyle = cardImg.getAttribute('style') || '';
+        
+        // Populate static components inside the modal interface
+        modalTitle.innerText = titleText;
+        modalImg.src = imgSrc;
+        
+        // Handle visual presentation rules cleanly depending on asset backgrounds
+        if(imgStyle.includes('contain')) {
+          modalImg.style.objectFit = 'contain';
+          modalImg.style.padding = '1.5rem';
+          modalImg.style.backgroundColor = cardImg.style.backgroundColor;
+        } else {
+          modalImg.style.objectFit = 'cover';
+          modalImg.style.padding = '0';
+          modalImg.style.backgroundColor = 'transparent';
+        }
+
+        // Map data arrays dynamically to form action properties
+        const data = programDetails[titleText];
+        if (data) {
+          modalText.innerText = data.text;
+          modalActionBtn.innerText = data.btnText;
+          
+          // Generates url parameter tracking to pre-fill content flags automatically if desired
+          modalActionBtn.href = `contact.html?program=${encodeURIComponent(titleText)}`;
+          modalActionBtn.style.display = "inline-flex"; 
+        } else {
+          modalText.innerText = "Detailed brief summary content coming soon.";
+          modalActionBtn.href = "contact.html";
+          modalActionBtn.innerText = "✉️ Contact Us";
+          modalActionBtn.style.display = "inline-flex";
+        }
+        
+        // Open modal
+        modal.classList.add('active');
+      });
+    });
+
+    // Handle closure actions safely via buttons and background overlays
+    closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('active');
+    });
+  </script>
 </body>
 </html>

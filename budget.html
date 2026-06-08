@@ -157,6 +157,199 @@
     .badge-done    { border-color: rgba(10,22,40,0.2); color: var(--navy); background: rgba(10,22,40,0.04); }
     .badge-pending { border-color: rgba(245,197,24,0.4); color: var(--gold2); background: rgba(245,197,24,0.06); }
 
+    /* ── QR RECORDS SECTION ── */
+    .qr-records-section {
+      margin-top: 56px;
+    }
+    .qr-records-section .report-block-header {
+      margin-bottom: 2px;
+    }
+
+    .qr-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+      background: var(--lightgray);
+    }
+
+    .qr-card {
+      background: var(--white);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .qr-card-inner {
+      display: flex;
+      gap: 28px;
+      align-items: flex-start;
+    }
+
+    .qr-placeholder {
+      flex-shrink: 0;
+      width: 108px;
+      height: 108px;
+      border: 2px solid var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      position: relative;
+      background: var(--white);
+    }
+    /* Corner brackets on QR box */
+    .qr-placeholder::before,
+    .qr-placeholder::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+    }
+    .qr-placeholder::before {
+      top: -2px; left: -2px;
+      border-top: 3px solid var(--gold);
+      border-left: 3px solid var(--gold);
+    }
+    .qr-placeholder::after {
+      bottom: -2px; right: -2px;
+      border-bottom: 3px solid var(--gold);
+      border-right: 3px solid var(--gold);
+    }
+
+    /* QR dot grid pattern */
+    .qr-dots {
+      display: grid;
+      grid-template-columns: repeat(7, 8px);
+      grid-template-rows: repeat(7, 8px);
+      gap: 2px;
+      padding: 8px;
+    }
+    .qr-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--navy);
+    }
+    .qr-dot.light { background: transparent; }
+
+    .qr-scan-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-align: center;
+    }
+
+    .qr-info { flex: 1; }
+
+    .qr-tag {
+      display: inline-block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      background: rgba(245,197,24,0.08);
+      border: 1px solid rgba(245,197,24,0.3);
+      padding: 2px 8px;
+      margin-bottom: 10px;
+    }
+
+    .qr-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .qr-desc {
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* Quarter pills */
+    .qr-quarters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .qr-pill {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 1px solid var(--lightgray);
+      color: var(--navy);
+      background: var(--offwhite);
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .qr-pill:hover {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .qr-pill svg {
+      width: 10px;
+      height: 10px;
+      flex-shrink: 0;
+    }
+
+    .qr-pill.active {
+      background: var(--navy);
+      color: var(--gold);
+      border-color: var(--navy);
+    }
+
+    /* Month pills (for monthly purchases) */
+    .qr-months {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    /* Link row below each card */
+    .qr-link-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 20px;
+      border-top: 1px solid var(--lightgray);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .qr-link-row .qr-link-label {
+      font-size: 0.72rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+
+    .qr-link-row a {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--navy);
+      text-decoration: none;
+      border-bottom: 1px solid var(--navy);
+      letter-spacing: 0.04em;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .qr-link-row a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+
     /* Cert box */
     .cert-box {
       margin-top: 56px;
@@ -225,6 +418,11 @@
       .cert-box { grid-template-columns: 1fr; gap: 32px; padding: 36px 28px; }
       .report-table thead th:nth-child(2),
       .report-table tbody td:nth-child(2) { display: none; }
+      .qr-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .qr-card-inner { flex-direction: column; }
+      .qr-placeholder { width: 92px; height: 92px; }
     }
     @media (max-width: 560px) {
       .report-block-header { flex-direction: column; align-items: flex-start; }
@@ -414,6 +612,217 @@
           </tbody>
         </table>
       </div>
+
+      <!-- ═══════════════════════════════════════════════ -->
+      <!-- QR RECORDS — RCB + MONTHLY PURCHASES           -->
+      <!-- ═══════════════════════════════════════════════ -->
+      <div class="qr-records-section">
+
+        <div class="report-block-header">
+          <h3>Official Financial Records</h3>
+          <span class="block-tag">Scan to Access</span>
+        </div>
+
+        <div class="qr-grid">
+
+          <!-- ── CARD 1: RCB Quarterly ── -->
+          <div class="qr-card">
+            <div class="qr-card-inner">
+
+              <!-- QR Placeholder -->
+              <div class="qr-placeholder" title="QR Code — RCB Quarterly Register">
+                <!-- Decorative pixel QR pattern -->
+                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- Top-left finder -->
+                  <rect x="4" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="6" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="9" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Top-right finder -->
+                  <rect x="58" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="60" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="63" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Bottom-left finder -->
+                  <rect x="4" y="58" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="6" y="60" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="9" y="63" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Data dots -->
+                  <rect x="30" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="38" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="4" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="30" y="12" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="20" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="20" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="4" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="12" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="20" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="54" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="70" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="4" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="20" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="54" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="70" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="4" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="12" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="54" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="38" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="46" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="54" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="70" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="46" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="54" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="70" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="38" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="54" y="70" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="62" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="70" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                </svg>
+              </div>
+
+              <div class="qr-info">
+                <span class="qr-tag">RCB — Quarterly</span>
+                <div class="qr-title">Register of Cash in Bank</div>
+                <p class="qr-desc">
+                  Quarterly register of all cash in bank balances and related financial transactions, maintained in compliance with COA regulations.
+                </p>
+                <div class="qr-quarters">
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q1_LINK" target="_blank" rel="noopener" class="qr-pill active">
+                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Q1 · Jan–Mar
+                  </a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q2_LINK" target="_blank" rel="noopener" class="qr-pill">
+                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Q2 · Apr–Jun
+                  </a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q3_LINK" target="_blank" rel="noopener" class="qr-pill">
+                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Q3 · Jul–Sep
+                  </a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q4_LINK" target="_blank" rel="noopener" class="qr-pill">
+                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                    Q4 · Oct–Dec
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="qr-link-row">
+              <span class="qr-link-label">Access full register on Google Drive</span>
+              <a href="https://drive.google.com/drive/folders/REPLACE_WITH_RCB_MAIN_FOLDER" target="_blank" rel="noopener">
+                View All RCB Records
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- ── CARD 2: Monthly Itemized Purchases ── -->
+          <div class="qr-card">
+            <div class="qr-card-inner">
+
+              <!-- QR Placeholder -->
+              <div class="qr-placeholder" title="QR Code — Monthly Itemized Purchases">
+                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- Top-left finder -->
+                  <rect x="4" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="6" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="9" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Top-right finder -->
+                  <rect x="58" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="60" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="63" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Bottom-left finder -->
+                  <rect x="4" y="58" width="22" height="22" fill="currentColor" opacity="0.15"/>
+                  <rect x="6" y="60" width="18" height="18" fill="currentColor" opacity="0.15"/>
+                  <rect x="9" y="63" width="12" height="12" fill="currentColor" opacity="0.7"/>
+                  <!-- Data dots (different pattern from card 1) -->
+                  <rect x="30" y="4" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="12" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="30" y="20" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="20" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="4" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="12" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="38" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="54" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="62" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="70" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="4" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="12" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="20" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="38" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="54" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="4" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="20" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="30" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="70" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="30" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="46" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="70" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="38" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="54" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="70" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="30" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="46" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                  <rect x="62" y="70" width="5" height="5" fill="currentColor" opacity="0.4"/>
+                  <rect x="70" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
+                </svg>
+              </div>
+
+              <div class="qr-info">
+                <span class="qr-tag">Monthly — Itemized</span>
+                <div class="qr-title">Monthly Itemized Purchase Requests</div>
+                <p class="qr-desc">
+                  Full itemized list of all purchase requests and procurements for each month, including particulars, unit cost, quantity, and purpose.
+                </p>
+                <div class="qr-months">
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JAN_LINK" target="_blank" rel="noopener" class="qr-pill">Jan</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_FEB_LINK" target="_blank" rel="noopener" class="qr-pill">Feb</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_MAR_LINK" target="_blank" rel="noopener" class="qr-pill">Mar</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_APR_LINK" target="_blank" rel="noopener" class="qr-pill">Apr</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_MAY_LINK" target="_blank" rel="noopener" class="qr-pill">May</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JUN_LINK" target="_blank" rel="noopener" class="qr-pill">Jun</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JUL_LINK" target="_blank" rel="noopener" class="qr-pill">Jul</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_AUG_LINK" target="_blank" rel="noopener" class="qr-pill">Aug</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_SEP_LINK" target="_blank" rel="noopener" class="qr-pill">Sep</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_OCT_LINK" target="_blank" rel="noopener" class="qr-pill">Oct</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_NOV_LINK" target="_blank" rel="noopener" class="qr-pill">Nov</a>
+                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_DEC_LINK" target="_blank" rel="noopener" class="qr-pill">Dec</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="qr-link-row">
+              <span class="qr-link-label">Access full purchase logs on Google Drive</span>
+              <a href="https://drive.google.com/drive/folders/REPLACE_WITH_PURCHASES_MAIN_FOLDER" target="_blank" rel="noopener">
+                View All Purchase Records
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div><!-- /.qr-grid -->
+      </div><!-- /.qr-records-section -->
+      <!-- ═══════════════════════════════════════════════ -->
 
       <!-- Balance Table -->
       <div class="report-block">

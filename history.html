@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History — Barangay Panicuason</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  
+  <!-- FIXED: Paths linked to your asset folders -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />    
+  
+  <script src="js/nav.js" defer></script>
+  <script src="js/footer.js" defer></script>
+  
+  <style>
+    /* ── TIMELINE ── */
+    .history-section { background: var(--white); }
+
+    .timeline {
+      position: relative;
+      margin-top: 64px;
+      padding-left: 0;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 90px;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), var(--blue), var(--red), var(--gold));
+    }
+
+    .tl-item {
+      display: flex;
+      gap: 0;
+      margin-bottom: 56px;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity .6s, transform .6s;
+    }
+    .tl-item.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    .tl-year {
+      flex: 0 0 90px;
+      text-align: right;
+      padding-right: 28px;
+      padding-top: 4px;
+      position: relative;
+    }
+    .tl-year span {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .tl-year::after {
+      content: '';
+      position: absolute;
+      right: -7px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 2px var(--gold);
+    }
+
+    .tl-body {
+      flex: 1;
+      background: var(--offwhite);
+      padding: 28px 32px;
+      margin-left: 28px;
+      border-left: 3px solid var(--lightgray);
+      transition: border-color .25s;
+      position: relative;
+    }
+    .tl-body:hover { border-left-color: var(--gold); }
+    .tl-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .tl-body p {
+      font-size: .92rem;
+      color: var(--gray);
+      line-height: 1.85;
+    }
+    .tl-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-size: .66rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border: 1px solid rgba(26,95,180,.3);
+      color: var(--blue);
+      background: rgba(26,95,180,.05);
+    }
+
+    /* ── QUICK FACTS ── */
+    .quick-facts { background: var(--navy); padding: 80px 32px; }
+    .quick-facts .section-tag         { color: var(--gold); }
+    .quick-facts .section-tag::before { background: var(--gold); }
+    .quick-facts h2.section-h         { color: var(--white); }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+    }
+    .fact-card {
+      background: var(--navy2);
+      padding: 36px 28px;
+      border-top: 3px solid transparent;
+      transition: border-color .25s;
+    }
+    .fact-card:nth-child(1) { border-top-color: var(--gold); }
+    .fact-card:nth-child(2) { border-top-color: var(--red); }
+    .fact-card:nth-child(3) { border-top-color: var(--blue); }
+    .fact-card:nth-child(4) { border-top-color: var(--green); }
+    .fact-card:hover         { background: #0f2040; }
+
+    .fact-label {
+      font-size: .68rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .fact-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .fact-note {
+      font-size: .8rem;
+      color: rgba(255,255,255,.45);
+      line-height: 1.6;
+    }
+
+    /* ── GEOGRAPHY ── */
+    .geography-section { background: var(--offwhite); }
+    .geo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 56px;
+    }
+    .geo-card {
+      background: var(--white);
+      padding: 40px 36px;
+    }
+    .geo-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--lightgray);
+    }
+    .geo-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .geo-card ul li {
+      font-size: .9rem;
+      color: var(--gray);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.6;
+    }
+    .geo-card ul li::before {
+      content: '—';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .geo-card ul li strong { color: var(--navy); }
+
+    /* ── POPULATION HIGHLIGHT ── */
+    .pop-band {
+      background: var(--gold);
+      padding: 64px 32px;
+    }
+    .pop-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .pop-stat {
+      padding: 32px 28px;
+      border-right: 1px solid rgba(10,22,40,.12);
+      text-align: center;
+    }
+    .pop-stat:last-child { border-right: none; }
+    .pop-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--navy);
+      display: block;
+      line-height: 1;
+    }
+    .pop-lbl {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(10,22,40,.55);
+      margin-top: 8px;
+      display: block;
+    }
+    .pop-sub {
+      font-size: .82rem;
+      color: rgba(10,22,40,.45);
+      margin-top: 4px;
+      display: block;
+    }
+
+    @media (max-width: 860px) {
+      .timeline::before { left: 0; }
+      .tl-year { display: none; }
+      .tl-body { margin-left: 20px; }
+      .facts-grid { grid-template-columns: repeat(2, 1fr); }
+      .geo-grid   { grid-template-columns: 1fr; }
+      .pop-inner  { grid-template-columns: 1fr; }
+      .pop-stat   { border-right: none; border-bottom: 1px solid rgba(10,22,40,.12); }
+      .pop-stat:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR INTERFACES -->
+  <div id="sk-nav"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <p class="section-tag" style="color:var(--gold);margin-bottom:12px;">
+        <span style="width:28px;height:2px;background:var(--gold);display:inline-block;"></span>
+        Barangay Panicuason · Naga City
+      </p>
+      <h1>History &amp;<br>Origins</h1>
+      <p>Tracing the roots of Panicuason — from its early settlement along the highlands of Naga to a thriving barangay community.</p>
+    </div>
+  </section>
+
+  <!-- QUICK FACTS -->
+  <section class="quick-facts reveal">
+    <div class="container">
+      <span class="section-tag">At a Glance</span>
+      <h2 class="section-h">Panicuason in Numbers</h2>
+      <div class="facts-grid">
+        <div class="fact-card reveal reveal-delay-1">
+          <span class="fact-label">Population (2020)</span>
+          <span class="fact-value">3,100</span>
+          <span class="fact-note">1.48% of Naga's total population</span>
+        </div>
+        <div class="fact-card reveal reveal-delay-2">
+          <span class="fact-label">Elevation</span>
+          <span class="fact-value">334 m</span>
+          <span class="fact-note">1,095.8 ft above mean sea level</span>
+        </div>
+        <div class="fact-card reveal reveal-delay-3">
+          <span class="fact-label">Coordinates</span>
+          <span class="fact-value" style="font-size:1.1rem;padding-top:4px;">13.6628°N</span>
+          <span class="fact-note">123.3183°E · Island of Luzon</span>
+        </div>
+        <div class="fact-card reveal reveal-delay-3">
+          <span class="fact-label">Postal Code</span>
+          <span class="fact-value">4400</span>
+          <span class="fact-note">City of Naga, Camarines Sur</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY TIMELINE -->
+  <section class="history-section section-pad">
+    <div class="container">
+      <span class="section-tag">Historical Timeline</span>
+      <h2 class="section-h">Growth Through the Decades</h2>
+      <p class="section-sub">Panicuason's story is told through the steady growth of its people — from a small mountain community to a recognized barangay of Naga City.</p>
+
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-year"><span>Pre-<br>1990</span></div>
+          <div class="tl-body">
+            <h3>Early Settlement</h3>
+            <p>Panicuason sits at approximately 334 meters above sea level on the foothills of Mount Isarog, roughly 5.93 km to its east. The barangay's elevated terrain and proximity to the mountain shaped the way of life of its early settlers — primarily farming and small-scale agriculture. The name "Panicuason" is believed to derive from the local Bikol language, reflecting the natural character of the land.</p>
+            <span class="tl-tag">Origins</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>1990</span></div>
+          <div class="tl-body">
+            <h3>First Census Record — 1,236 Residents</h3>
+            <p>The May 1990 Census formally recorded Panicuason's population at 1,236 individuals across 222 households, with an average household size of 5.50 members. This marks the earliest documented demographic baseline of the barangay under modern Philippine statistics.</p>
+            <span class="tl-tag">Census 1990</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>1995</span></div>
+          <div class="tl-body">
+            <h3>Slight Dip — 1,366 Residents</h3>
+            <p>By September 1995, the population edged up to 1,366 across 214 households, showing modest growth of 1.89% annually. The slight decrease in the number of households despite population growth suggests household consolidation during this period.</p>
+            <span class="tl-tag">Census 1995</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>2000</span></div>
+          <div class="tl-body">
+            <h3>Population Surge — 1,847 Residents</h3>
+            <p>The 2000 Census recorded a significant jump to 1,847 residents — a 6.68% annualized growth rate, the highest in recorded history. The number of households swelled to 332, reflecting increased settlement and family formation within the barangay during the late 1990s.</p>
+            <span class="tl-tag">Census 2000</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>2007</span></div>
+          <div class="tl-body">
+            <h3>Continued Growth — 2,246 Residents</h3>
+            <p>The August 2007 Census placed Panicuason's population at 2,246 across 396 households, with a 2.73% annual growth rate. This period marked the barangay crossing the 2,000-resident threshold, signifying its growing importance within Naga City.</p>
+            <span class="tl-tag">Census 2007</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>2010</span></div>
+          <div class="tl-body">
+            <h3>Temporary Decline — 2,033 Residents</h3>
+            <p>Unusually, the 2010 Census recorded a decline to 2,033 — a negative growth of -3.56% annually. The number of households remained at 396, suggesting that some residents may have temporarily relocated or migrated during this period, a pattern seen in several upland barangays of Camarines Sur.</p>
+            <span class="tl-tag">Census 2010</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>2015</span></div>
+          <div class="tl-body">
+            <h3>Strong Recovery — 2,715 Residents</h3>
+            <p>The 2015 Census saw the strongest recorded recovery, with population jumping to 2,715 across 555 households — a 5.66% annualized growth rate. The median age of 19.64 reflects a very young community, with youth aged 15–19 forming the largest age group at 385 individuals (14.18%). Young dependents aged 14 and below comprised 36.83% of the population.</p>
+            <span class="tl-tag">Census 2015</span>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-year"><span>2020</span></div>
+          <div class="tl-body">
+            <h3>Present Day — 3,100 Residents</h3>
+            <p>The May 2020 Census confirmed Panicuason's population at 3,100 — the highest in its recorded history, representing a 2.83% annualized growth from 2015. In 30 years, the barangay grew by 1,864 people. Panicuason now accounts for 1.48% of Naga City's total population, 0.15% of Camarines Sur, and 0.051% of the Bicol Region.</p>
+            <span class="tl-tag">Census 2020</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULATION HIGHLIGHT -->
+  <div class="pop-band">
+    <div class="pop-inner">
+      <div class="pop-stat reveal">
+        <span class="pop-num">3,100</span>
+        <span class="pop-lbl">Population (2020)</span>
+        <span class="pop-sub">+1,864 since 1990</span>
+      </div>
+      <div class="pop-stat reveal reveal-delay-1">
+        <span class="pop-num">555</span>
+        <span class="pop-lbl">Households (2015)</span>
+        <span class="pop-sub">Avg. 4.74 members per household</span>
+      </div>
+      <div class="pop-stat reveal reveal-delay-2">
+        <span class="pop-num">~20</span>
+        <span class="pop-lbl">Median Age</span>
+        <span class="pop-sub">A remarkably young community</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GEOGRAPHY -->
+  <section class="geography-section section-pad">
+    <div class="container">
+      <span class="section-tag">Geography & Location</span>
+      <h2 class="section-h">Where Panicuason Stands</h2>
+      <p class="section-sub">Nestled in the highlands of Naga City, Panicuason borders nine other barangays and is defined by its proximity to Mount Isarog.</p>
+
+      <div class="geo-grid">
+        <div class="geo-card reveal">
+          <h3>Adjacent Barangays</h3>
+          <ul>
+            <li><strong>Hiwacloy</strong> — Goa, Camarines Sur</li>
+            <li><strong>Del Rosario</strong> — Ocampo, Camarines Sur</li>
+            <li><strong>Gatbo</strong> — Ocampo, Camarines Sur</li>
+            <li><strong>Santo Niño</strong> — Pili, Camarines Sur</li>
+            <li><strong>Tinangis</strong> — Pili, Camarines Sur</li>
+            <li><strong>Curry</strong> — Pili, Camarines Sur</li>
+            <li><strong>Carolina</strong> — Naga, Camarines Sur</li>
+            <li><strong>Lugsad</strong> — Calabanga, Camarines Sur</li>
+            <li><strong>Siembre</strong> — Bombon, Camarines Sur</li>
+          </ul>
+        </div>
+        <div class="geo-card reveal reveal-delay-1">
+          <h3>Nearby Landmarks</h3>
+          <ul>
+            <li><strong>Mount Isarog</strong> — 5.93 km to the East (S85°E)</li>
+            <li><strong>Tanglar Point</strong> — 12.11 km to the North-West (N43°W)</li>
+            <li><strong>Bicol River</strong> — within 15.40 km to the West-South-West</li>
+            <li><strong>Lake Baao</strong> — 20.76 km to the South (S1°W)</li>
+            <li><strong>Mount Iriga</strong> — 27.41 km to the South-South-East</li>
+            <li><strong>Lake Buhi</strong> — 27.89 km to the South-East (S44°E)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER MARKUP CONTAINER -->
+  <div id="sk-footer"></div>
+
+  <!-- FIXED: Script source pointed to folder and optimized -->
+  <script src="js/main.js" defer></script>
+  <script>
+    /* Reveal on scroll execution */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal, .tl-item').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

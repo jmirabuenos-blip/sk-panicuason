@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — Resolutions &amp; Policies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <script src="js/nav.js" defer></script>
+  <script src="js/footer.js" defer></script>
+  <style>
+    /* ── Resolutions Specific Styles ── */
+    .filter-wrapper {
+      background: #fff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .search-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+    }
+    .filter-select {
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      cursor: pointer;
+      min-width: 160px;
+    }
+
+    /* Document Table/List Styles */
+    .res-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .res-item {
+      background: #fff;
+      border-left: 5px solid #0e1f3d; /* Dark Navy Accent */
+      border-radius: 8px;
+      padding: 20px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .res-item:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .res-meta {
+      flex: 1;
+    }
+    .res-number {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #dfb76c; /* Gold accent */
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .res-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: #0e1f3d;
+      margin: 0 0 6px 0;
+      line-height: 1.4;
+    }
+    .res-date {
+      font-size: 0.85rem;
+      color: #777;
+    }
+    .res-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-left: 10px;
+      background: #f0f4f8;
+      color: #0e1f3d;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #0e1f3d;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .download-btn:hover {
+      background: #dfb76c;
+      color: #0e1f3d;
+    }
+
+    /* Empty state notice */
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+      font-style: italic;
+      background: #fff;
+      border-radius: 8px;
+      display: none;
+    }
+
+    @media(max-width: 768px) {
+      .res-item { flex-direction: column; align-items: flex-start; gap: 15px; }
+      .download-btn { width: 100%; justify-content: center; }
+      .res-tag { margin-left: 0; margin-top: 5px; display: block; width: max-content; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR ══ -->
+  <div id="sk-nav"></div>
+
+  <!-- ══ PAGE HERO ══ -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="gold-bar"></div>
+      <h1>Resolutions &amp; Policies</h1>
+      <p>Review the official legislative measures, local ordinances, and policy frameworks passed by the Katipunan ng Kabataan council.</p>
+    </div>
+  </section>
+
+  <!-- ══ RESOLUTIONS TRACKER ══ -->
+  <section class="section-pad" style="background: var(--offwhite);">
+    <div class="container">
+      
+      <!-- Live Search & Filtering Controls -->
+      <div class="filter-wrapper reveal">
+        <input type="text" id="resSearch" class="search-input" placeholder="Search by keyword or resolution number..." />
+        
+        <select id="categoryFilter" class="filter-select">
+          <option value="all">All Categories</option>
+          <option value="Budget">Budget &amp; Finance</option>
+          <option value="Sports">Sports &amp; Culture</option>
+          <option value="Education">Scholarships &amp; Youth</option>
+          <option value="Governance">Internal Governance</option>
+        </select>
+
+        <select id="yearFilter" class="filter-select">
+          <option value="all">All Years</option>
+          <option value="2026">2026</option>
+          <option value="2025">2025</option>
+        </select>
+      </div>
+
+      <!-- Resolutions List Container -->
+      <div class="res-list">
+
+        <!-- Resolution Item 1 -->
+        <div class="res-item reveal" data-category="Budget" data-year="2026">
+          <div class="res-meta">
+            <span class="res-number">SK Resolution No. 01, S. 2026</span>
+            <h3 class="res-title">Approval of the Annual Youth Investment Program (AYIP) Budget allocation for Fiscal Year 2026. <span class="res-tag">Budget</span></h3>
+            <span class="res-date">📅 Approved on: January 15, 2026</span>
+          </div>
+          <a href="documents/resolutions/sk-res-01-2026.pdf" target="_blank" class="download-btn">
+            📄 View PDF
+          </a>
+        </div>
+
+        <!-- Resolution Item 2 -->
+        <div class="res-item reveal" data-category="Sports" data-year="2026">
+          <div class="res-meta">
+            <span class="res-number">SK Resolution No. 02, S. 2026</span>
+            <h3 class="res-title">Appropriation of specific community guidelines and team logistics for the Palarong Barangay Summer League. <span class="res-tag">Sports</span></h3>
+            <span class="res-date">📅 Approved on: March 04, 2026</span>
+          </div>
+          <a href="documents/resolutions/sk-res-02-2026.pdf" target="_blank" class="download-btn">
+            📄 View PDF
+          </a>
+        </div>
+
+        <!-- Resolution Item 3 -->
+        <div class="res-item reveal" data-category="Education" data-year="2025">
+          <div class="res-meta">
+            <span class="res-number">SK Resolution No. 08, S. 2025</span>
+            <h3 class="res-title">Establishment of the SK Panicuason Educational Assistance Framework and student selection criteria guidelines. <span class="res-tag">Education</span></h3>
+            <span class="res-date">📅 Approved on: October 12, 2025</span>
+          </div>
+          <a href="documents/resolutions/sk-res-08-2025.pdf" target="_blank" class="download-btn">
+            📄 View PDF
+          </a>
+        </div>
+
+        <!-- Resolution Item 4 -->
+        <div class="res-item reveal" data-category="Governance" data-year="2025">
+          <div class="res-meta">
+            <span class="res-number">SK Resolution No. 07, S. 2025</span>
+            <h3 class="res-title">Appointing new youth cluster leaders and establishing purok-level active coordination teams. <span class="res-tag">Governance</span></h3>
+            <span class="res-date">📅 Approved on: August 20, 2025</span>
+          </div>
+          <a href="documents/resolutions/sk-res-07-2025.pdf" target="_blank" class="download-btn">
+            📄 View PDF
+          </a>
+        </div>
+
+        <!-- Fallback Message if nothing matches filters -->
+        <div id="noResultsNotice" class="no-results">
+          No resolutions match your search filters. Try clearing them!
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FOOTER ══ -->
+  <div id="sk-footer"></div>
+
+  <script src="js/main.js"></script>
+  
+  <!-- ── Dynamic Search & Filtering Script ── -->
+  <script>
+    const searchInput = document.getElementById('resSearch');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const resItems = document.querySelectorAll('.res-item');
+    const noResultsNotice = document.getElementById('noResultsNotice');
+
+    function filterResolutions() {
+      const searchText = searchInput.value.toLowerCase();
+      const selectedCategory = categoryFilter.value;
+      const selectedYear = yearFilter.value;
+      let visibleCount = 0;
+
+      resItems.forEach(item => {
+        const title = item.querySelector('.res-title').innerText.toLowerCase();
+        const number = item.querySelector('.res-number').innerText.toLowerCase();
+        const cat = item.getAttribute('data-category');
+        const year = item.getAttribute('data-year');
+
+        // Condition checks
+        const matchesSearch = title.includes(searchText) || number.includes(searchText);
+        const matchesCategory = (selectedCategory === 'all' || cat === selectedCategory);
+        const matchesYear = (selectedYear === 'all' || year === selectedYear);
+
+        if (matchesSearch && matchesCategory && matchesYear) {
+          item.style.display = 'flex';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      // Show/Hide "No Results" notice
+      if (visibleCount === 0) {
+        noResultsNotice.style.display = 'block';
+      } else {
+        noResultsNotice.style.display = 'none';
+      }
+    }
+
+    // Attach listeners
+    searchInput.addEventListener('input', filterResolutions);
+    categoryFilter.addEventListener('change', filterResolutions);
+    yearFilter.addEventListener('change', filterResolutions);
+  </script>
+</body>
+</html>
