@@ -51,7 +51,7 @@ const revealObserver = new IntersectionObserver((entries) => {
       revealObserver.unobserve(entry.target);
     }
   });
-}, { threshold: 0.12 });
+}, { threshold: 0.05 });
 
 document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
@@ -95,10 +95,13 @@ if (filterBtns.length && galleryItems.length) {
       btn.classList.add('active');
 
       const filter = btn.dataset.filter;
-      galleryItems.forEach(item => {
-        item.style.display =
-          filter === 'all' || item.dataset.category === filter ? 'block' : 'none';
-      });
+          galleryItems.forEach(item => {
+           if (filter === 'all' || item.dataset.cat === filter) {
+             item.classList.remove('hidden');
+           } else {
+             item.classList.add('hidden');
+           }
+        });
     });
   });
 }

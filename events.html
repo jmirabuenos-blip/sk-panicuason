@@ -9,92 +9,424 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
-  <script src="js/nav.js" defer></script>
+  <style>
+    .pb-banner {
+      background: var(--navy);
+      border: 2px solid var(--gold);
+      padding: 48px 48px 40px;
+      margin-top: 56px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+    .pb-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('images/pb2026.png') center/contain no-repeat;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    .pb-banner-inner { position: relative; z-index: 1; }
+    .pb-banner img.pb-logo {
+      width: 110px;
+      margin: 0 auto 20px;
+      display: block;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+    }
+    .pb-banner h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .pb-banner h2 span { color: var(--gold); }
+    .pb-banner .pb-sub {
+      font-size: .88rem;
+      color: rgba(255,255,255,.5);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .pb-date-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      background: rgba(245,197,24,.08);
+      border: 1px solid rgba(245,197,24,.25);
+      padding: 10px 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pb-date-row span { font-size: .82rem; color: var(--gold); font-weight: 600; letter-spacing: .06em; }
+    .pb-date-row .dot { width: 4px; height: 4px; background: rgba(245,197,24,.4); border-radius: 50%; }
+
+    /* DIVISION CARDS */
+    .division-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .division-card {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border-top: 4px solid var(--navy);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .division-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.14); }
+    .division-card.midget { border-top-color: var(--blue); }
+    .division-card.junior { border-top-color: var(--red); }
+    .division-card.youth  { border-top-color: var(--gold2); }
+
+    .division-photo {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: var(--navy2);
+      overflow: hidden;
+    }
+    .division-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+    .division-card:hover .division-photo img { transform: scale(1.05); }
+    .division-photo .photo-note {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .division-photo .photo-note .note-icon { font-size: 2rem; }
+    .division-photo .photo-note .note-text {
+      font-size: .72rem;
+      font-weight: 700;
+      color: var(--gold);
+      background: rgba(245,197,24,.1);
+      border: 1.5px dashed var(--gold);
+      border-radius: 4px;
+      padding: 4px 12px;
+    }
+    .division-photo .time-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: var(--navy);
+      color: var(--gold);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      padding: 5px 12px;
+      border: 1px solid rgba(245,197,24,.3);
+    }
+
+    .division-body { padding: 24px 24px 16px; flex: 1; }
+    .division-label {
+      font-size: .62rem;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .division-card.midget .division-label { color: var(--blue); }
+    .division-card.junior .division-label { color: var(--red); }
+    .division-card.youth  .division-label { color: var(--gold2); }
+
+    .division-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--navy);
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .matchup { background: var(--offwhite); padding: 14px 16px; margin-bottom: 14px; }
+    .matchup-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .matchup-team { font-family: 'Playfair Display', serif; font-size: .82rem; font-weight: 800; color: var(--navy); line-height: 1.2; flex: 1; }
+    .matchup-team.right { text-align: right; }
+    .matchup-vs { font-size: .62rem; font-weight: 900; letter-spacing: .1em; color: var(--white); background: var(--navy); padding: 4px 8px; flex-shrink: 0; }
+    .division-card.midget .matchup-vs { background: var(--blue); }
+    .division-card.junior .matchup-vs { background: var(--red); }
+    .division-card.youth  .matchup-vs { background: var(--gold2); color: var(--navy); }
+
+    .division-body p { font-size: .82rem; color: var(--gray); line-height: 1.7; margin-bottom: 12px; }
+
+    .if-nec {
+      margin: 12px 0 0;
+      background: rgba(10,22,40,.04);
+      border-left: 3px solid var(--lightgray);
+      padding: 10px 14px;
+      font-size: .78rem;
+      color: var(--gray);
+      line-height: 1.55;
+    }
+    .if-nec strong { color: var(--navy); }
+
+    .division-foot {
+      padding: 14px 24px 20px;
+      border-top: 1px solid var(--lightgray);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .division-foot span { font-size: .75rem; color: var(--blue); font-weight: 600; }
+
+    /* QUOTE */
+    .pb-quote {
+      background: var(--navy2);
+      border-left: 4px solid var(--gold);
+      padding: 28px 36px;
+      margin-top: 2px;
+    }
+    .pb-quote p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.55);
+      margin: 0;
+      line-height: 1.75;
+    }
+    .pb-quote cite {
+      display: block;
+      margin-top: 10px;
+      font-size: .72rem;
+      font-style: normal;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* OTHER EVENTS */
+    .event-row {
+      background: var(--white);
+      display: flex;
+      align-items: stretch;
+      border-left: 4px solid var(--lightgray);
+      transition: border-color .22s, transform .22s;
+      margin-bottom: 2px;
+    }
+    .event-row:hover { border-left-color: var(--gold); transform: translateX(4px); }
+    .event-row .event-date-box {
+      background: var(--navy);
+      width: 90px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 8px;
+      gap: 2px;
+      text-align: center;
+    }
+    .event-row .event-date-box .day { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; }
+    .event-row .event-date-box .month { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+    .event-row-info { padding: 20px 28px; flex: 1; }
+    .event-row-info h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .event-row-info p { font-size: .85rem; color: var(--gray); line-height: 1.6; margin-bottom: 10px; }
+    .event-row-meta { display: flex; gap: 20px; flex-wrap: wrap; }
+    .event-row-meta span { font-size: .75rem; color: var(--blue); font-weight: 600; }
+    .event-status { display: inline-block; font-size: .6rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; margin-left: 8px; vertical-align: middle; }
+    .status-tbd { background: var(--lightgray); color: var(--gray); }
+
+    .follow-cta { margin-top: 48px; text-align: center; padding: 40px 24px; background: var(--white); border: 2px dashed var(--lightgray); }
+    .follow-cta p { font-size: .95rem; color: var(--gray); line-height: 1.8; }
+    .follow-cta a { color: var(--blue); font-weight: 600; text-decoration: none; }
+    .follow-cta a:hover { color: var(--gold2); }
+
+    @media (max-width: 860px) {
+      .division-grid { grid-template-columns: 1fr; }
+      .pb-banner { padding: 36px 24px 32px; }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- ══ NAVBAR ══ -->
   <div id="sk-nav"></div>
 
-  <!-- ══ PAGE HERO ══ -->
   <section class="page-hero">
     <div class="container page-hero-content">
       <div class="gold-bar"></div>
       <h1>Events</h1>
-      <p>Stay updated on all upcoming and past SK activities in our barangay.</p>
+      <p>Stay updated on the latest activities, programs, and competitions happening in Barangay Panicuason.</p>
     </div>
   </section>
 
-  <!-- ══ EVENTS SECTION ══ -->
   <section class="section-pad" style="background:var(--offwhite);">
     <div class="container">
+
       <div class="text-center reveal">
-        <div class="section-label" style="justify-content:center;">Calendar</div>
-        <h2 class="section-title">Upcoming &amp; Recent Events</h2>
+        <div class="section-label" style="justify-content:center;">What's Happening</div>
+        <h2 class="section-title">Upcoming Events</h2>
         <p class="section-sub" style="margin-inline:auto;">
-          From sports fests to leadership summits — there's always something happening in our barangay.
+          From sports championships to community programs — here's what's coming up in our barangay.
         </p>
       </div>
 
-      <div class="no-events reveal">
-        <p>No upcoming events at the moment. Check back soon for new activities and announcements.</p>
+      <!-- PB2026 BANNER -->
+      <div class="pb-banner reveal">
+        <div class="pb-banner-inner">
+          <img class="pb-logo" src="images/pb2026.png" alt="Palarong Barangay 2026" />
+          <p class="pb-sub">Palarong Barangay 2026 · Championship Games</p>
+          <h2>The Battle for <span>Panicuason</span></h2>
+          <div class="pb-date-row">
+            <span>📅 June 13, 2026</span>
+            <div class="dot"></div>
+            <span>📍 Panicuason Covered Court</span>
+            <div class="dot"></div>
+            <span>🏆 Championship Game 2</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- THREE DIVISION CARDS -->
+      <div class="division-grid">
+
+        <!-- MIDGET 6PM -->
+        <div class="division-card midget reveal reveal-delay-1">
+          <div class="division-photo">
+            <img src="images/midgetdiv.jpg" alt="Midget Division Championship Game 2" />
+            <span class="time-badge">6:00 PM</span>
+          </div>
+          <div class="division-body">
+            <div class="division-label">Midget Division · Game 2</div>
+            <h3>Championship Game 2</h3>
+            <div class="matchup">
+              <div class="matchup-row">
+                <span class="matchup-team">P-SA6S</span>
+                <span class="matchup-vs">VS</span>
+                <span class="matchup-team right">GTA Pinas Purok Tres</span>
+              </div>
+            </div>
+            <p>The young stars of the Midget Division are ready to return to the court and continue their battle for the championship. One week to prepare. One goal to achieve.</p>
+            <div class="if-nec"><strong>If Necessary — Game 3:</strong> June 14, 2026 · All divisions return to crown the champions.</div>
+          </div>
+          <div class="division-foot">
+            <span>📍 Panicuason Covered Court</span>
+            <span>#MidgetDivision</span>
+          </div>
+        </div>
+
+        <!-- JUNIOR 7PM -->
+        <div class="division-card junior reveal reveal-delay-2">
+          <div class="division-photo">
+            <img src="images/juniordiv.jpg" alt="Junior Division Championship Game 2" />
+            <span class="time-badge">7:00 PM</span>
+          </div>
+          <div class="division-body">
+            <div class="division-label">Junior Division · Game 2</div>
+            <h3>Championship Game 2</h3>
+            <div class="matchup">
+              <div class="matchup-row">
+                <span class="matchup-team">Untouchaballs</span>
+                <span class="matchup-vs">VS</span>
+                <span class="matchup-team right">Street Boys</span>
+              </div>
+            </div>
+            <p>Both teams in the Junior Division are pushing harder in practice as they prepare for another crucial championship game. Every practice counts. Every effort matters.</p>
+            <div class="if-nec"><strong>If Necessary — Game 3:</strong> June 14, 2026 · All divisions return to crown the champions.</div>
+          </div>
+          <div class="division-foot">
+            <span>📍 Panicuason Covered Court</span>
+            <span>#JuniorDivision</span>
+          </div>
+        </div>
+
+        <!-- YOUTH 8PM -->
+        <div class="division-card youth reveal reveal-delay-3">
+          <div class="division-photo">
+            <img src="images/opendiv.jpg" alt="Youth Division Championship Game 2" />
+            <span class="time-badge">8:00 PM</span>
+          </div>
+          <div class="division-body">
+            <div class="division-label">Youth Division · Game 2</div>
+            <h3>Championship Game 2</h3>
+            <div class="matchup">
+              <div class="matchup-row">
+                <span class="matchup-team">Unibersidad ng Panicuason</span>
+                <span class="matchup-vs">VS</span>
+                <span class="matchup-team right">Isarog Vanguard</span>
+              </div>
+            </div>
+            <p>The Youth Division teams are working hard and staying focused as they ready themselves for the next chapter of the championship series. The grind continues.</p>
+            <div class="if-nec"><strong>If Necessary — Game 3:</strong> June 14, 2026 · All divisions return to crown the champions.</div>
+          </div>
+          <div class="division-foot">
+            <span>📍 Panicuason Covered Court</span>
+            <span>#YouthDivision</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- QUOTE -->
+      <div class="pb-quote reveal">
+        <p>"Champions are not made in a day — they are made through preparation, perseverance, and heart."</p>
+        <cite>#PalarongBarangay2026 · #ChampionshipGame2</cite>
+      </div>
+
+      <!-- OTHER EVENTS -->
+      <div style="margin-top:64px;">
+        <div class="section-label reveal">Other Events</div>
+
+        <div class="event-row reveal reveal-delay-1">
+          <div class="event-date-box"><span class="day">TBA</span><span class="month">2026</span></div>
+          <div class="event-row-info">
+            <h3>SK General Assembly <span class="event-status status-tbd">TBA</span></h3>
+            <p>Quarterly assembly of the Sangguniang Kabataan council and youth constituents. Agenda and exact date to be announced.</p>
+            <div class="event-row-meta"><span>📍 Barangay Panicuason Hall</span><span>👥 All Youth</span></div>
+          </div>
+        </div>
+
+        <div class="event-row reveal reveal-delay-2">
+          <div class="event-date-box"><span class="day">TBA</span><span class="month">2026</span></div>
+          <div class="event-row-info">
+            <h3>Tree Planting Drive <span class="event-status status-tbd">TBA</span></h3>
+            <p>Annual environmental advocacy activity in partnership with local environment groups. Details to follow.</p>
+            <div class="event-row-meta"><span>📍 Barangay Panicuason</span><span>🌿 Environment Program</span></div>
+          </div>
+        </div>
+
+        <div class="event-row reveal reveal-delay-3">
+          <div class="event-date-box"><span class="day">TBA</span><span class="month">2026</span></div>
+          <div class="event-row-info">
+            <h3>Youth Leadership Seminar <span class="event-status status-tbd">TBA</span></h3>
+            <p>A seminar on civic responsibility and community leadership open to all youth aged 15–30. Date to be announced.</p>
+            <div class="event-row-meta"><span>📍 Barangay Panicuason Hall</span><span>🏛️ Leadership Program</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="follow-cta reveal">
+        <p>
+          📘 For real-time updates on events and announcements, follow us on Facebook.<br />
+          <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a>
+        </p>
       </div>
 
     </div>
   </section>
 
-  <!-- ══ CTA BAND ══ -->
   <section class="cta-band">
     <div class="cta-inner">
       <div>
-        <h2>Want to Suggest an Event?</h2>
-        <p>We welcome ideas from the community. Send us your event proposals anytime.</p>
+        <h2>Want to Participate?</h2>
+        <p>Reach out and we'll connect you to the right event or program.</p>
       </div>
-      <a href="contact.html" class="btn btn-white">Send a Message</a>
+      <a href="contact.html" class="btn btn-white">Contact Us</a>
     </div>
   </section>
 
-  <!-- ══ FOOTER ══ -->
-  <footer class="footer">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="index.html" class="nav-logo">
-          <img src="images/logo.jpg" alt="SK seal" />
-          <div class="nav-logo-text">
-            <span class="top">Sangguniang Kabataan</span>
-            <span class="sub">Barangay Panicuason · Naga City</span>
-          </div>
-        </a>
-        <p>Serving the youth with integrity, passion, and purpose. Together, we build a stronger Barangay Panicuason.</p>
-      </div>
-      <div>
-        <h4>Quick Links</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="programs.html">Programs</a></li>
-          <li><a href="events.html">Events</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <ul class="footer-contact">
-          <li><span>📍</span> Barangay Panicuason Hall, Naga City</li>
-          <li><span>📞</span> (123) 456-7890</li>
-          <li><span>✉️</span> <a href="https://mail.google.com/mail/?view=cm&to=skpanicuason@gmail.com" target="_blank">skpanicuason@gmail.com</a></li>
-          <li><span>🕗</span> Mon–Fri, 8AM–5PM</li>
-          <li><span>📘</span> <a href="https://www.facebook.com/skpanicuason2023" target="_blank">facebook.com/skpanicuason2023</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
-      <span>Built with 💛 for the Youth of Naga City</span>
-    </div>
-  </footer>
+  <div id="sk-footer"></div>
 
-  <script src="js/main.js"></script>
+  <script src="js/nav.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/footer.js"></script>
 </body>
 </html>

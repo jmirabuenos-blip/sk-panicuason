@@ -1107,6 +1107,8 @@ img.logo {
   background: var(--navy2);
 }
 .gallery-item img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -1282,4 +1284,9 @@ img.logo {
   .form-row     { grid-template-columns: 1fr; }
   .contact-info { padding: 36px 28px; }
   .contact-form-wrap { padding: 36px 28px; }
+}
+/* ── GALLERY ITEMS: always visible, no scroll reveal ── */
+.gallery-item.reveal {
+  opacity: 1 !important;
+  transform: none !important;
 }
