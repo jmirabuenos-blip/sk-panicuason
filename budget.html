@@ -3,922 +3,1181 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SK Barangay Panicuason — Financial Report</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <title>ABYIP/CBYDP 2024–2026 · SK Barangay Panicuason</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
-
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&display=swap" rel="stylesheet" />
   <style>
-    /* ── FINANCE PAGE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .finance-meta {
-      margin-top: 12px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--blue);
+    :root {
+      --navy:   #0f2342;
+      --blue:   #1d4ed8;
+      --sky:    #3b82f6;
+      --pale:   #eff6ff;
+      --muted:  #64748b;
+      --border: #e2e8f0;
+      --white:  #ffffff;
+      --paper:  #f8fafc;
+      --gold:   #f59e0b;
     }
-    .finance-meta strong { color: var(--navy); }
 
-    /* Summary Cards */
-    .finance-summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      margin-top: 56px;
+    .bgt-page {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
-    .summary-card {
-      background: var(--white);
-      padding: 36px 32px;
-      border-top: 3px solid var(--lightgray);
+    .bgt-page .header,
+    .bgt-page .body-wrap,
+    .bgt-page .bgt-stats-bar {
+      font-family: 'Inter', sans-serif;
     }
-    .summary-card.balance {
+
+    /* ── HEADER ── */
+    .header {
       background: var(--navy);
-      border-top-color: var(--gold);
+      padding: 116px 0 0; /* 68px navbar + 48px top */
+      position: relative;
+      overflow: hidden;
     }
-    .summary-label {
-      font-size: 0.68rem;
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      background: radial-gradient(circle, rgba(29,78,216,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .bgt-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 40px;
+    }
+    .header-flag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .flag-stripe {
+      width: 3px;
+      height: 28px;
+      border-radius: 2px;
+    }
+    .flag-stripe.blue  { background: #3b82f6; }
+    .flag-stripe.red   { background: #ef4444; }
+    .flag-stripe.gold  { background: #f59e0b; }
+    .flag-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .header h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 10px;
+      max-width: 540px;
+    }
+    .header-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.8;
+    }
+    .ref-badge {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 16px 20px;
+      text-align: right;
+    }
+    .ref-badge .ref-label {
+      font-size: 9px;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--gray);
+      color: rgba(255,255,255,0.3);
       display: block;
-      margin-bottom: 16px;
+      margin-bottom: 4px;
     }
-    .summary-card.balance .summary-label { color: rgba(255,255,255,0.4); }
-    .summary-amount {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-      font-weight: 900;
-      color: var(--navy);
+    .ref-badge .ref-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
       display: block;
-      line-height: 1;
-      margin-bottom: 10px;
     }
-    .summary-card.balance .summary-amount { color: var(--gold); }
-    .summary-note {
-      font-size: 0.78rem;
-      color: var(--gray);
-      line-height: 1.5;
+    .ref-badge .ref-val + .ref-label { margin-top: 12px; }
+
+    /* ── STATS BAR ── */
+    .bgt-stats-bar {
+      background: #0a1e38;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.08);
     }
-    .summary-card.balance .summary-note { color: rgba(255,255,255,0.3); }
+    .bgt-stat {
+      padding: 24px 28px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .bgt-stat:last-child { border-right: none; }
+    .bgt-stat-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .bgt-stat-value {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-weight: 700;
+      color: #fff;
+      display: block;
+      line-height: 1.1;
+    }
+    .bgt-stat-value.highlight { color: var(--gold); }
+    .bgt-stat-note {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      margin-top: 3px;
+      display: block;
+    }
 
-    /* Report Blocks */
-    .report-block { margin-top: 56px; }
+    /* ── BODY ── */
+    .body-wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 48px 28px 80px;
+    }
 
-    .report-block-header {
-      background: var(--navy);
-      padding: 18px 28px;
+    /* ── SPREADSHEET LINK ── */
+    .sheets-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 2px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--blue);
+      padding: 14px 20px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
     }
-    .report-block-header h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 800;
-      color: var(--white);
-      margin: 0;
+    .sheets-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .report-block-header .block-tag {
-      font-size: 0.65rem;
+    .sheets-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sheets-icon svg { width: 16px; height: 16px; color: var(--blue); }
+    .sheets-bar h4 {
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold);
-      border: 1px solid rgba(245,197,24,0.25);
-      padding: 3px 10px;
+      color: var(--navy);
+      margin-bottom: 1px;
     }
+    .sheets-bar p { font-size: 12px; color: var(--muted); }
+    .sheets-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--blue);
+      padding: 8px 16px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .sheets-btn:hover { background: var(--navy); }
+    .sheets-btn svg { width: 10px; height: 10px; }
 
-    .report-table {
+    /* ── SECTION BLOCK ── */
+    .prog-section { margin-bottom: 36px; }
+
+    .bgt-section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--navy);
+      padding: 12px 20px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .bgt-section-header:hover { background: #1a3357; }
+    .sec-code {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: rgba(255,255,255,0.35);
+      flex-shrink: 0;
+    }
+    .sec-title {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      flex: 1;
+    }
+    .sec-total {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .sec-chevron {
+      width: 16px;
+      height: 16px;
+      color: rgba(255,255,255,0.3);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .bgt-section-header.open .sec-chevron { transform: rotate(180deg); }
+
+    /* ── TABLE ── */
+    .section-body { display: block; }
+    .section-body.collapsed { display: none; }
+
+    .budget-table {
       width: 100%;
       border-collapse: collapse;
       background: var(--white);
+      font-size: 13px;
     }
-    .report-table thead tr { background: var(--navy2); }
-    .report-table thead th {
-      padding: 12px 24px;
-      font-size: 0.65rem;
+    .budget-table thead tr {
+      background: #1e3a5f;
+    }
+    .budget-table thead th {
+      padding: 9px 16px;
+      font-size: 10px;
       font-weight: 700;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: rgba(255,255,255,0.45);
       text-align: left;
+      white-space: nowrap;
     }
-    .report-table thead th:last-child { text-align: right; }
-    .report-table tbody tr { border-bottom: 1px solid var(--lightgray); }
-    .report-table tbody tr:hover { background: var(--offwhite); }
-    .report-table tbody td {
-      padding: 16px 24px;
-      font-size: 0.88rem;
+    .budget-table thead th.r { text-align: right; }
+    .budget-table tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .budget-table tbody tr:hover { background: var(--pale); }
+    .budget-table tbody td {
+      padding: 13px 16px;
       color: var(--navy);
       vertical-align: middle;
     }
-    .report-table tbody td:last-child {
-      text-align: right;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: 0.92rem;
-    }
-    .row-main { font-weight: 600; color: var(--navy); display: block; }
-    .row-sub  { font-size: 0.75rem; color: var(--gray); display: block; margin-top: 2px; }
-
-    .row-total td {
-      background: var(--offwhite);
-      border-top: 2px solid var(--navy);
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--navy);
-    }
-    .row-total td:last-child {
-      font-size: 1rem !important;
-      font-family: 'Playfair Display', serif;
-    }
-
-    /* Status badges — navy palette only */
-    .badge {
-      display: inline-block;
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border: 1px solid var(--lightgray);
-      color: var(--gray);
-      background: var(--offwhite);
-    }
-    .badge-done    { border-color: rgba(10,22,40,0.2); color: var(--navy); background: rgba(10,22,40,0.04); }
-    .badge-pending { border-color: rgba(245,197,24,0.4); color: var(--gold2); background: rgba(245,197,24,0.06); }
-
-    /* ── QR RECORDS SECTION ── */
-    .qr-records-section {
-      margin-top: 56px;
-    }
-    .qr-records-section .report-block-header {
+    .td-program { font-weight: 600; color: var(--navy); font-size: 13px; }
+    .td-code-sm {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      display: block;
       margin-bottom: 2px;
     }
-
-    .qr-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-      background: var(--lightgray);
+    .td-desc {
+      font-size: 12px;
+      color: var(--muted);
+      display: block;
+      margin-top: 2px;
+      font-weight: 400;
     }
-
-    .qr-card {
-      background: var(--white);
-      padding: 36px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+    .td-period {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
     }
-
-    .qr-card-inner {
-      display: flex;
-      gap: 28px;
-      align-items: flex-start;
+    td.r {
+      text-align: right;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      white-space: nowrap;
+      vertical-align: middle;
     }
-
-    .qr-placeholder {
-      flex-shrink: 0;
-      width: 108px;
-      height: 108px;
-      border: 2px solid var(--navy);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      position: relative;
-      background: var(--white);
-    }
-    /* Corner brackets on QR box */
-    .qr-placeholder::before,
-    .qr-placeholder::after {
-      content: '';
-      position: absolute;
-      width: 14px;
-      height: 14px;
-    }
-    .qr-placeholder::before {
-      top: -2px; left: -2px;
-      border-top: 3px solid var(--gold);
-      border-left: 3px solid var(--gold);
-    }
-    .qr-placeholder::after {
-      bottom: -2px; right: -2px;
-      border-bottom: 3px solid var(--gold);
-      border-right: 3px solid var(--gold);
-    }
-
-    /* QR dot grid pattern */
-    .qr-dots {
-      display: grid;
-      grid-template-columns: repeat(7, 8px);
-      grid-template-rows: repeat(7, 8px);
-      gap: 2px;
-      padding: 8px;
-    }
-    .qr-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--navy);
-    }
-    .qr-dot.light { background: transparent; }
-
-    .qr-scan-label {
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gray);
-      text-align: center;
-    }
-
-    .qr-info { flex: 1; }
-
-    .qr-tag {
-      display: inline-block;
-      font-size: 0.6rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--gold2);
-      background: rgba(245,197,24,0.08);
-      border: 1px solid rgba(245,197,24,0.3);
-      padding: 2px 8px;
-      margin-bottom: 10px;
-    }
-
-    .qr-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1rem;
-      font-weight: 800;
+    td.r.y24 { color: #94a3b8; }
+    td.r.y25 { color: var(--sky); }
+    td.r.y26 { color: var(--blue); font-weight: 600; }
+    td.r.ytotal {
       color: var(--navy);
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-
-    .qr-desc {
-      font-size: 0.8rem;
-      color: var(--gray);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    /* Quarter pills */
-    .qr-quarters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .qr-pill {
-      font-size: 0.65rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border: 1px solid var(--lightgray);
-      color: var(--navy);
-      background: var(--offwhite);
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      font-size: 14px;
     }
-    .qr-pill:hover {
-      background: var(--navy);
-      color: var(--white);
-      border-color: var(--navy);
-    }
-    .qr-pill svg {
-      width: 10px;
-      height: 10px;
-      flex-shrink: 0;
-    }
+    td.r.zero { color: #d1d5db; }
 
-    .qr-pill.active {
+    /* ── GRAND TOTAL ── */
+    .grand-row {
+      display: grid;
+      grid-template-columns: 1fr repeat(4, auto);
+      gap: 0;
       background: var(--navy);
+      padding: 20px 20px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .grand-label {
+      font-family: 'Fraunces', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+    }
+    .grand-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      font-size: 13px;
+      text-align: right;
+      padding: 0 16px;
+      white-space: nowrap;
+    }
+    .grand-num.y24 { color: rgba(255,255,255,0.3); }
+    .grand-num.y25 { color: rgba(255,255,255,0.5); }
+    .grand-num.y26 { color: rgba(255,255,255,0.7); }
+    .grand-num.ytotal {
       color: var(--gold);
-      border-color: var(--navy);
+      font-size: 16px;
+      font-weight: 700;
     }
 
-    /* Month pills (for monthly purchases) */
-    .qr-months {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
-
-    /* Link row below each card */
-    .qr-link-row {
+    /* ── YEAR LEGEND ── */
+    .legend {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding-top: 20px;
-      border-top: 1px solid var(--lightgray);
-      gap: 12px;
+      gap: 20px;
+      margin-bottom: 24px;
       flex-wrap: wrap;
     }
-
-    .qr-link-row .qr-link-label {
-      font-size: 0.72rem;
-      color: var(--gray);
+    .legend-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--navy);
       font-weight: 500;
     }
-
-    .qr-link-row a {
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--navy);
-      text-decoration: none;
-      border-bottom: 1px solid var(--navy);
-      letter-spacing: 0.04em;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
     }
-    .qr-link-row a:hover { color: var(--blue); border-bottom-color: var(--blue); }
+    .legend-dot.y24 { background: #94a3b8; }
+    .legend-dot.y25 { background: var(--sky); }
+    .legend-dot.y26 { background: var(--blue); }
+    .legend-dot.ytotal { background: var(--navy); }
 
-    /* Cert box */
-    .cert-box {
-      margin-top: 56px;
+    /* ── NOTE ── */
+    .foot-note {
+      font-size: 12px;
+      color: var(--muted);
+      font-style: italic;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+
+    /* ── CERT ── */
+    .cert {
       background: var(--navy);
-      padding: 48px 40px;
+      padding: 48px;
+      margin-top: 56px;
+    }
+    .cert-top {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 48px;
+      margin-bottom: 36px;
     }
-    .cert-box h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 16px;
-    }
-    .cert-box p {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.4);
-      line-height: 1.85;
-    }
-    .cert-box p + p { margin-top: 12px; }
-    .cert-box .gold { color: var(--gold); font-weight: 700; }
-
-    .sig-list { display: flex; flex-direction: column; gap: 28px; }
-    .sig-item { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
-    .sig-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
+    .cert h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
       font-weight: 700;
-      color: var(--white);
+      color: #fff;
+      margin-bottom: 10px;
     }
-    .sig-title {
-      font-size: 0.65rem;
+    .cert p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.8;
+    }
+    .cert-note-italic {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      font-style: italic;
+      margin-top: 12px;
+    }
+    .sig-section-label {
+      font-size: 9px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+      padding: 10px 0 8px;
+    }
+    .sig-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: rgba(255,255,255,0.06);
+    }
+    .sig-grid.two { grid-template-columns: repeat(2, 1fr); }
+    .sig-cell {
+      background: rgba(255,255,255,0.03);
+      padding: 16px 20px;
+    }
+    .sig-role {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--gold);
-      margin-top: 4px;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .sig-name {
+      font-family: 'Fraunces', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .sig-title {
+      font-size: 11px;
+      color: rgba(255,255,255,0.35);
     }
 
-    /* Notice */
-    .doc-notice {
-      margin-top: 2px;
-      background: var(--white);
-      border: 1px solid var(--lightgray);
-      padding: 28px 32px;
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    .doc-notice-text h4 {
-      font-family: 'Playfair Display', serif;
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-    .doc-notice-text p { font-size: 0.83rem; color: var(--gray); }
-    .doc-notice .btn { margin-left: auto; flex-shrink: 0; }
-
-    /* Responsive */
+    /* ── RESPONSIVE ── */
     @media (max-width: 860px) {
-      .finance-summary { grid-template-columns: 1fr; }
-      .cert-box { grid-template-columns: 1fr; gap: 32px; padding: 36px 28px; }
-      .report-table thead th:nth-child(2),
-      .report-table tbody td:nth-child(2) { display: none; }
-      .qr-grid { grid-template-columns: 1fr; }
+      .header-top { flex-direction: column; }
+      .bgt-stats-bar { grid-template-columns: repeat(2,1fr); }
+      .stat:nth-child(2) { border-right: none; }
+      .cert-top { grid-template-columns: 1fr; gap: 24px; }
+      .sig-grid { grid-template-columns: 1fr 1fr; }
+      .grand-row { display: none; }
     }
-    @media (max-width: 640px) {
-      .qr-card-inner { flex-direction: column; }
-      .qr-placeholder { width: 92px; height: 92px; }
-    }
-    @media (max-width: 560px) {
-      .report-block-header { flex-direction: column; align-items: flex-start; }
-      .doc-notice { flex-direction: column; }
-      .doc-notice .btn { margin-left: 0; }
+    @media (max-width: 600px) {
+      .body-wrap { padding: 28px 16px 60px; }
+      .cert { padding: 28px 16px; }
+      .bgt-stats-bar { grid-template-columns: 1fr 1fr; }
+      .sig-grid, .sig-grid.two { grid-template-columns: 1fr; }
+      .budget-table .hide-sm { display: none; }
+      .bgt-section-header { flex-wrap: wrap; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
-  <div id="sk-nav"></div>
+<div id="sk-nav"></div>
 
-  <!-- PAGE HERO -->
-  <section class="page-hero">
-    <div class="container page-hero-content">
-      <div class="gold-bar"></div>
-      <h1>Financial Report</h1>
-      <p>Transparent and accountable — an overview of SK Barangay Panicuason's income, expenditures, and fund utilization.</p>
-    </div>
-  </section>
-
-  <!-- MAIN -->
-  <section class="section-pad" style="background:var(--offwhite);">
-    <div class="container">
-
-      <!-- Heading -->
-      <div class="text-center">
-        <div class="section-label" style="justify-content:center;">Fiscal Transparency</div>
-        <h2 class="section-title">Annual Financial Summary</h2>
-        <p class="section-sub" style="margin-inline:auto;">
-          In compliance with the SK Reform Act (RA 10742), all SK funds and expenditures
-          are reported publicly for the youth of Barangay Panicuason.
-        </p>
-        <p class="finance-meta" style="margin-top:12px;">
-          Fiscal Year: <strong>[YEAR]</strong> &nbsp;·&nbsp; As of: <strong>[DATE]</strong>
-        </p>
-      </div>
-
-      <!-- Summary Cards -->
-      <div class="finance-summary">
-
-        <div class="summary-card">
-          <span class="summary-label">Total Income / Receipts</span>
-          <span class="summary-amount">₱ [0,000.00]</span>
-          <span class="summary-note">Total funds received for the fiscal year</span>
-        </div>
-
-        <div class="summary-card">
-          <span class="summary-label">Total Expenditures</span>
-          <span class="summary-amount">₱ [0,000.00]</span>
-          <span class="summary-note">Total disbursements and obligations</span>
-        </div>
-
-        <div class="summary-card balance">
-          <span class="summary-label">Remaining Balance</span>
-          <span class="summary-amount">₱ [0,000.00]</span>
-          <span class="summary-note">Unexpended balance as of report date</span>
-        </div>
-
-      </div>
-
-      <!-- Income Table -->
-      <div class="report-block">
-        <div class="report-block-header">
-          <h3>Sources of Income</h3>
-          <span class="block-tag">Fund Receipts</span>
-        </div>
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>Source / Particulars</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Amount (₱)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <span class="row-main">SKFP — Barangay Share (10%)</span>
-                <span class="row-sub">Barangay Fund Transfer</span>
-              </td>
-              <td>Annual SK Fund from Barangay</td>
-              <td><span class="badge badge-done">Received</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">SKFP — Municipal Share</span>
-                <span class="row-sub">Municipal Fund Transfer</span>
-              </td>
-              <td>Annual SK Fund from Municipality</td>
-              <td><span class="badge badge-done">Received</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">Other Sources / Donations</span>
-                <span class="row-sub">Miscellaneous Income</span>
-              </td>
-              <td>Other receipts, if any</td>
-              <td><span class="badge">Noted</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr class="row-total">
-              <td colspan="3">Total Income</td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Expenditures Table -->
-      <div class="report-block">
-        <div class="report-block-header">
-          <h3>Expenditures &amp; Disbursements</h3>
-          <span class="block-tag">Fund Utilization</span>
-        </div>
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>Program / Activity / Project</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Amount (₱)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <span class="row-main">Youth Development Program</span>
-                <span class="row-sub">Skills Training &amp; Livelihood</span>
-              </td>
-              <td>Training materials, venue, facilitators</td>
-              <td><span class="badge badge-done">Completed</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">Sports &amp; Health Program</span>
-                <span class="row-sub">Sports Equipment &amp; Events</span>
-              </td>
-              <td>Sports fest, equipment purchase</td>
-              <td><span class="badge badge-done">Completed</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">Educational Assistance</span>
-                <span class="row-sub">Scholarships &amp; School Supplies</span>
-              </td>
-              <td>School supplies distribution, aid</td>
-              <td><span class="badge badge-done">Completed</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">Environmental Program</span>
-                <span class="row-sub">Clean-up &amp; Tree Planting</span>
-              </td>
-              <td>Materials, coordination, logistics</td>
-              <td><span class="badge badge-done">Completed</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">Administrative Expenses</span>
-                <span class="row-sub">Office Supplies &amp; Operations</span>
-              </td>
-              <td>Office needs, printing, communications</td>
-              <td><span class="badge badge-pending">Ongoing</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td>
-                <span class="row-main">[Add Program / Activity]</span>
-                <span class="row-sub">Replace with actual item</span>
-              </td>
-              <td>—</td>
-              <td><span class="badge badge-pending">Pending</span></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr class="row-total">
-              <td colspan="3">Total Expenditures</td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- ═══════════════════════════════════════════════ -->
-      <!-- QR RECORDS — RCB + MONTHLY PURCHASES           -->
-      <!-- ═══════════════════════════════════════════════ -->
-      <div class="qr-records-section">
-
-        <div class="report-block-header">
-          <h3>Official Financial Records</h3>
-          <span class="block-tag">Scan to Access</span>
-        </div>
-
-        <div class="qr-grid">
-
-          <!-- ── CARD 1: RCB Quarterly ── -->
-          <div class="qr-card">
-            <div class="qr-card-inner">
-
-              <!-- QR Placeholder -->
-              <div class="qr-placeholder" title="QR Code — RCB Quarterly Register">
-                <!-- Decorative pixel QR pattern -->
-                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <!-- Top-left finder -->
-                  <rect x="4" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="6" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="9" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Top-right finder -->
-                  <rect x="58" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="60" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="63" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Bottom-left finder -->
-                  <rect x="4" y="58" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="6" y="60" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="9" y="63" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Data dots -->
-                  <rect x="30" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="38" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="4" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="30" y="12" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="20" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="20" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="4" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="12" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="20" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="54" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="70" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="4" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="20" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="54" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="70" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="4" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="12" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="54" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="38" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="46" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="54" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="70" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="46" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="54" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="70" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="38" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="54" y="70" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="62" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="70" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                </svg>
-              </div>
-
-              <div class="qr-info">
-                <span class="qr-tag">RCB — Quarterly</span>
-                <div class="qr-title">Register of Cash in Bank</div>
-                <p class="qr-desc">
-                  Quarterly register of all cash in bank balances and related financial transactions, maintained in compliance with COA regulations.
-                </p>
-                <div class="qr-quarters">
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q1_LINK" target="_blank" rel="noopener" class="qr-pill active">
-                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                    Q1 · Jan–Mar
-                  </a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q2_LINK" target="_blank" rel="noopener" class="qr-pill">
-                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                    Q2 · Apr–Jun
-                  </a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q3_LINK" target="_blank" rel="noopener" class="qr-pill">
-                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                    Q3 · Jul–Sep
-                  </a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_Q4_LINK" target="_blank" rel="noopener" class="qr-pill">
-                    <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M6 1v7M3 5l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 10h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                    Q4 · Oct–Dec
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="qr-link-row">
-              <span class="qr-link-label">Access full register on Google Drive</span>
-              <a href="https://drive.google.com/drive/folders/REPLACE_WITH_RCB_MAIN_FOLDER" target="_blank" rel="noopener">
-                View All RCB Records
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- ── CARD 2: Monthly Itemized Purchases ── -->
-          <div class="qr-card">
-            <div class="qr-card-inner">
-
-              <!-- QR Placeholder -->
-              <div class="qr-placeholder" title="QR Code — Monthly Itemized Purchases">
-                <svg width="84" height="84" viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <!-- Top-left finder -->
-                  <rect x="4" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="6" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="9" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Top-right finder -->
-                  <rect x="58" y="4" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="60" y="6" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="63" y="9" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Bottom-left finder -->
-                  <rect x="4" y="58" width="22" height="22" fill="currentColor" opacity="0.15"/>
-                  <rect x="6" y="60" width="18" height="18" fill="currentColor" opacity="0.15"/>
-                  <rect x="9" y="63" width="12" height="12" fill="currentColor" opacity="0.7"/>
-                  <!-- Data dots (different pattern from card 1) -->
-                  <rect x="30" y="4" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="4" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="12" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="12" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="30" y="20" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="20" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="4" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="12" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="38" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="54" y="30" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="62" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="70" y="30" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="4" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="12" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="20" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="38" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="54" y="38" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="38" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="4" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="20" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="30" y="46" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="70" y="46" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="30" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="46" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="54" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="70" y="54" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="38" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="54" y="62" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="70" y="62" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="30" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="46" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                  <rect x="62" y="70" width="5" height="5" fill="currentColor" opacity="0.4"/>
-                  <rect x="70" y="70" width="5" height="5" fill="currentColor" opacity="0.7"/>
-                </svg>
-              </div>
-
-              <div class="qr-info">
-                <span class="qr-tag">Monthly — Itemized</span>
-                <div class="qr-title">Monthly Itemized Purchase Requests</div>
-                <p class="qr-desc">
-                  Full itemized list of all purchase requests and procurements for each month, including particulars, unit cost, quantity, and purpose.
-                </p>
-                <div class="qr-months">
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JAN_LINK" target="_blank" rel="noopener" class="qr-pill">Jan</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_FEB_LINK" target="_blank" rel="noopener" class="qr-pill">Feb</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_MAR_LINK" target="_blank" rel="noopener" class="qr-pill">Mar</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_APR_LINK" target="_blank" rel="noopener" class="qr-pill">Apr</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_MAY_LINK" target="_blank" rel="noopener" class="qr-pill">May</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JUN_LINK" target="_blank" rel="noopener" class="qr-pill">Jun</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_JUL_LINK" target="_blank" rel="noopener" class="qr-pill">Jul</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_AUG_LINK" target="_blank" rel="noopener" class="qr-pill">Aug</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_SEP_LINK" target="_blank" rel="noopener" class="qr-pill">Sep</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_OCT_LINK" target="_blank" rel="noopener" class="qr-pill">Oct</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_NOV_LINK" target="_blank" rel="noopener" class="qr-pill">Nov</a>
-                  <a href="https://drive.google.com/drive/folders/REPLACE_WITH_DEC_LINK" target="_blank" rel="noopener" class="qr-pill">Dec</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="qr-link-row">
-              <span class="qr-link-label">Access full purchase logs on Google Drive</span>
-              <a href="https://drive.google.com/drive/folders/REPLACE_WITH_PURCHASES_MAIN_FOLDER" target="_blank" rel="noopener">
-                View All Purchase Records
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </a>
-            </div>
-          </div>
-
-        </div><!-- /.qr-grid -->
-      </div><!-- /.qr-records-section -->
-      <!-- ═══════════════════════════════════════════════ -->
-
-      <!-- Balance Table -->
-      <div class="report-block">
-        <div class="report-block-header">
-          <h3>Fund Balance Summary</h3>
-          <span class="block-tag">As of [DATE]</span>
-        </div>
-        <table class="report-table">
-          <thead>
-            <tr>
-              <th>Particulars</th>
-              <th>Notes</th>
-              <th>&nbsp;</th>
-              <th>Amount (₱)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Total Receipts / Income</strong></td>
-              <td>All sources combined</td>
-              <td></td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-            <tr>
-              <td><strong>Less: Total Expenditures</strong></td>
-              <td>All disbursements</td>
-              <td></td>
-              <td>( ₱ [0,000.00] )</td>
-            </tr>
-            <tr class="row-total">
-              <td colspan="3">Remaining / Unexpended Balance</td>
-              <td>₱ [0,000.00]</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Document Notice -->
-      <div class="doc-notice">
-        <div class="doc-notice-text">
-          <h4>Full Financial Report Available</h4>
-          <p>The complete audited financial report including supporting documents is available upon request at the Barangay Hall.</p>
-        </div>
-        <a href="contact.html" class="btn btn-navy">Request a Copy</a>
-      </div>
-
-      <!-- Certification -->
-      <div class="cert-box">
-        <div>
-          <h3>Certification</h3>
-          <p>
-            I hereby certify that the foregoing financial report is true and correct based on
-            the books of accounts and official receipts on file with the Sangguniang Kabataan
-            of Barangay Panicuason, Naga City, for Fiscal Year
-            <span class="gold">[YEAR]</span>.
-          </p>
-          <p>
-            This report is prepared in compliance with the SK Reform Act (RA 10742) and
-            Commission on Audit (COA) regulations on SK fund utilization and transparency.
-          </p>
-        </div>
-        <div class="sig-list">
-          <div class="sig-item">
-            <div class="sig-name">[Treasurer Full Name]</div>
-            <div class="sig-title">SK Treasurer · Barangay Panicuason</div>
-          </div>
-          <div class="sig-item">
-            <div class="sig-name">[Chairman Full Name]</div>
-            <div class="sig-title">SK Chairman · Barangay Panicuason</div>
-          </div>
-          <div class="sig-item">
-            <div class="sig-name">[Barangay Captain Name]</div>
-            <div class="sig-title">Barangay Captain · Noted</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CTA BAND -->
-  <section class="cta-band">
-    <div class="cta-inner">
+<div class="bgt-page">
+<!-- HEADER -->
+<div class="header">
+  <div class="bgt-container">
+    <div class="header-top">
       <div>
-        <h2>Questions About Our Funds?</h2>
-        <p>We are committed to full transparency. Reach out to us for any concerns or inquiries.</p>
+        <div class="header-flag">
+          <div class="flag-stripe blue"></div>
+          <div class="flag-stripe red"></div>
+          <div class="flag-stripe gold"></div>
+          <span class="flag-label">Republic of the Philippines · Sangguniang Kabataan</span>
+        </div>
+        <h1>Annual Budget &amp; Investment Plan</h1>
+        <p class="header-sub">
+          3-Year CBYDP · SK Barangay Panicuason, Naga City 4400<br>
+          skpanicuason@gmail.com &nbsp;·&nbsp; RA 10742 (SK Reform Act of 2015)
+        </p>
       </div>
-      <a href="contact.html" class="btn btn-white">Contact Us</a>
+      <div class="ref-badge">
+        <span class="ref-label">AIP Reference</span>
+        <span class="ref-val">9000-001</span>
+        <span class="ref-label">Fiscal Years</span>
+        <span class="ref-val">2024 – 2026</span>
+        <span class="ref-label">Funding Source</span>
+        <span class="ref-val">SK Fund (10%)</span>
+      </div>
     </div>
-  </section>
+  </div>
 
-  <div id="sk-footer"></div>
+  <div class="bgt-stats-bar">
+    <div class="bgt-container" style="display:contents;">
+      <div class="bgt-stat">
+        <span class="bgt-stat-label">FY 2024 Actual</span>
+        <span class="bgt-stat-value">₱ 534,866.50</span>
+        <span class="bgt-stat-note">Base Year</span>
+      </div>
+      <div class="bgt-stat">
+        <span class="bgt-stat-label">FY 2025 Projected</span>
+        <span class="bgt-stat-value">₱ 731,000.00</span>
+        <span class="bgt-stat-note">Projected</span>
+      </div>
+      <div class="bgt-stat">
+        <span class="bgt-stat-label">FY 2026 Projected</span>
+        <span class="bgt-stat-value">₱ 856,000.00</span>
+        <span class="bgt-stat-note">Projected</span>
+      </div>
+      <div class="bgt-stat">
+        <span class="bgt-stat-label">3-Year Total</span>
+        <span class="bgt-stat-value highlight">₱ 2,121,866.50</span>
+        <span class="bgt-stat-note">CBYDP 2024–2026</span>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <script src="js/nav.js" defer></script>
-  <script src="js/main.js" defer></script>
-  <script src="js/footer.js" defer></script>
+<!-- BODY -->
+<div class="body-wrap">
+
+  <!-- Spreadsheet link -->
+  <div class="sheets-bar">
+    <div class="sheets-bar-left">
+      <div class="sheets-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="18" height="18" rx="1" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M3 9h18M3 15h18M9 3v18" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div>
+        <h4>Full Budget Spreadsheet</h4>
+        <p>View all line items, formulas, and supporting data on Google Sheets</p>
+      </div>
+    </div>
+    <a href="https://docs.google.com/spreadsheets/d/1c9aHLUX_ZL71J6XOmzX09mVv85-sM05I/edit?usp=sharing" target="_blank" rel="noopener" class="sheets-btn">
+      Open Spreadsheet
+      <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 10L10 2M10 2H4M10 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <span class="legend-label">Year</span>
+    <div class="legend-item"><div class="legend-dot y24"></div> 2024 (Actual)</div>
+    <div class="legend-item"><div class="legend-dot y25"></div> 2025 (Projected)</div>
+    <div class="legend-item"><div class="legend-dot y26"></div> 2026 (Projected)</div>
+    <div class="legend-item"><div class="legend-dot ytotal"></div> 3-Year Total</div>
+    <span style="font-size:11px;color:var(--muted);margin-left:auto;">Click any section to expand / collapse</span>
+  </div>
+
+  <!-- ══ 1. GOVERNANCE ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-001</span>
+      <span class="sec-title">Governance</span>
+      <span class="sec-total">₱ 876,716.63</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-001</span><span class="td-program">SK Honoraria</span><span class="td-desc">More effective and efficient administration</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 133,716.63</td>
+            <td class="r y25 hide-sm">₱ 150,000.00</td>
+            <td class="r y26">₱ 180,000.00</td>
+            <td class="r ytotal">₱ 463,716.63</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-002</span><span class="td-program">SK Regular Sessions</span><span class="td-desc">Meals for every SK Regular Session</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,000.00</td>
+            <td class="r y25 hide-sm">₱ 13,000.00</td>
+            <td class="r y26">₱ 18,000.00</td>
+            <td class="r ytotal">₱ 36,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-003</span><span class="td-program">Barangay Founding Anniversary</span><span class="td-desc">Annual commemoration of Barangay's founding</span></td>
+            <td class="td-period hide-sm">February</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 15,000.00</td>
+            <td class="r y26">₱ 20,000.00</td>
+            <td class="r ytotal">₱ 35,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-004</span><span class="td-program">Katipunan ng Kabataan Assembly</span><span class="td-desc">Encourage youth participation in public and civic affairs</span></td>
+            <td class="td-period hide-sm">Feb – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,000.00</td>
+            <td class="r y25 hide-sm">₱ 15,000.00</td>
+            <td class="r y26">₱ 20,000.00</td>
+            <td class="r ytotal">₱ 40,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-005</span><span class="td-program">Fidelity Bond</span><span class="td-desc">Compliance with SK requirements for fidelity bonding</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 3,000.00</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 7,000.00</td>
+            <td class="r ytotal">₱ 15,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-006</span><span class="td-program">Linggo ng Kabataan</span><span class="td-desc">LitMusDa Competitions — culture, arts, and youth celebration</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 15,000.00</td>
+            <td class="r y25 hide-sm">₱ 25,000.00</td>
+            <td class="r y26">₱ 30,000.00</td>
+            <td class="r ytotal">₱ 70,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-007</span><span class="td-program">Fiesta Activities</span><span class="td-desc">Laro ng Lahi, cultural activities — heritage and community connections</span></td>
+            <td class="td-period hide-sm">Sep – Oct</td>
+            <td class="r y24 hide-sm">₱ 20,000.00</td>
+            <td class="r y25 hide-sm">₱ 25,000.00</td>
+            <td class="r y26">₱ 30,000.00</td>
+            <td class="r ytotal">₱ 75,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-008</span><span class="td-program">Rubberized Court</span><span class="td-desc">Improve quality venue facilities for sports events</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 37,000.00</td>
+            <td class="r y25 hide-sm">₱ 40,000.00</td>
+            <td class="r y26">₱ 40,000.00</td>
+            <td class="r ytotal">₱ 117,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-009</span><span class="td-program">IT Equipment</span><span class="td-desc">Supplies for SK operations</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 25,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-001-0010</span><span class="td-program">Bulletin Board in Every Zone</span><span class="td-desc">Improve communication and information dissemination</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 30,000.00</td>
+            <td class="r zero">—</td>
+            <td class="r ytotal">₱ 30,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 2. EDUCATION ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-002</span>
+      <span class="sec-title">Education</span>
+      <span class="sec-total">₱ 448,787.47</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-002-001</span><span class="td-program">Barangay Tertiary Scholarship Program</span><span class="td-desc">Academic scholarship for students to finish their studies</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 133,787.47</td>
+            <td class="r y25 hide-sm">₱ 140,000.00</td>
+            <td class="r y26">₱ 150,000.00</td>
+            <td class="r ytotal">₱ 423,787.47</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-002-002</span><span class="td-program">Technical &amp; Support Assistance — ALS Panicuason</span><span class="td-desc">Supplemental education assistance to ALS Learners</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 25,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 3. PEACE BUILDING ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-003</span>
+      <span class="sec-title">Peace Building &amp; Security</span>
+      <span class="sec-total">₱ 71,862.41</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-003-001</span><span class="td-program">Seminar on Anti-Drugs, Alcoholism &amp; Smoking Awareness</span><span class="td-desc">Educate adolescents on illicit drug use and substance prevention</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 1,000.00</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r zero">—</td>
+            <td class="r ytotal">₱ 1,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-003-002</span><span class="td-program">Disaster Risk Reduction Preparedness &amp; Response Training</span><span class="td-desc">DRRM preparedness — disaster planning, resilience, and recovery</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 2,000.00</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 27,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-003-003</span><span class="td-program">Improvement of SK Signages</span><span class="td-desc">Public information on emergency hotlines for youth</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 8,000.00</td>
+            <td class="r ytotal">₱ 13,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-003-004</span><span class="td-program">First Aid Equipment</span><span class="td-desc">Empower youth to provide immediate assistance during emergencies</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,862.41</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 30,862.41</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 4. HEALTH ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-004</span>
+      <span class="sec-title">Health &amp; Nutrition Program</span>
+      <span class="sec-total">₱ 66,000.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-004-001</span><span class="td-program">Seminar on Mental Health Awareness</span><span class="td-desc">Strengthen youth awareness on mental health and reduce stigma</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 8,000.00</td>
+            <td class="r ytotal">₱ 13,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-004-002</span><span class="td-program">Free Circumcision Program</span><span class="td-desc">Health education, community engagement, and youth well-being</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r y25 hide-sm">₱ 20,000.00</td>
+            <td class="r y26">₱ 30,000.00</td>
+            <td class="r ytotal">₱ 50,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-004-003</span><span class="td-program">Support for Barangay Nutrition Activity — Youth Sector</span><span class="td-desc">Sustainable improvements in nutrition awareness and health outcomes</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 3,000.00</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r zero">—</td>
+            <td class="r ytotal">₱ 3,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 5. SPORTS ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-005</span>
+      <span class="sec-title">Sports Development</span>
+      <span class="sec-total">₱ 426,500.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-005-001</span><span class="td-program">Annual Inter-Zone Activities</span><span class="td-desc">Promote sportsmanship through sporting competitions</span></td>
+            <td class="td-period hide-sm">Apr – Sep</td>
+            <td class="r y24 hide-sm">₱ 80,000.00</td>
+            <td class="r y25 hide-sm">₱ 100,000.00</td>
+            <td class="r y26">₱ 110,000.00</td>
+            <td class="r ytotal">₱ 290,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-005-002</span><span class="td-program">Sporting Materials &amp; Equipment</span><span class="td-desc">Materials for sporting competitions among youth players</span></td>
+            <td class="td-period hide-sm">Apr – May</td>
+            <td class="r y24 hide-sm">₱ 10,000.00</td>
+            <td class="r y25 hide-sm">₱ 15,000.00</td>
+            <td class="r y26">₱ 20,000.00</td>
+            <td class="r ytotal">₱ 45,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-005-003</span><span class="td-program">Annual Inter-Barangay Tournament</span><span class="td-desc">Promote sportsmanship through inter-barangay sporting competitions</span></td>
+            <td class="td-period hide-sm">Apr – Sep</td>
+            <td class="r y24 hide-sm">₱ 21,500.00</td>
+            <td class="r y25 hide-sm">₱ 30,000.00</td>
+            <td class="r y26">₱ 40,000.00</td>
+            <td class="r ytotal">₱ 91,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 6. ACTIVE CITIZENSHIP ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-006</span>
+      <span class="sec-title">Active Citizenship</span>
+      <span class="sec-total">₱ 17,000.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-006-001</span><span class="td-program">Ceremonial and Oath Taking</span><span class="td-desc">Barangay Youth Organizations — unified and empowered youth officers</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 2,000.00</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 10,000.00</td>
+            <td class="r ytotal">₱ 17,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 7. AGRICULTURE ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-007</span>
+      <span class="sec-title">Agriculture &amp; Environment Protection</span>
+      <span class="sec-total">₱ 55,500.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-007-001</span><span class="td-program">Animal Dispersal</span><span class="td-desc">Responsibility and engagement on biodiversity and ecosystem health</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,000.00</td>
+            <td class="r y25 hide-sm">₱ 15,000.00</td>
+            <td class="r y26">₱ 20,000.00</td>
+            <td class="r ytotal">₱ 40,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-007-002</span><span class="td-program">Gulayan sa Komunidad</span><span class="td-desc">Promote healthy environment and cultivate natural resources</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 2,500.00</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 8,000.00</td>
+            <td class="r ytotal">₱ 15,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 8. ECONOMIC ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-008</span>
+      <span class="sec-title">Economic Empowerment Program</span>
+      <span class="sec-total">₱ 1,000.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-008-001</span><span class="td-program">Seminar on Financial Literacy</span><span class="td-desc">Substantiate financial management literacy among youth</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 1,000.00</td>
+            <td class="r zero hide-sm">—</td>
+            <td class="r zero">—</td>
+            <td class="r ytotal">₱ 1,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 9. SOCIAL INCLUSION ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-009</span>
+      <span class="sec-title">Social Inclusion &amp; Equity</span>
+      <span class="sec-total">₱ 28,000.00</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-009-001</span><span class="td-program">PWD Youth Gift-Giving</span><span class="td-desc">Assistance and recognition for youth with disabilities</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 3,000.00</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 28,000.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ══ 10. CAPABILITY BUILDING ══ -->
+  <div class="prog-section">
+    <div class="bgt-section-header open" onclick="toggle(this)">
+      <span class="sec-code">9000-001-010</span>
+      <span class="sec-title">Capability Building Program</span>
+      <span class="sec-total">₱ 144,362.41</span>
+      <svg class="sec-chevron" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr>
+          <th style="width:36%">Program / Activity</th>
+          <th class="hide-sm">Period</th>
+          <th class="r hide-sm">2024</th>
+          <th class="r hide-sm">2025</th>
+          <th class="r">2026</th>
+          <th class="r">3-Year Total</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="td-code-sm">9000-001-010-001</span><span class="td-program">Training and Seminar Expenses</span><span class="td-desc">Added knowledge on SK procedures and governance</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,000.00</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 30,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-010-002</span><span class="td-program">Travelling Expenses</span><span class="td-desc">Support for official travel expenditures of SK officials</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 5,000.00</td>
+            <td class="r y25 hide-sm">₱ 10,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 30,000.00</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-010-003</span><span class="td-program">Purchase of SK Office Materials</span><span class="td-desc">Supplies needed for SK operations</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 1,862.41</td>
+            <td class="r y25 hide-sm">₱ 5,000.00</td>
+            <td class="r y26">₱ 10,000.00</td>
+            <td class="r ytotal">₱ 16,862.41</td>
+          </tr>
+          <tr>
+            <td><span class="td-code-sm">9000-001-010-004</span><span class="td-program">Other MOOE</span><span class="td-desc">Miscellaneous maintenance and other operating expenses</span></td>
+            <td class="td-period hide-sm">Jan – Dec</td>
+            <td class="r y24 hide-sm">₱ 39,500.00</td>
+            <td class="r y25 hide-sm">₱ 13,000.00</td>
+            <td class="r y26">₱ 15,000.00</td>
+            <td class="r ytotal">₱ 67,500.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- GRAND TOTAL -->
+  <div class="grand-row">
+    <span class="grand-label">Grand Total — All Programs</span>
+    <span class="grand-num y24 hide-sm">₱ 534,866.50</span>
+    <span class="grand-num y25 hide-sm">₱ 731,000.00</span>
+    <span class="grand-num y26">₱ 856,000.00</span>
+    <span class="grand-num ytotal">₱ 2,121,866.50</span>
+  </div>
+  <p class="foot-note">
+    Note: Figures for FY 2025 and FY 2026 are projected only and subject to revision based on actual fund releases. Source of funding: SK Fund (10% allocation). Reference: RA 10742.
+  </p>
+
+  <!-- CERTIFICATION -->
+  <div class="cert">
+    <div class="cert-top">
+      <div>
+        <h3>Certification</h3>
+        <p>
+          This 3-Year Comprehensive Barangay Youth Development Plan (CBYDP) and Annual Barangay Youth Investment Plan (ABYIP) for Barangay Panicuason, Naga City has been duly prepared, concurred, attested, noted, and approved by the undersigned in accordance with the provisions of Republic Act No. 10742 (SK Reform Act of 2015) and its implementing rules and regulations.
+        </p>
+        <p class="cert-note-italic">Figures for FY 2025 and FY 2026 are projected only and subject to revision based on actual fund releases.</p>
+      </div>
+      <div>
+        <h3>Prepared by</h3>
+        <div class="sig-grid two" style="margin-bottom:2px;">
+          <div class="sig-cell">
+            <span class="sig-role">SK Secretary</span>
+            <span class="sig-name">MS. JHANA L. LAGOS</span>
+          </div>
+          <div class="sig-cell">
+            <span class="sig-role">SK Treasurer</span>
+            <span class="sig-name">MR. CRISTOPHER D. TORRES</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sig-section-label">SK Kagawads</div>
+    <div class="sig-grid" style="margin-bottom:2px;">
+      <div class="sig-cell">
+        <span class="sig-name">HON. JEORDAN PEDRAGOSA</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-name">HON. JOHN MARLO I. SINFUEGO</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-name">HON. ALBERT T. ALFORTE</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-name">HON. CAMAELA B. SABALZA</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-name">HON. FRANCIS WAYNE O. BRAGA</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-name">HON. CARMEN A. ANTONES</span>
+        <span class="sig-title">SK Kagawad</span>
+      </div>
+    </div>
+
+    <div class="sig-grid" style="margin-top:2px;">
+      <div class="sig-cell">
+        <span class="sig-role">Attested by</span>
+        <span class="sig-name">HON. ARIEL M. CAPOS</span>
+        <span class="sig-title">SK Kagawad / Chairman, Committee on Appropriation</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-role">Approved by</span>
+        <span class="sig-name">HON. JOHN MARK P. COSA</span>
+        <span class="sig-title">SK Chairman</span>
+      </div>
+      <div class="sig-cell">
+        <span class="sig-role">Noted by</span>
+        <span class="sig-name">HON. DOMINGO L. RAMOS</span>
+        <span class="sig-title">Punong Barangay</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.body-wrap -->
+
+<script>
+  function toggle(header) {
+    header.classList.toggle('open');
+    const body = header.nextElementSibling;
+    body.classList.toggle('collapsed');
+  }
+</script>
+
+</div><!-- /.bgt-page -->
+
+<script src="js/nav.js" defer></script>
 
 </body>
 </html>
