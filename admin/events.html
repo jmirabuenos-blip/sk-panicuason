@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Admin — Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
+</head>
+<body class="admin-body">
+
+  <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+  <div class="admin-layout">
+
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <img src="../images/logo.jpg" alt="SK Seal" />
+        <div>
+          <span class="sh-top">SK Admin</span>
+          <span class="sh-sub">Panicuason</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-label">Management</div>
+        <a href="index.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="events.html" class="active"><span class="nav-icon">📅</span> Events</a>
+        <a href="announcements.html"><span class="nav-icon">📢</span> Announcements</a>
+        <a href="gallery-admin.html"><span class="nav-icon">🖼️</span> Gallery</a>
+        <a href="officials.html"><span class="nav-icon">👥</span> Officials</a>
+        <div class="sidebar-nav-label">Links</div>
+        <a href="../index.html" target="_blank"><span class="nav-icon">🌐</span> View Website</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">A</div>
+          <div class="user-email" id="userEmail">Loading…</div>
+        </div>
+        <button class="btn-logout" id="logoutBtn">Sign Out</button>
+      </div>
+    </aside>
+
+    <!-- ══ MAIN ══ -->
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Events</h1>
+          <span class="breadcrumb"><a href="../index.html">Home</a> / Admin / Events</span>
+        </div>
+        <button class="btn-add" id="btnAddEvent">+ Add Event</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <div id="eventsTableContainer">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══ EVENT MODAL ══ -->
+  <div class="modal-overlay" id="eventModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Event</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="eventForm">
+          <input type="hidden" id="eventId" />
+          <div class="form-group">
+            <label for="eventTitle">Event Title *</label>
+            <input type="text" id="eventTitle" placeholder="e.g. SK Basketball League" required />
+          </div>
+          <div class="form-group">
+            <label for="eventDescription">Description</label>
+            <textarea id="eventDescription" placeholder="Describe the event…"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="eventDate">Date</label>
+              <input type="date" id="eventDate" />
+            </div>
+            <div class="form-group">
+              <label for="eventTime">Time</label>
+              <input type="time" id="eventTime" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="eventLocation">Location</label>
+            <input type="text" id="eventLocation" placeholder="e.g. Barangay Panicuason Hall" />
+          </div>
+          <div class="form-group">
+            <label for="eventImage">Image URL</label>
+            <input type="text" id="eventImage" placeholder="Paste an image URL (e.g. from Facebook, Google Drive)" />
+            <input type="file" id="eventImageFile" accept="image/*" style="display:none;" />
+            <img id="imagePreview" class="image-preview" alt="Preview" />
+          </div>
+          <div class="form-group">
+            <label for="eventStatus">Status</label>
+            <select id="eventStatus">
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="past">Past</option>
+              <option value="tba">To Be Announced</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="modalCancel">Cancel</button>
+        <button class="btn-save" id="modalSave">Save Event</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONFIRM DELETE ══ -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal" style="max-width:400px;">
+      <div class="confirm-dialog">
+        <div class="confirm-icon">⚠️</div>
+        <h4>Delete Event?</h4>
+        <p>This action cannot be undone. The event will be permanently removed.</p>
+        <div class="confirm-actions">
+          <button class="btn-cancel" id="confirmCancel">Cancel</button>
+          <button class="btn-danger" id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="../js/admin-events.js"></script>
+</body>
+</html>

@@ -49,7 +49,7 @@
       </div>
       <div class="footer-bottom">
         <span>© ${currentYear} Sangguniang Kabataan Barangay Panicuason. All rights reserved.</span>
-        <span>Built with 💛 for the Youth of Naga City</span>
+        <span>Built with 💛 for the Youth of Naga City · <a href="admin/login.html" style="color:rgba(255,255,255,.35);text-decoration:none;">Admin</a></span>
       </div>
     </footer>
   `;

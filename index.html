@@ -89,6 +89,9 @@
           <h2 style="font-family:'Playfair Display', serif; color: var(--navy); font-size: 1.8rem; margin: 0;">Important Community Notices</h2>
         </div>
 
+<!-- FIRESTORE ANNOUNCEMENTS -->
+<div id="firestoreAnnouncements"></div>
+
 <!-- NOTICE 2: DON BOSCO -->
 <div class="update-item-row">
   <div class="update-meta">
@@ -240,6 +243,50 @@
 
   <div id="sk-footer"></div>
 
+  <!-- Firebase SDK for loading announcements -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    (function() {
+      var container = document.getElementById('firestoreAnnouncements');
+      if (!container) return;
+
+      db.collection('announcements')
+        .orderBy('order', 'asc')
+        .limit(30)
+        .get()
+        .then(function(snap) {
+          if (snap.empty) { container.innerHTML = ''; return; }
+          var html = '';
+          snap.forEach(function(doc) {
+            var a = doc.data();
+            if (a.active === false) return; // skip hidden
+            var tagHtml = a.tag
+              ? '<span class="update-tag" style="color:' + (a.tagColor || '#0d6efd') + ';background:' + (a.tagColor || '#0d6efd') + '11;">' + esc(a.tag) + '</span>'
+              : '';
+            var imgHtml = a.imageUrl
+              ? '<img src="' + esc(a.imageUrl) + '" alt="' + esc(a.title || '') + '" style="width:100%;max-height:300px;object-fit:contain;background:#f8f9fa;border-radius:8px;margin-bottom:14px;display:block;" />'
+              : '';
+            var linkHtml = a.linkUrl
+              ? '<a href="' + esc(a.linkUrl) + '" target="_blank" class="update-link-btn">👉 ' + esc(a.linkText || 'Click here') + '</a>'
+              : '';
+            html += '<div class="update-item-row" style="border-bottom:1px dashed var(--lightgray);padding:24px 0;display:grid;grid-template-columns:250px 1fr;gap:20px;">' +
+              '<div class="update-meta"><h4>' + esc(a.title || 'Untitled') + '</h4>' + tagHtml + '</div>' +
+              '<div class="update-content">' + imgHtml +
+              (a.content ? '<p>' + a.content + '</p>' : '') +
+              linkHtml + '</div></div>';
+          });
+          container.innerHTML = html;
+        })
+        .catch(function(err) {
+          console.log('Announcements load skipped:', err.message);
+          container.innerHTML = '';
+        });
+
+      function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    })();
+  </script>
   <script src="js/main.js" defer></script>
 </body>
 </html>

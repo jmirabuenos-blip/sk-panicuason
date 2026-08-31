@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Admin — Officials</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
+</head>
+<body class="admin-body">
+
+  <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+  <div class="admin-layout">
+
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <img src="../images/logo.jpg" alt="SK Seal" />
+        <div><span class="sh-top">SK Admin</span><span class="sh-sub">Panicuason</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-label">Management</div>
+        <a href="index.html"><span class="nav-icon">📊</span> Dashboard</a>
+        <a href="events.html"><span class="nav-icon">📅</span> Events</a>
+        <a href="announcements.html"><span class="nav-icon">📢</span> Announcements</a>
+        <a href="gallery-admin.html"><span class="nav-icon">🖼️</span> Gallery</a>
+        <a href="officials.html" class="active"><span class="nav-icon">👥</span> Officials</a>
+        <div class="sidebar-nav-label">Links</div>
+        <a href="../index.html" target="_blank"><span class="nav-icon">🌐</span> View Website</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">A</div>
+          <div class="user-email" id="userEmail">Loading…</div>
+        </div>
+        <button class="btn-logout" id="logoutBtn">Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div class="admin-topbar">
+        <div>
+          <h1>Officials</h1>
+          <span class="breadcrumb"><a href="../index.html">Home</a> / Admin / Officials</span>
+        </div>
+        <button class="btn-add" id="btnAddOfficial">+ Add Official</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <div id="officialsTableContainer">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══ OFFICIAL MODAL ══ -->
+  <div class="modal-overlay" id="officialModal">
+    <div class="modal" style="max-width:560px;">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Official</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="officialForm">
+          <input type="hidden" id="officialId" />
+
+          <div class="form-group">
+            <label for="officialName">Full Name *</label>
+            <input type="text" id="officialName" placeholder="e.g. Juan Dela Cruz" required />
+          </div>
+
+          <div class="form-group">
+            <label for="officialPosition">Position</label>
+            <input type="text" id="officialPosition" placeholder="e.g. SK Kagawad, SK Secretary" />
+          </div>
+
+          <div class="form-group">
+            <label for="officialImage">Photo URL</label>
+            <input type="text" id="officialImage" placeholder="Paste a photo URL" />
+            <img id="imagePreview" class="image-preview" alt="Preview" style="max-height:150px;border-radius:50%;width:auto;" />
+          </div>
+
+          <div class="form-group">
+            <label for="officialBio">Bio / Description</label>
+            <textarea id="officialBio" placeholder="Short bio about this official…" style="min-height:80px;"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="officialOrder">Display Order</label>
+              <input type="number" id="officialOrder" value="0" min="0" />
+            </div>
+            <div class="form-group" style="justify-content:flex-end;">
+              <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.82rem;">
+                <input type="checkbox" id="officialChairman" style="width:18px;height:18px;" />
+                SK Chairman (featured layout)
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" id="modalCancel">Cancel</button>
+        <button class="btn-save" id="modalSave">Save Official</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONFIRM DELETE ══ -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal" style="max-width:400px;">
+      <div class="confirm-dialog">
+        <div class="confirm-icon">⚠️</div>
+        <h4>Remove Official?</h4>
+        <p>This action cannot be undone.</p>
+        <div class="confirm-actions">
+          <button class="btn-cancel" id="confirmCancel">Cancel</button>
+          <button class="btn-danger" id="confirmDelete">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/admin-auth.js"></script>
+  <script src="../js/admin-officials.js"></script>
+</body>
+</html>

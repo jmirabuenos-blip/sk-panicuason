@@ -1,0 +1,28 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/admin",                "destination": "/admin/index.html" },
+    { "source": "/admin/login",          "destination": "/admin/login.html" },
+    { "source": "/admin/events",         "destination": "/admin/events.html" },
+    { "source": "/admin/announcements",  "destination": "/admin/announcements.html" },
+    { "source": "/admin/gallery-admin",  "destination": "/admin/gallery-admin.html" },
+    { "source": "/admin/officials",      "destination": "/admin/officials.html" },
+    { "source": "/about",                "destination": "/about.html" },
+    { "source": "/events",               "destination": "/events.html" },
+    { "source": "/gallery",              "destination": "/gallery.html" },
+    { "source": "/programs",             "destination": "/programs.html" },
+    { "source": "/budget",               "destination": "/budget.html" },
+    { "source": "/contact",              "destination": "/contact.html" },
+    { "source": "/resolutions",          "destination": "/resolutions.html" },
+    { "source": "/history",              "destination": "/history.html" },
+    { "source": "/demographics",         "destination": "/demographics.html" }
+  ]
+}

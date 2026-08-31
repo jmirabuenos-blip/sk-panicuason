@@ -234,6 +234,8 @@
     .event-row-meta span { font-size: .75rem; color: var(--blue); font-weight: 600; }
     .event-status { display: inline-block; font-size: .6rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; margin-left: 8px; vertical-align: middle; }
     .status-tbd { background: var(--lightgray); color: var(--gray); }
+    .status-upcoming { background: rgba(14,165,233,.1); color: var(--sky700); }
+    .status-past { background: rgba(100,116,139,.1); color: var(--gray); }
 
     .follow-cta { margin-top: 48px; text-align: center; padding: 40px 24px; background: var(--white); border: 2px dashed var(--lightgray); }
     .follow-cta p { font-size: .95rem; color: var(--gray); line-height: 1.8; }
@@ -269,8 +271,14 @@
         </p>
       </div>
 
-      <!-- OTHER EVENTS -->
+      <!-- DYNAMIC EVENTS FROM FIRESTORE -->
       <div style="margin-top:64px;">
+        <div class="section-label reveal">Managed Events</div>
+        <div id="firestoreEvents"><!-- Loaded dynamically via JS --></div>
+      </div>
+
+      <!-- STATIC EVENTS (fallback / always shown) -->
+      <div style="margin-top:48px;">
         <div class="section-label reveal">Other Events</div>
 
         <div class="event-row reveal reveal-delay-1">
@@ -323,6 +331,61 @@
 
   <div id="sk-footer"></div>
 
+  <!-- Firebase SDK for loading events -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    (function() {
+      const container = document.getElementById('firestoreEvents');
+      if (!container) return;
+
+      db.collection('events').orderBy('createdAt', 'desc').limit(20).get()
+        .then(function(snap) {
+          if (snap.empty) {
+            container.innerHTML = '';
+            return;
+          }
+          var html = '';
+          snap.forEach(function(doc) {
+            var ev = doc.data();
+            var dateObj = ev.date ? new Date(ev.date + 'T00:00:00') : null;
+            var day   = dateObj ? dateObj.getDate() : 'TBA';
+            var month = dateObj ? dateObj.toLocaleDateString('en-US', { month: 'short' }).toUpperCase() : '';
+            var year  = dateObj ? dateObj.getFullYear() : '';
+            var statusClass = ev.status === 'past' ? 'status-past' : (ev.status === 'tba' ? 'status-tbd' : 'status-upcoming');
+            var statusLabel = ev.status === 'past' ? 'Past' : (ev.status === 'tba' ? 'TBA' : 'Upcoming');
+            var timeStr = '';
+            if (ev.time) {
+              var parts = ev.time.split(':');
+              var hr = parseInt(parts[0], 10);
+              var ampm = hr >= 12 ? 'PM' : 'AM';
+              timeStr = (hr % 12 || 12) + ':' + parts[1] + ' ' + ampm;
+            }
+            var imgHtml = ev.imageUrl ? '<img src="' + ev.imageUrl + '" alt="' + (ev.title||'') + '" style="width:100%;max-height:220px;object-fit:cover;border-radius:6px;margin-bottom:14px;" />' : '';
+            html += '<div class="event-row reveal" style="border-left-color:var(--sky400);">' +
+              '<div class="event-date-box"><span class="day" style="color:var(--sky300);">' + day + '</span><span class="month">' + month + '</span></div>' +
+              '<div class="event-row-info">' +
+              imgHtml +
+              '<h3>' + (ev.title||'Untitled') + ' <span class="event-status ' + statusClass + '">' + statusLabel + '</span></h3>' +
+              (ev.description ? '<p>' + ev.description + '</p>' : '') +
+              '<div class="event-row-meta">' +
+              (ev.location ? '<span>📍 ' + ev.location + '</span>' : '') +
+              (timeStr ? '<span>🕐 ' + timeStr + '</span>' : '') +
+              '</div></div></div>';
+          });
+          container.innerHTML = html;
+          // Re-observe for scroll reveal
+          container.querySelectorAll('.reveal').forEach(function(el) {
+            if (typeof revealObserver !== 'undefined') revealObserver.observe(el);
+          });
+        })
+        .catch(function(err) {
+          console.log('Firestore events load skipped:', err.message);
+          container.innerHTML = '';
+        });
+    })();
+  </script>
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
   <script src="js/footer.js"></script>

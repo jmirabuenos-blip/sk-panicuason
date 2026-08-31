@@ -205,8 +205,11 @@
         <button class="filter-btn" data-filter="council">Council</button>
       </div>
 
-      <!-- GALLERY GRID -->
-      <div class="gallery-grid">
+      <!-- FIRESTORE GALLERY ITEMS -->
+      <div class="gallery-grid" id="firestoreGallery"></div>
+
+      <!-- STATIC GALLERY GRID -->
+      <div class="gallery-grid" id="staticGallery">
 
         <div class="gallery-item reveal" data-cat="community"
              data-title="Post-Disaster Assessment & Road Clearing"
@@ -297,7 +300,7 @@
         </div>
 
       </div>
-      <!-- end gallery-grid -->
+      <!-- end staticGallery -->
 
     </div>
   </section>
@@ -326,50 +329,85 @@
   <!-- ══ FOOTER ══ -->
   <div id="sk-footer"></div>
 
+  <!-- Firebase SDK for loading gallery -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script>
+    (function() {
+      var container = document.getElementById('firestoreGallery');
+      if (!container) return;
+
+      db.collection('gallery').orderBy('order', 'asc').limit(50).get()
+        .then(function(snap) {
+          if (snap.empty) { container.innerHTML = ''; return; }
+          var html = '';
+          snap.forEach(function(doc) {
+            var g = doc.data();
+            if (!g.imageUrl) return;
+            var cat = (g.category || 'Other').toLowerCase();
+            html += '<div class="gallery-item" data-cat="' + cat + '" data-title="' + (g.title || '') + '" data-date="">' +
+              '<img src="' + g.imageUrl + '" alt="' + (g.title || '') + '" />' +
+              '<div class="gallery-overlay">' +
+              (g.category ? '<span class="g-cat">' + g.category + '</span>' : '') +
+              '<span class="g-title">' + (g.title || '') + '</span>' +
+              (g.caption ? '<span class="g-date">' + g.caption + '</span>' : '') +
+              '</div></div>';
+          });
+          container.innerHTML = html;
+          // Re-init filter + lightbox for new items
+          initFilterAndLightbox();
+        })
+        .catch(function(err) {
+          console.log('Gallery load skipped:', err.message);
+          container.innerHTML = '';
+        });
+    })();
+  </script>
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
   <script src="js/footer.js"></script>
 
   <script>
-    /* ── FILTER ── */
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    const filterBtns   = document.querySelectorAll('.filter-btn');
+    /* ── FILTER + LIGHTBOX (works for static & Firestore items) ── */
+    function initFilterAndLightbox() {
+      var allItems  = document.querySelectorAll('.gallery-item');
+      var filterBtns = document.querySelectorAll('.filter-btn');
 
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.dataset.filter;
-        galleryItems.forEach(item => {
-          item.classList.toggle('hidden', filter !== 'all' && item.dataset.cat !== filter);
-        });
+      filterBtns.forEach(function(btn) {
+        btn.onclick = function() {
+          filterBtns.forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var filter = btn.dataset.filter;
+          allItems.forEach(function(item) {
+            item.classList.toggle('hidden', filter !== 'all' && item.dataset.cat !== filter);
+          });
+        };
       });
-    });
 
-    /* ── LIGHTBOX ── */
-    const lightbox      = document.getElementById('lightbox');
-    const lightboxImg   = document.getElementById('lightboxImg');
-    const lightboxTitle = document.getElementById('lightboxTitle');
-    const lightboxDate  = document.getElementById('lightboxDate');
-    const lightboxClose = document.getElementById('lightboxClose');
-
-    galleryItems.forEach(item => {
-      item.addEventListener('click', () => {
-        lightboxImg.src           = item.querySelector('img').src;
-        lightboxImg.alt           = item.dataset.title;
-        lightboxTitle.textContent = item.dataset.title;
-        lightboxDate.textContent  = item.dataset.date;
-        lightbox.classList.add('open');
-        document.body.style.overflow = 'hidden';
+      allItems.forEach(function(item) {
+        item.onclick = function() {
+          var lightbox      = document.getElementById('lightbox');
+          var lightboxImg   = document.getElementById('lightboxImg');
+          var lightboxTitle = document.getElementById('lightboxTitle');
+          var lightboxDate  = document.getElementById('lightboxDate');
+          lightboxImg.src           = item.querySelector('img').src;
+          lightboxImg.alt           = item.dataset.title;
+          lightboxTitle.textContent = item.dataset.title;
+          lightboxDate.textContent  = item.dataset.date || '';
+          lightbox.classList.add('open');
+          document.body.style.overflow = 'hidden';
+        };
       });
-    });
+    }
 
-    lightboxClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+    initFilterAndLightbox();
 
+    document.getElementById('lightboxClose').onclick = closeLightbox;
+    document.getElementById('lightbox').onclick = function(e) { if (e.target === this) closeLightbox(); };
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
     function closeLightbox() {
-      lightbox.classList.remove('open');
+      document.getElementById('lightbox').classList.remove('open');
       document.body.style.overflow = '';
     }
   </script>
