@@ -245,7 +245,137 @@
     @media (max-width: 860px) {
       .division-grid { grid-template-columns: 1fr; }
       .pb-banner { padding: 36px 24px 32px; }
+      .committee-tabs { flex-wrap: wrap; }
     }
+
+    /* ── Committee Events Tabs ── */
+    .committee-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 24px;
+    }
+    .committee-tab {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 2px solid var(--lightgray);
+      background: var(--white);
+      color: var(--gray);
+      cursor: pointer;
+      transition: all .2s;
+      border-radius: 4px;
+    }
+    .committee-tab:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+    .committee-tab.active {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--sky300);
+    }
+    .committee-panels {
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+    }
+    .committee-panel {
+      display: none;
+      padding: 32px;
+    }
+    .committee-panel.active {
+      display: block;
+    }
+    .committee-panel h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--lightgray);
+    }
+    .committee-empty {
+      font-size: .92rem;
+      color: var(--gray);
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--offwhite);
+      border-radius: 8px;
+      border: 2px dashed var(--lightgray);
+    }
+    .committee-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .committee-photo {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--offwhite);
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .committee-photo:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.15);
+    }
+    .committee-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .3s;
+    }
+    .committee-photo:hover img {
+      transform: scale(1.05);
+    }
+    .committee-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,22,40,.92);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      backdrop-filter: blur(6px);
+    }
+    .committee-lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .committee-lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 10px 50px rgba(0,0,0,.4);
+    }
+    .committee-lb-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      font-size: 1.6rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 10001;
+    }
+    .committee-lb-close:hover { background: rgba(255,255,255,.3); }
   </style>
 </head>
 <body>
@@ -306,6 +436,83 @@
             <p>A seminar on civic responsibility and community leadership open to all youth aged 15–30. Date to be announced.</p>
             <div class="event-row-meta"><span>📍 Barangay Panicuason Hall</span><span>🏛️ Leadership Program</span></div>
           </div>
+        </div>
+      </div>
+
+      <!-- ══ 2025 SK COMMITTEE EVENTS ══ -->
+      <div style="margin-top:64px;">
+        <div class="section-label reveal">2025 Committee Activities</div>
+        <h2 class="section-title reveal">SK Committee Events</h2>
+        <p class="section-sub reveal" style="margin-inline:auto; margin-bottom:32px;">
+          A look back at the activities and initiatives conducted by each SK committee throughout 2025.
+        </p>
+
+        <!-- Committee Banner -->
+        <div class="reveal" style="text-align:center; margin-bottom:40px;">
+          <img src="images/committee-events/SK COMMITTEES.jfif" alt="SK Committees" style="max-width:100%; max-height:300px; object-fit:contain; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,.1);" />
+        </div>
+
+        <!-- Committee Tabs -->
+        <div class="committee-tabs" id="committeeTabs">
+          <button class="committee-tab active" data-committee="agriculture">Agriculture & Environment</button>
+          <button class="committee-tab" data-committee="education">Education</button>
+          <button class="committee-tab" data-committee="health">Health</button>
+          <button class="committee-tab" data-committee="infrastructure">Infrastructure</button>
+          <button class="committee-tab" data-committee="peace">Peace & Building</button>
+          <button class="committee-tab" data-committee="economic">Economic Empowerment</button>
+          <button class="committee-tab" data-committee="accountability">Accountability & Ethics</button>
+          <button class="committee-tab" data-committee="active">Active Citizenship</button>
+          <button class="committee-tab" data-committee="bac">BAC</button>
+          <button class="committee-tab" data-committee="appropriation">Appropriation</button>
+          <button class="committee-tab" data-committee="properties">Properties & Inventory</button>
+          <button class="committee-tab" data-committee="rules">Rules & Privileges</button>
+          <button class="committee-tab" data-committee="social">Social Building</button>
+          <button class="committee-tab" data-committee="ways">Ways & Means</button>
+        </div>
+
+        <!-- Committee Panels -->
+        <div class="committee-panels">
+          <!-- Agriculture & Environment -->
+          <div class="committee-panel active" id="panel-agriculture">
+            <h3>Com. Agriculture & Environment</h3>
+            <div class="committee-gallery">
+              <div class="committee-photo"><img src="images/committee-events/agriculture-environment/484640907_661994072895699_5832382049052792523_n.jpg" alt="Agriculture & Environment Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/agriculture-environment/484927508_661996719562101_7923037160521622914_n.jpg" alt="Agriculture & Environment Event" /></div>
+            </div>
+          </div>
+
+          <!-- Education -->
+          <div class="committee-panel" id="panel-education">
+            <h3>Com. on Education</h3>
+            <div class="committee-gallery">
+              <div class="committee-photo"><img src="images/committee-events/education/482318172_657396640022109_8677141757077810545_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/482319456_657396633355443_6690398460913327505_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/482324513_657396500022123_6484238422480372548_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/514274787_739961361765636_5668587337005552323_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/515215052_739961481765624_338113920895938267_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/518274829_747584317670007_1937513421185256619_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/544904382_792710649824040_1999017503082668446_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/545020583_792727439822361_8200160982276230287_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/545146926_792710616490710_8354947542497124995_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/545194786_793225726439199_1180755144436296095_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/545206914_793241633104275_5455363295397721531_n.jpg" alt="Education Event" /></div>
+              <div class="committee-photo"><img src="images/committee-events/education/545354238_792710523157386_8928021230433354041_n.jpg" alt="Education Event" /></div>
+            </div>
+          </div>
+
+          <!-- Empty committees -->
+          <div class="committee-panel" id="panel-health"><h3>Com. on Health</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-infrastructure"><h3>Infrastructure</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-peace"><h3>Peace & Building</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-economic"><h3>Economic Empowerment</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-accountability"><h3>Accountability & Ethics</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-active"><h3>Active Citizenship</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-bac"><h3>BAC</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-appropriation"><h3>Appropriation</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-properties"><h3>Properties & Inventory</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-rules"><h3>Rules & Privileges</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-social"><h3>Social Building</h3><p class="committee-empty">No event photos available yet.</p></div>
+          <div class="committee-panel" id="panel-ways"><h3>Ways & Means</h3><p class="committee-empty">No event photos available yet.</p></div>
         </div>
       </div>
 
@@ -389,5 +596,51 @@
   <script src="js/nav.js" defer></script>
   <script src="js/main.js" defer></script>
   <script src="js/footer.js"></script>
+
+  <!-- Committee Tabs & Lightbox -->
+  <script>
+    (function() {
+      // Tab switching
+      var tabs = document.querySelectorAll('.committee-tab');
+      var panels = document.querySelectorAll('.committee-panel');
+
+      tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+          tabs.forEach(function(t) { t.classList.remove('active'); });
+          panels.forEach(function(p) { p.classList.remove('active'); });
+          tab.classList.add('active');
+          var target = document.getElementById('panel-' + tab.dataset.committee);
+          if (target) target.classList.add('active');
+        });
+      });
+
+      // Lightbox for committee photos
+      var lb = document.createElement('div');
+      lb.className = 'committee-lightbox';
+      lb.innerHTML = '<button class="committee-lb-close">&times;</button><img src="" alt="Committee Event" />';
+      document.body.appendChild(lb);
+      var lbImg = lb.querySelector('img');
+      var lbClose = lb.querySelector('.committee-lb-close');
+
+      document.querySelectorAll('.committee-photo').forEach(function(photo) {
+        photo.addEventListener('click', function() {
+          lbImg.src = photo.querySelector('img').src;
+          lb.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      function closeLb() {
+        lb.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      lbClose.addEventListener('click', closeLb);
+      lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && lb.classList.contains('active')) closeLb();
+      });
+    })();
+  </script>
 </body>
 </html> 
