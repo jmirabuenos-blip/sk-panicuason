@@ -63,126 +63,162 @@
 
     <!-- ══ MAIN CONTENT ══ -->
     <main class="admin-main">
+
+      <!-- Top Bar -->
       <div class="admin-topbar">
         <div>
-          <h1>Dashboard</h1>
-          <span class="breadcrumb"><a href="../index.html">Home</a> / Admin / Dashboard</span>
+          <h1>SK Dashboard Overview</h1>
+          <span class="breadcrumb">Welcome back, <span id="topbarName">Admin</span></span>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn-topbar-primary" onclick="window.location.href='events.html'">
+            <span>＋</span> New Event
+          </button>
         </div>
       </div>
 
-      <!-- Stats -->
-      <div class="stats-row" id="statsRow">
-        <div class="stat-card">
-          <span class="stat-icon">📅</span>
-          <div class="stat-details">
-            <h3 id="statEvents">—</h3>
-            <p>Total Events</p>
+      <!-- ══ STAT CARDS ══ -->
+      <div class="dash-stats" id="dashStats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: rgba(14,165,233,.12); color: #0ea5e9;">
+            <span>📅</span>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-label">Total Events</span>
+            <div class="dash-stat-number" id="statEvents">—</div>
+            <span class="dash-stat-sub">All time events</span>
+          </div>
+          <div class="dash-stat-arrow">↗</div>
+        </div>
+
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: rgba(16,185,129,.12); color: #10b981;">
+            <span>🔜</span>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-label">Upcoming</span>
+            <div class="dash-stat-number" id="statUpcoming">—</div>
+            <span class="dash-stat-sub">Scheduled events</span>
+          </div>
+          <div class="dash-stat-arrow">↗</div>
+        </div>
+
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: rgba(139,92,246,.12); color: #8b5cf6;">
+            <span>📢</span>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-label">Announcements</span>
+            <div class="dash-stat-number" id="statAnnouncements">—</div>
+            <span class="dash-stat-sub">Active notices</span>
+          </div>
+          <div class="dash-stat-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- ══ SECOND ROW: Event Status + Recent Events ══ -->
+      <div class="dash-grid-2">
+
+        <!-- Event Status Breakdown -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Event Status</h3>
+          </div>
+          <div class="dash-card-body">
+            <div class="donut-wrapper">
+              <div class="donut-chart" id="donutChart">
+                <div class="donut-center">
+                  <span class="donut-total" id="donutTotal">0</span>
+                  <span class="donut-label">events</span>
+                </div>
+              </div>
+            </div>
+            <div class="status-legend">
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #0ea5e9;"></span>
+                <span class="legend-text">Upcoming</span>
+                <span class="legend-count" id="legendUpcoming">0</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #10b981;"></span>
+                <span class="legend-text">Ongoing</span>
+                <span class="legend-count" id="legendOngoing">0</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #8b5cf6;"></span>
+                <span class="legend-text">Past</span>
+                <span class="legend-count" id="legendPast">0</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-dot" style="background: #f59e0b;"></span>
+                <span class="legend-text">TBA</span>
+                <span class="legend-count" id="legendTBA">0</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="stat-card" style="border-left-color: var(--sky300);">
-          <span class="stat-icon">🔜</span>
-          <div class="stat-details">
-            <h3 id="statUpcoming">—</h3>
-            <p>Upcoming</p>
+
+        <!-- Recent Events -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Recent Events</h3>
+            <a href="events.html" class="dash-card-link">View All →</a>
           </div>
-        </div>
-        <div class="stat-card" style="border-left-color: var(--gray);">
-          <span class="stat-icon">✅</span>
-          <div class="stat-details">
-            <h3 id="statPast">—</h3>
-            <p>Past Events</p>
+          <div class="dash-card-body dash-card-scroll" id="recentEventsContainer">
+            <div class="loading-spinner"><div class="spinner"></div></div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Events Table -->
-      <div class="admin-table-wrap">
-        <div class="admin-table-header">
-          <h2>Recent Events</h2>
-          <button class="btn-add" id="btnAddEvent">+ Add Event</button>
+      <!-- ══ THIRD ROW: Activity + Quick Actions ══ -->
+      <div class="dash-grid-2">
+        <!-- Activity Feed -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Recent Activity</h3>
+          </div>
+          <div class="dash-card-body dash-card-scroll" id="activityFeed">
+            <div class="loading-spinner"><div class="spinner"></div></div>
+          </div>
         </div>
-        <div id="eventsTableContainer">
-          <div class="loading-spinner"><div class="spinner"></div></div>
+
+        <!-- Quick Actions -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div class="dash-card-body">
+            <div class="quick-actions-grid">
+              <a href="events.html" class="quick-action-card">
+                <div class="qa-icon" style="background: rgba(14,165,233,.12); color: #0ea5e9;">📅</div>
+                <span class="qa-label">Add Event</span>
+              </a>
+              <a href="announcements.html" class="quick-action-card">
+                <div class="qa-icon" style="background: rgba(16,185,129,.12); color: #10b981;">📢</div>
+                <span class="qa-label">Announcement</span>
+              </a>
+              <a href="gallery-admin.html" class="quick-action-card">
+                <div class="qa-icon" style="background: rgba(245,158,11,.12); color: #f59e0b;">🖼️</div>
+                <span class="qa-label">Add Photo</span>
+              </a>
+              <a href="officials.html" class="quick-action-card">
+                <div class="qa-icon" style="background: rgba(139,92,246,.12); color: #8b5cf6;">👥</div>
+                <span class="qa-label">Officials</span>
+              </a>
+            </div>
+
+            <div class="site-link-box">
+              <span class="site-link-icon">🌐</span>
+              <div>
+                <span class="site-link-title">View Public Website</span>
+                <a href="../index.html" target="_blank" class="site-link-url">sk-panicuason.vercel.app →</a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
     </main>
-  </div>
-
-  <!-- ══ EVENT MODAL ══ -->
-  <div class="modal-overlay" id="eventModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3 id="modalTitle">Add New Event</h3>
-        <button class="modal-close" id="modalClose">&times;</button>
-      </div>
-      <div class="modal-body">
-        <form id="eventForm">
-          <input type="hidden" id="eventId" />
-
-          <div class="form-group">
-            <label for="eventTitle">Event Title *</label>
-            <input type="text" id="eventTitle" placeholder="e.g. SK Basketball League" required />
-          </div>
-
-          <div class="form-group">
-            <label for="eventDescription">Description</label>
-            <textarea id="eventDescription" placeholder="Describe the event…"></textarea>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="eventDate">Date</label>
-              <input type="date" id="eventDate" />
-            </div>
-            <div class="form-group">
-              <label for="eventTime">Time</label>
-              <input type="time" id="eventTime" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="eventLocation">Location</label>
-            <input type="text" id="eventLocation" placeholder="e.g. Barangay Panicuason Hall" />
-          </div>
-
-          <div class="form-group">
-            <label for="eventImage">Image URL</label>
-            <input type="text" id="eventImage" placeholder="Paste an image URL (e.g. from Facebook, Google Drive)" />
-            <input type="file" id="eventImageFile" accept="image/*" style="display:none;" />
-            <img id="imagePreview" class="image-preview" alt="Preview" />
-          </div>
-
-          <div class="form-group">
-            <label for="eventStatus">Status</label>
-            <select id="eventStatus">
-              <option value="upcoming">Upcoming</option>
-              <option value="ongoing">Ongoing</option>
-              <option value="past">Past</option>
-              <option value="tba">To Be Announced</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancel" id="modalCancel">Cancel</button>
-        <button class="btn-save" id="modalSave">Save Event</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ══ CONFIRM DELETE MODAL ══ -->
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal" style="max-width:400px;">
-      <div class="confirm-dialog">
-        <div class="confirm-icon">⚠️</div>
-        <h4>Delete Event?</h4>
-        <p>This action cannot be undone. The event will be permanently removed.</p>
-        <div class="confirm-actions">
-          <button class="btn-cancel" id="confirmCancel">Cancel</button>
-          <button class="btn-danger" id="confirmDelete">Delete</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- Toast container -->
