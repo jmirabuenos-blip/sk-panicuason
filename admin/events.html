@@ -6,61 +6,72 @@
   <title>SK Admin — Events</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
 </head>
 <body class="admin-body">
 
-  <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+  <div class="admin-wrapper">
+    <div class="admin-container">
 
-  <div class="admin-layout">
+      <!-- ══ HEADER ══ -->
+      <header class="admin-header">
+        <a href="index.html" class="admin-brand">
+          <img src="../images/logo.jpg" alt="SK" class="brand-logo" />
+          <span class="brand-name">SK Admin</span>
+        </a>
+        <nav class="admin-nav">
+          <a href="index.html" class="nav-pill">Dashboard</a>
+          <a href="events.html" class="nav-pill active">Events</a>
+          <a href="announcements.html" class="nav-pill">Announcements</a>
+          <a href="gallery-admin.html" class="nav-pill">Gallery</a>
+          <a href="officials.html" class="nav-pill">Officials</a>
+        </nav>
+        <div class="admin-header-right">
+          <div class="header-avatar" id="userAvatar">A</div>
+          <button class="admin-hamburger" id="adminHamburger" aria-label="Menu">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </header>
 
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="admin-sidebar" id="adminSidebar">
-      <div class="sidebar-header">
-        <img src="../images/logo.jpg" alt="SK Seal" />
-        <div>
-          <span class="sh-top">SK Admin</span>
-          <span class="sh-sub">Panicuason</span>
+      <!-- Mobile nav -->
+      <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+      <div class="mobile-nav-panel" id="mobileNavPanel">
+        <div class="mobile-nav-header"><span>Navigation</span><button class="mobile-nav-close" id="mobileNavClose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+        <nav class="mobile-nav-links">
+          <a href="index.html">Dashboard</a>
+          <a href="events.html" class="active">Events</a>
+          <a href="announcements.html">Announcements</a>
+          <a href="gallery-admin.html">Gallery</a>
+          <a href="officials.html">Officials</a>
+        </nav>
+        <div class="mobile-nav-footer">
+          <span id="userEmail">Admin</span>
+          <button class="btn-signout" id="logoutBtn">Sign Out</button>
         </div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="sidebar-nav-label">Management</div>
-        <a href="index.html"><span class="nav-icon">📊</span> Dashboard</a>
-        <a href="events.html" class="active"><span class="nav-icon">📅</span> Events</a>
-        <a href="announcements.html"><span class="nav-icon">📢</span> Announcements</a>
-        <a href="gallery-admin.html"><span class="nav-icon">🖼️</span> Gallery</a>
-        <a href="officials.html"><span class="nav-icon">👥</span> Officials</a>
-        <div class="sidebar-nav-label">Links</div>
-        <a href="../index.html" target="_blank"><span class="nav-icon">🌐</span> View Website</a>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-info">
-          <div class="user-avatar" id="userAvatar">A</div>
-          <div class="user-email" id="userEmail">Loading…</div>
-        </div>
-        <button class="btn-logout" id="logoutBtn">Sign Out</button>
-      </div>
-    </aside>
 
-    <!-- ══ MAIN ══ -->
-    <main class="admin-main">
-      <div class="admin-topbar">
-        <div>
-          <h1>Events</h1>
-          <span class="breadcrumb"><a href="../index.html">Home</a> / Admin / Events</span>
+      <!-- ══ CONTENT ══ -->
+      <div class="admin-content">
+        <div class="content-header">
+          <div>
+            <h1>Events Management</h1>
+            <p class="content-subtitle">Manage all SK events and activities</p>
+          </div>
+          <button class="btn-add" id="btnAddEvent">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Event
+          </button>
         </div>
-        <button class="btn-add" id="btnAddEvent">+ Add Event</button>
-      </div>
-
-      <div class="admin-table-wrap">
-        <div id="eventsTableContainer">
-          <div class="loading-spinner"><div class="spinner"></div></div>
+        <div class="admin-table-wrap">
+          <div id="eventsTableContainer">
+            <div class="loading-spinner"><div class="spinner"></div></div>
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   </div>
 
   <!-- ══ EVENT MODAL ══ -->
@@ -97,7 +108,7 @@
           </div>
           <div class="form-group">
             <label for="eventImage">Image URL</label>
-            <input type="text" id="eventImage" placeholder="Paste an image URL (e.g. from Facebook, Google Drive)" />
+            <input type="text" id="eventImage" placeholder="Paste an image URL" />
             <input type="file" id="eventImageFile" accept="image/*" style="display:none;" />
             <img id="imagePreview" class="image-preview" alt="Preview" />
           </div>
@@ -123,7 +134,9 @@
   <div class="modal-overlay" id="confirmModal">
     <div class="modal" style="max-width:400px;">
       <div class="confirm-dialog">
-        <div class="confirm-icon">⚠️</div>
+        <div class="confirm-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
         <h4>Delete Event?</h4>
         <p>This action cannot be undone. The event will be permanently removed.</p>
         <div class="confirm-actions">
@@ -143,5 +156,15 @@
   <script src="../js/firebase-config.js"></script>
   <script src="../js/admin-auth.js"></script>
   <script src="../js/admin-events.js"></script>
+  <script>
+    (function() {
+      var h = document.getElementById('adminHamburger'), o = document.getElementById('mobileNavOverlay'), p = document.getElementById('mobileNavPanel'), c = document.getElementById('mobileNavClose');
+      function open() { o.classList.add('show'); p.classList.add('show'); document.body.style.overflow='hidden'; }
+      function close() { o.classList.remove('show'); p.classList.remove('show'); document.body.style.overflow=''; }
+      if(h) h.addEventListener('click',open);
+      if(o) o.addEventListener('click',close);
+      if(c) c.addEventListener('click',close);
+    })();
+  </script>
 </body>
 </html>

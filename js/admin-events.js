@@ -1,7 +1,6 @@
 /* ============================================
-   SK BARANGAY PANICUASON — admin-events.js
-   Dashboard logic + Event CRUD for admin panel.
-   Depends on firebase-config.js & admin-auth.js
+   SK ADMIN — admin-events.js
+   Dashboard + Event CRUD for Cognify-style admin
 ============================================ */
 
 (function () {
@@ -13,29 +12,36 @@
   });
 
   /* ── DOM refs ── */
-  var sidebar        = document.getElementById('adminSidebar');
-  var sidebarToggle  = document.getElementById('sidebarToggle');
-  var logoutBtn      = document.getElementById('logoutBtn');
-  var userEmail      = document.getElementById('userEmail');
+  var logoutBtn      = document.getElementById('mobileLogoutBtn');
+  var userEmail      = document.getElementById('mobileUserEmail');
   var userAvatar     = document.getElementById('userAvatar');
   var topbarName     = document.getElementById('topbarName');
-  var btnAddEvent    = document.getElementById('btnAddEvent');
-  var tableContainer = document.getElementById('eventsTableContainer');
 
   /* ── Dashboard DOM refs ── */
   var statEvents        = document.getElementById('statEvents');
-  var statUpcoming      = document.getElementById('statUpcoming');
   var statAnnouncements = document.getElementById('statAnnouncements');
-  var donutChart        = document.getElementById('donutChart');
+  var statGallery       = document.getElementById('statGallery');
+  var breakdownPercent  = document.getElementById('breakdownPercent');
+  var barUpcoming       = document.getElementById('barUpcoming');
+  var barPast           = document.getElementById('barPast');
+  var barOngoing        = document.getElementById('barOngoing');
+  var barTBA            = document.getElementById('barTBA');
+  var barFillUpcoming   = document.getElementById('barFillUpcoming');
+  var barFillPast       = document.getElementById('barFillPast');
+  var barFillOngoing    = document.getElementById('barFillOngoing');
+  var barFillTBA        = document.getElementById('barFillTBA');
   var donutTotal        = document.getElementById('donutTotal');
+  var segUpcoming       = document.getElementById('segUpcoming');
+  var segPast           = document.getElementById('segPast');
+  var segOngoing        = document.getElementById('segOngoing');
+  var segTBA            = document.getElementById('segTBA');
   var legendUpcoming    = document.getElementById('legendUpcoming');
-  var legendOngoing     = document.getElementById('legendOngoing');
   var legendPast        = document.getElementById('legendPast');
+  var legendOngoing     = document.getElementById('legendOngoing');
   var legendTBA         = document.getElementById('legendTBA');
-  var recentEventsContainer = document.getElementById('recentEventsContainer');
   var activityFeed      = document.getElementById('activityFeed');
 
-  /* ── Modal refs (only on pages with the modal) ── */
+  /* ── Modal refs (sub-pages with event modal) ── */
   var eventModal   = document.getElementById('eventModal');
   var modalTitle   = document.getElementById('modalTitle');
   var modalClose   = document.getElementById('modalClose');
@@ -52,643 +58,349 @@
   var imageFile    = document.getElementById('eventImageFile');
   var imagePreview = document.getElementById('imagePreview');
   var statusInput  = document.getElementById('eventStatus');
+  var tableContainer = document.getElementById('eventsTableContainer');
 
-  /* ── Confirm modal refs ── */
   var confirmModal   = document.getElementById('confirmModal');
   var confirmCancel  = document.getElementById('confirmCancel');
   var confirmDelete  = document.getElementById('confirmDelete');
 
   /* ── State ── */
-  var allEvents     = [];
+  var allEvents        = [];
   var allAnnouncements = [];
-  var deleteId      = null;
-  var editingId     = null;
-  var uploadTask    = null;
+  var allGallery       = [];
+  var deleteId         = null;
+  var editingId        = null;
+  var uploadTask       = null;
 
   /* ═══════════════════════════════════════════
      INIT
   ═══════════════════════════════════════════ */
   function initDashboard(user) {
-    // Show user info
-    var displayName = user.email || 'Admin';
-    userEmail.textContent  = displayName;
-    userAvatar.textContent = displayName.charAt(0).toUpperCase();
-    if (topbarName) topbarName.textContent = displayName.split('@')[0];
+    var name = user.email || 'Admin';
+    if (userEmail) userEmail.textContent = name;
+    if (userAvatar) userAvatar.textContent = name.charAt(0).toUpperCase();
+    if (topbarName) topbarName.textContent = name.split('@')[0];
 
-    // Load events
-    loadEvents();
-
-    // Real-time listener on events collection
+    /* Events */
     db.collection('events').orderBy('createdAt', 'desc')
       .onSnapshot(function (snap) {
-        allEvents = snap.docs.map(function (doc) {
-          return Object.assign({ id: doc.id }, doc.data());
-        });
+        allEvents = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
         updateDashboard();
         if (tableContainer) renderTable();
       });
 
-    // Real-time listener on announcements
+    /* Announcements */
     db.collection('announcements').orderBy('order', 'asc')
       .onSnapshot(function (snap) {
-        allAnnouncements = snap.docs.map(function (doc) {
-          return Object.assign({ id: doc.id }, doc.data());
-        });
-        updateAnnouncementsStat();
+        allAnnouncements = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+        var active = allAnnouncements.filter(function (a) { return a.active !== false; }).length;
+        if (statAnnouncements) animateNumber(statAnnouncements, active);
       });
-  }
 
-  /* ═══════════════════════════════════════════
-     LOAD EVENTS (initial placeholder)
-  ═══════════════════════════════════════════ */
-  function loadEvents() {
-    if (tableContainer) {
-      tableContainer.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
-    }
+    /* Gallery */
+    db.collection('gallery').orderBy('order', 'asc')
+      .onSnapshot(function (snap) {
+        allGallery = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
+        if (statGallery) animateNumber(statGallery, allGallery.length);
+      });
   }
 
   /* ═══════════════════════════════════════════
      UPDATE DASHBOARD
   ═══════════════════════════════════════════ */
   function updateDashboard() {
-    var today = new Date().toISOString().slice(0, 10);
-    var total    = allEvents.length;
-    var upcoming = allEvents.filter(function (e) {
-      return (e.status === 'upcoming' || e.status === 'tba') && (!e.date || e.date >= today);
-    }).length;
+    var today  = new Date().toISOString().slice(0, 10);
+    var total  = allEvents.length;
+    var upcoming = allEvents.filter(function (e) { return (e.status === 'upcoming' || e.status === 'tba') && (!e.date || e.date >= today); }).length;
     var ongoing  = allEvents.filter(function (e) { return e.status === 'ongoing'; }).length;
-    var past     = allEvents.filter(function (e) {
-      return e.status === 'past' || (e.date && e.date < today);
-    }).length;
+    var past     = allEvents.filter(function (e) { return e.status === 'past' || (e.date && e.date < today); }).length;
     var tba      = allEvents.filter(function (e) { return e.status === 'tba'; }).length;
 
-    // Update stat numbers
-    if (statEvents)   animateNumber(statEvents, total);
-    if (statUpcoming) animateNumber(statUpcoming, upcoming);
+    /* Stat numbers */
+    if (statEvents) animateNumber(statEvents, total);
 
-    // Update donut chart
-    updateDonutChart(total, upcoming, ongoing, past, tba);
+    /* Bar chart */
+    if (total > 0) {
+      var uPct = Math.round(upcoming / total * 100);
+      var pPct = Math.round(past / total * 100);
+      var oPct = Math.round(ongoing / total * 100);
+      var tPct = Math.round(tba / total * 100);
 
-    // Update legend
+      if (breakdownPercent) breakdownPercent.textContent = (uPct + oPct) + '%';
+      if (barUpcoming) barUpcoming.textContent = uPct + '%';
+      if (barPast) barPast.textContent = pPct + '%';
+      if (barOngoing) barOngoing.textContent = oPct + '%';
+      if (barTBA) barTBA.textContent = tPct + '%';
+      if (barFillUpcoming) barFillUpcoming.style.width = uPct + '%';
+      if (barFillPast) barFillPast.style.width = pPct + '%';
+      if (barFillOngoing) barFillOngoing.style.width = oPct + '%';
+      if (barFillTBA) barFillTBA.style.width = tPct + '%';
+    }
+
+    /* Donut chart */
+    updateDonut(total, upcoming, past, ongoing, tba);
+
+    /* Legend */
     if (legendUpcoming) legendUpcoming.textContent = upcoming;
-    if (legendOngoing)  legendOngoing.textContent = ongoing;
-    if (legendPast)     legendPast.textContent = past;
-    if (legendTBA)      legendTBA.textContent = tba;
+    if (legendPast) legendPast.textContent = past;
+    if (legendOngoing) legendOngoing.textContent = ongoing;
+    if (legendTBA) legendTBA.textContent = tba;
 
-    // Update recent events
-    renderRecentEvents();
-
-    // Update activity feed
-    renderActivityFeed();
+    /* Activity */
+    renderActivity();
   }
 
   /* ═══════════════════════════════════════════
-     UPDATE ANNOUNCEMENTS STAT
+     DONUT CHART (SVG stroke-dasharray)
   ═══════════════════════════════════════════ */
-  function updateAnnouncementsStat() {
-    var active = allAnnouncements.filter(function (a) { return a.active !== false; }).length;
-    if (statAnnouncements) animateNumber(statAnnouncements, active);
-  }
-
-  /* ═══════════════════════════════════════════
-     DONUT CHART
-  ═══════════════════════════════════════════ */
-  function updateDonutChart(total, upcoming, ongoing, past, tba) {
-    if (!donutChart || !donutTotal) return;
-
+  function updateDonut(total, upcoming, past, ongoing, tba) {
+    if (!donutTotal) return;
     donutTotal.textContent = total;
 
+    var circumference = 2 * Math.PI * 60; /* r=60 */
+    var gap = 6; /* gap between segments */
+    var available = circumference - gap * 4;
+
     if (total === 0) {
-      donutChart.style.background = '#e2e8f0';
+      [segUpcoming, segPast, segOngoing, segTBA].forEach(function (el) {
+        if (el) { el.setAttribute('stroke-dasharray', '0 ' + circumference); }
+      });
       return;
     }
 
-    var uPct = (upcoming / total) * 100;
-    var oPct = (ongoing / total) * 100;
-    var pPct = (past / total) * 100;
-    var tPct = (tba / total) * 100;
+    var segments = [
+      { el: segUpcoming, val: upcoming },
+      { el: segPast,     val: past },
+      { el: segOngoing,  val: ongoing },
+      { el: segTBA,      val: tba }
+    ];
 
-    var uEnd = uPct;
-    var oEnd = uEnd + oPct;
-    var pEnd = oEnd + pPct;
-    var tEnd = pEnd + tPct;
-
-    donutChart.style.background =
-      'conic-gradient(' +
-      '#0ea5e9 0% ' + uEnd + '%, ' +
-      '#10b981 ' + uEnd + '% ' + oEnd + '%, ' +
-      '#8b5cf6 ' + oEnd + '% ' + pEnd + '%, ' +
-      '#f59e0b ' + pEnd + '% ' + tEnd + '%, ' +
-      '#e2e8f0 ' + tEnd + '% 100%)';
-  }
-
-  /* ═══════════════════════════════════════════
-     RECENT EVENTS
-  ═══════════════════════════════════════════ */
-  function renderRecentEvents() {
-    if (!recentEventsContainer) return;
-
-    var recent = allEvents.slice(0, 5);
-
-    if (recent.length === 0) {
-      recentEventsContainer.innerHTML =
-        '<div class="empty-state">' +
-        '<div class="empty-icon">📅</div>' +
-        '<p>No events yet.</p>' +
-        '</div>';
-      return;
-    }
-
-    var html = recent.map(function (ev) {
-      var dateStr = ev.date ? formatDate(ev.date) : 'TBA';
-      var badge = getStatusBadge(ev.status);
-      var thumb;
-
-      if (ev.imageUrl) {
-        thumb = '<div class="recent-event-thumb"><img src="' + escapeHtml(ev.imageUrl) + '" alt="" /></div>';
-      } else {
-        thumb = '<div class="recent-event-thumb">📅</div>';
-      }
-
-      return '<div class="recent-event-item">' +
-        thumb +
-        '<div class="recent-event-info">' +
-          '<div class="recent-event-title">' + escapeHtml(ev.title || 'Untitled') + '</div>' +
-          '<div class="recent-event-meta">' + dateStr + (ev.location ? ' · ' + escapeHtml(ev.location) : '') + '</div>' +
-        '</div>' +
-        badge +
-        '</div>';
-    }).join('');
-
-    recentEventsContainer.innerHTML = html;
+    var offset = 0;
+    segments.forEach(function (seg) {
+      if (!seg.el) return;
+      var segLen = (seg.val / total) * available;
+      seg.el.setAttribute('stroke-dasharray', segLen + ' ' + (circumference - segLen));
+      seg.el.setAttribute('stroke-dashoffset', -offset + circumference * 0.25);
+      offset += segLen + gap;
+    });
   }
 
   /* ═══════════════════════════════════════════
      ACTIVITY FEED
   ═══════════════════════════════════════════ */
-  function renderActivityFeed() {
+  function renderActivity() {
     if (!activityFeed) return;
-
     var items = [];
 
-    // Add events to activity
-    allEvents.slice(0, 10).forEach(function (ev) {
-      var icon = '📅';
-      var bg = 'rgba(14,165,233,.1)';
-      var color = '#0ea5e9';
-      var action = 'Event added';
-
-      if (ev.status === 'past') {
-        icon = '✅'; bg = 'rgba(16,185,129,.1)'; color = '#10b981'; action = 'Event completed';
-      } else if (ev.status === 'ongoing') {
-        icon = '🔴'; bg = 'rgba(239,68,68,.1)'; color = '#ef4444'; action = 'Event ongoing';
-      } else if (ev.status === 'tba') {
-        icon = '⏳'; bg = 'rgba(245,158,11,.1)'; color = '#f59e0b'; action = 'Event scheduled';
-      }
-
-      var timeStr = ev.createdAt
-        ? timeAgo(ev.createdAt)
-        : (ev.date ? formatDate(ev.date) : 'Recently');
+    allEvents.slice(0, 8).forEach(function (ev) {
+      var color = '#22c55e', bg = 'rgba(34,197,94,.1)', label = 'Event added';
+      if (ev.status === 'past') { color = '#94a3b8'; bg = 'rgba(148,163,184,.1)'; label = 'Completed'; }
+      else if (ev.status === 'ongoing') { color = '#ef4444'; bg = 'rgba(239,68,68,.1)'; label = 'Ongoing'; }
+      else if (ev.status === 'tba') { color = '#f59e0b'; bg = 'rgba(245,158,11,.1)'; label = 'Scheduled'; }
 
       items.push({
-        icon: icon,
-        bg: bg,
-        color: color,
-        text: '<strong>' + escapeHtml(ev.title || 'Untitled') + '</strong> — ' + action,
-        time: timeStr,
+        color: color, bg: bg,
+        text: '<strong>' + esc(ev.title || 'Untitled') + '</strong> — ' + label,
+        time: ev.createdAt ? timeAgo(ev.createdAt) : (ev.date || 'Recently'),
         sort: ev.createdAt ? (ev.createdAt.seconds || 0) : 0
       });
     });
 
-    // Add announcements to activity
-    allAnnouncements.slice(0, 5).forEach(function (ann) {
+    allAnnouncements.slice(0, 4).forEach(function (ann) {
       items.push({
-        icon: '📢',
-        bg: 'rgba(139,92,246,.1)',
-        color: '#8b5cf6',
-        text: '<strong>' + escapeHtml(ann.title || 'Untitled') + '</strong> — Announcement ' + (ann.active !== false ? 'published' : 'hidden'),
+        color: '#8b5cf6', bg: 'rgba(139,92,246,.1)',
+        text: '<strong>' + esc(ann.title || 'Untitled') + '</strong> — Announcement',
         time: ann.createdAt ? timeAgo(ann.createdAt) : 'Recently',
         sort: ann.createdAt ? (ann.createdAt.seconds || 0) : 0
       });
     });
 
-    // Sort by most recent
     items.sort(function (a, b) { return b.sort - a.sort; });
-
-    // Take top 8
     items = items.slice(0, 8);
 
     if (items.length === 0) {
-      activityFeed.innerHTML =
-        '<div class="empty-state">' +
-        '<div class="empty-icon">📋</div>' +
-        '<p>No recent activity.</p>' +
-        '</div>';
+      activityFeed.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128196;</div><p>No recent activity.</p></div>';
       return;
     }
 
-    var html = items.map(function (item) {
+    activityFeed.innerHTML = items.map(function (item) {
       return '<div class="activity-item">' +
-        '<div class="activity-icon" style="background:' + item.bg + '; color:' + item.color + ';">' + item.icon + '</div>' +
-        '<div class="activity-text">' +
-          '<p>' + item.text + '</p>' +
-          '<span class="activity-time">' + item.time + '</span>' +
+        '<div class="activity-icon" style="background:' + item.bg + ';color:' + item.color + ';">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg>' +
         '</div>' +
-        '</div>';
+        '<div class="activity-text"><p>' + item.text + '</p><span class="activity-time">' + item.time + '</span></div>' +
+      '</div>';
     }).join('');
-
-    activityFeed.innerHTML = html;
   }
 
   /* ═══════════════════════════════════════════
-     RENDER TABLE (for events sub-page)
+     TABLE (sub-pages)
   ═══════════════════════════════════════════ */
   function renderTable() {
     if (!tableContainer) return;
-
     if (allEvents.length === 0) {
-      tableContainer.innerHTML =
-        '<div class="empty-state">' +
-        '<div class="empty-icon">📅</div>' +
-        '<p>No events yet. Click <strong>"+ Add Event"</strong> to create your first event.</p>' +
-        '</div>';
+      tableContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128197;</div><p>No events yet.</p></div>';
       return;
     }
-
     var rows = allEvents.map(function (ev) {
       var dateStr = ev.date ? formatDate(ev.date) : 'TBA';
-      var timeStr = ev.time ? formatTime(ev.time) : '';
-      var badge   = getStatusBadge(ev.status);
-      var thumb;
-
-      if (ev.imageUrl) {
-        thumb = '<img class="event-thumb" src="' + escapeHtml(ev.imageUrl) + '" alt="" />';
-      } else {
-        thumb = '<div class="event-thumb" style="display:flex;align-items:center;justify-content:center;font-size:1.2rem;">📅</div>';
-      }
-
-      return '<tr>' +
-        '<td>' + thumb + '</td>' +
-        '<td><strong>' + escapeHtml(ev.title || 'Untitled') + '</strong></td>' +
-        '<td>' + dateStr + (timeStr ? ' · ' + timeStr : '') + '</td>' +
-        '<td>' + escapeHtml(ev.location || '—') + '</td>' +
-        '<td>' + badge + '</td>' +
-        '<td>' +
-          '<div class="action-btns">' +
-            '<button class="btn-edit" onclick="AdminEvents.edit(\'' + ev.id + '\')">Edit</button>' +
-            '<button class="btn-delete" onclick="AdminEvents.confirmDelete(\'' + ev.id + '\')">Delete</button>' +
-          '</div>' +
-        '</td>' +
-        '</tr>';
+      var thumb = ev.imageUrl
+        ? '<img class="event-thumb" src="' + esc(ev.imageUrl) + '" alt="" />'
+        : '<div class="event-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--admin-text-muted);">&#128197;</div>';
+      var badge = getStatusBadge(ev.status);
+      return '<tr><td>' + thumb + '</td><td><strong>' + esc(ev.title || 'Untitled') + '</strong></td>' +
+        '<td>' + dateStr + '</td><td>' + esc(ev.location || '—') + '</td><td>' + badge + '</td>' +
+        '<td><div class="action-btns">' +
+          '<button class="btn-edit" onclick="AdminEvents.edit(\'' + ev.id + '\')">Edit</button>' +
+          '<button class="btn-delete" onclick="AdminEvents.confirmDelete(\'' + ev.id + '\')">Delete</button>' +
+        '</div></td></tr>';
     }).join('');
-
-    tableContainer.innerHTML =
-      '<table class="admin-table">' +
-      '<thead><tr>' +
-        '<th style="width:70px;"></th>' +
-        '<th>Title</th>' +
-        '<th>Date</th>' +
-        '<th>Location</th>' +
-        '<th>Status</th>' +
-        '<th style="width:140px;">Actions</th>' +
-      '</tr></thead>' +
-      '<tbody>' + rows + '</tbody>' +
-      '</table>';
+    tableContainer.innerHTML = '<table class="admin-table"><thead><tr>' +
+      '<th style="width:60px;"></th><th>Title</th><th>Date</th><th>Location</th><th>Status</th><th style="width:120px;">Actions</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>';
   }
 
   /* ═══════════════════════════════════════════
-     MODAL: OPEN / CLOSE
+     MODAL OPEN / CLOSE / SAVE
   ═══════════════════════════════════════════ */
-  function openModal(eventData) {
+  function openModal(evData) {
     if (!eventForm) return;
     eventForm.reset();
-    if (imagePreview) {
-      imagePreview.style.display = 'none';
-      imagePreview.src = '';
-    }
+    if (imagePreview) { imagePreview.style.display = 'none'; imagePreview.src = ''; }
     editingId = null;
-
-    if (eventData) {
-      editingId = eventData.id;
+    if (evData) {
+      editingId = evData.id;
       if (modalTitle) modalTitle.textContent = 'Edit Event';
-      if (eventIdInput) eventIdInput.value = eventData.id;
-      if (titleInput) titleInput.value = eventData.title || '';
-      if (descInput) descInput.value = eventData.description || '';
-      if (dateInput) dateInput.value = eventData.date || '';
-      if (timeInput) timeInput.value = eventData.time || '';
-      if (locInput) locInput.value = eventData.location || '';
-      if (imageInput) imageInput.value = eventData.imageUrl || '';
-      if (statusInput) statusInput.value = eventData.status || 'upcoming';
-
-      if (eventData.imageUrl && imagePreview) {
-        imagePreview.src = eventData.imageUrl;
-        imagePreview.style.display = 'block';
-      }
+      if (eventIdInput) eventIdInput.value = evData.id;
+      if (titleInput) titleInput.value = evData.title || '';
+      if (descInput) descInput.value = evData.description || '';
+      if (dateInput) dateInput.value = evData.date || '';
+      if (timeInput) timeInput.value = evData.time || '';
+      if (locInput) locInput.value = evData.location || '';
+      if (imageInput) imageInput.value = evData.imageUrl || '';
+      if (statusInput) statusInput.value = evData.status || 'upcoming';
+      if (evData.imageUrl && imagePreview) { imagePreview.src = evData.imageUrl; imagePreview.style.display = 'block'; }
     } else {
       if (modalTitle) modalTitle.textContent = 'Add New Event';
       if (eventIdInput) eventIdInput.value = '';
     }
-
     if (eventModal) eventModal.classList.add('show');
   }
 
   function closeModal() {
     if (eventModal) eventModal.classList.remove('show');
-    if (uploadTask) {
-      uploadTask.cancel();
-      uploadTask = null;
-    }
+    if (uploadTask) { try { uploadTask.cancel(); } catch(e){} uploadTask = null; }
   }
 
-  /* ═══════════════════════════════════════════
-     SAVE EVENT (Create or Update)
-  ═══════════════════════════════════════════ */
   if (modalSave) {
     modalSave.addEventListener('click', async function () {
       var title = titleInput ? titleInput.value.trim() : '';
-      if (!title) {
-        showToast('Please enter an event title.', 'error');
-        return;
-      }
-
+      if (!title) { showToast('Please enter a title.', 'error'); return; }
       modalSave.disabled = true;
       modalSave.textContent = 'Saving…';
-
       try {
         var imageUrl = imageInput ? imageInput.value.trim() : '';
-
-        // Handle file upload if a file is selected
         if (imageFile && imageFile.files.length > 0) {
-          try {
-            imageUrl = await uploadImage(imageFile.files[0]);
-          } catch (uploadErr) {
-            console.warn('Image upload failed:', uploadErr);
-            showToast('Image upload unavailable — using URL instead.', 'error');
-            imageFile.value = '';
-          }
+          try { imageUrl = await uploadImage(imageFile.files[0]); }
+          catch (e) { showToast('Image upload unavailable.', 'error'); imageFile.value = ''; }
         }
-
-        var eventData = {
-          title:       title,
-          description: descInput ? descInput.value.trim() : '',
-          date:        dateInput ? dateInput.value || null : null,
-          time:        timeInput ? timeInput.value || null : null,
-          location:    locInput ? locInput.value.trim() : '',
-          imageUrl:    imageUrl || null,
-          status:      statusInput ? statusInput.value : 'upcoming',
-          updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+        var data = {
+          title: title, description: descInput ? descInput.value.trim() : '',
+          date: dateInput ? dateInput.value || null : null,
+          time: timeInput ? timeInput.value || null : null,
+          location: locInput ? locInput.value.trim() : '',
+          imageUrl: imageUrl || null, status: statusInput ? statusInput.value : 'upcoming',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         };
-
-        if (editingId) {
-          await db.collection('events').doc(editingId).update(eventData);
-          showToast('Event updated successfully!', 'success');
-        } else {
-          eventData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          await db.collection('events').add(eventData);
-          showToast('Event created successfully!', 'success');
-        }
-
+        if (editingId) { await db.collection('events').doc(editingId).update(data); showToast('Event updated!', 'success'); }
+        else { data.createdAt = firebase.firestore.FieldValue.serverTimestamp(); await db.collection('events').add(data); showToast('Event created!', 'success'); }
         closeModal();
-      } catch (err) {
-        console.error('Save error:', err);
-        showToast('Error saving event: ' + err.message, 'error');
-      } finally {
-        modalSave.disabled = false;
-        modalSave.textContent = 'Save Event';
-      }
+      } catch (err) { showToast('Error: ' + err.message, 'error'); }
+      finally { modalSave.disabled = false; modalSave.textContent = 'Save Event'; }
     });
   }
 
-  /* ═══════════════════════════════════════════
-     IMAGE UPLOAD to Firebase Storage
-  ═══════════════════════════════════════════ */
   function uploadImage(file) {
     return new Promise(function (resolve, reject) {
-      var timeout = setTimeout(function () {
-        reject(new Error('Upload timed out'));
-      }, 10000);
-
-      var fileName = 'events/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      var ref = storage.ref(fileName);
+      var timeout = setTimeout(function () { reject(new Error('Upload timed out')); }, 10000);
+      var name = 'events/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      var ref = storage.ref(name);
       uploadTask = ref.put(file);
-
-      uploadTask.on('state_changed',
-        null,
-        function (err) { clearTimeout(timeout); reject(err); },
-        async function () {
-          clearTimeout(timeout);
-          var url = await ref.getDownloadURL();
-          uploadTask = null;
-          resolve(url);
-        }
-      );
+      uploadTask.on('state_changed', null, function (e) { clearTimeout(timeout); reject(e); },
+        async function () { clearTimeout(timeout); var url = await ref.getDownloadURL(); uploadTask = null; resolve(url); });
     });
   }
 
-  /* ═══════════════════════════════════════════
-     IMAGE PREVIEW
-  ═══════════════════════════════════════════ */
   if (imageFile) {
     imageFile.addEventListener('change', function (e) {
       var file = e.target.files[0];
-      if (file && imagePreview) {
-        var reader = new FileReader();
-        reader.onload = function (ev) {
-          imagePreview.src = ev.target.result;
-          imagePreview.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      }
+      if (file && imagePreview) { var r = new FileReader(); r.onload = function (ev) { imagePreview.src = ev.target.result; imagePreview.style.display = 'block'; }; r.readAsDataURL(file); }
     });
   }
-
   if (imageInput) {
     imageInput.addEventListener('input', function () {
       var url = imageInput.value.trim();
-      if (url && imagePreview) {
-        imagePreview.src = url;
-        imagePreview.style.display = 'block';
-      } else if (imagePreview) {
-        imagePreview.style.display = 'none';
-      }
+      if (url && imagePreview) { imagePreview.src = url; imagePreview.style.display = 'block'; }
+      else if (imagePreview) { imagePreview.style.display = 'none'; }
     });
   }
 
   /* ═══════════════════════════════════════════
      DELETE
   ═══════════════════════════════════════════ */
-  function confirmDeleteEvent(id) {
-    deleteId = id;
-    if (confirmModal) confirmModal.classList.add('show');
-  }
+  function confirmDeleteEvent(id) { deleteId = id; if (confirmModal) confirmModal.classList.add('show'); }
 
   if (confirmDelete) {
     confirmDelete.addEventListener('click', async function () {
       if (!deleteId) return;
-      confirmDelete.disabled = true;
-      confirmDelete.textContent = 'Deleting…';
-
-      try {
-        await db.collection('events').doc(deleteId).delete();
-        showToast('Event deleted.', 'success');
-      } catch (err) {
-        showToast('Error deleting: ' + err.message, 'error');
-      } finally {
-        deleteId = null;
-        confirmDelete.disabled = false;
-        confirmDelete.textContent = 'Delete';
-        if (confirmModal) confirmModal.classList.remove('show');
-      }
+      confirmDelete.disabled = true; confirmDelete.textContent = 'Deleting…';
+      try { await db.collection('events').doc(deleteId).delete(); showToast('Event deleted.', 'success'); }
+      catch (err) { showToast('Error: ' + err.message, 'error'); }
+      finally { deleteId = null; confirmDelete.disabled = false; confirmDelete.textContent = 'Delete'; if (confirmModal) confirmModal.classList.remove('show'); }
     });
   }
-
-  if (confirmCancel) {
-    confirmCancel.addEventListener('click', function () {
-      deleteId = null;
-      if (confirmModal) confirmModal.classList.remove('show');
-    });
-  }
-
-  /* ═══════════════════════════════════════════
-     EDIT
-  ═══════════════════════════════════════════ */
-  function editEvent(id) {
-    var ev = allEvents.find(function (e) { return e.id === id; });
-    if (ev) openModal(ev);
-  }
+  if (confirmCancel) confirmCancel.addEventListener('click', function () { deleteId = null; if (confirmModal) confirmModal.classList.remove('show'); });
 
   /* ═══════════════════════════════════════════
      EVENT LISTENERS
   ═══════════════════════════════════════════ */
-  if (btnAddEvent) btnAddEvent.addEventListener('click', function () { openModal(null); });
   if (modalClose) modalClose.addEventListener('click', closeModal);
   if (modalCancel) modalCancel.addEventListener('click', closeModal);
-
-  if (eventModal) {
-    eventModal.addEventListener('click', function (e) {
-      if (e.target === eventModal) closeModal();
-    });
-  }
-
-  if (confirmModal) {
-    confirmModal.addEventListener('click', function (e) {
-      if (e.target === confirmModal) {
-        deleteId = null;
-        confirmModal.classList.remove('show');
-      }
-    });
-  }
-
-  // Sidebar toggle (mobile)
-  if (sidebarToggle) {
-    sidebarToggle.addEventListener('click', function () {
-      sidebar.classList.toggle('open');
-    });
-  }
-
-  // Logout
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', async function () {
-      await AdminAuth.signOut();
-      window.location.href = 'login.html';
-    });
-  }
+  if (eventModal) eventModal.addEventListener('click', function (e) { if (e.target === eventModal) closeModal(); });
+  if (confirmModal) confirmModal.addEventListener('click', function (e) { if (e.target === confirmModal) { deleteId = null; confirmModal.classList.remove('show'); } });
+  if (logoutBtn) logoutBtn.addEventListener('click', async function () { await AdminAuth.signOut(); window.location.href = 'login.html'; });
 
   /* ═══════════════════════════════════════════
      HELPERS
   ═══════════════════════════════════════════ */
-  function formatDate(dateStr) {
-    if (!dateStr) return 'TBA';
-    var d = new Date(dateStr + 'T00:00:00');
-    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  function formatDate(s) { if (!s) return 'TBA'; var d = new Date(s + 'T00:00:00'); return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+  function getStatusBadge(st) {
+    var m = { upcoming: '<span class="badge badge-upcoming">Upcoming</span>', ongoing: '<span class="badge badge-ongoing">Ongoing</span>', past: '<span class="badge badge-past">Past</span>', tba: '<span class="badge badge-tba">TBA</span>' };
+    return m[st] || m.upcoming;
   }
-
-  function formatTime(timeStr) {
-    if (!timeStr) return '';
-    var parts = timeStr.split(':');
-    var hr = parseInt(parts[0], 10);
-    var ampm = hr >= 12 ? 'PM' : 'AM';
-    var hr12 = hr % 12 || 12;
-    return hr12 + ':' + parts[1] + ' ' + ampm;
-  }
-
-  function getStatusBadge(status) {
-    var map = {
-      upcoming: '<span class="recent-event-badge badge-upcoming">Upcoming</span>',
-      ongoing:  '<span class="recent-event-badge badge-ongoing">Ongoing</span>',
-      past:     '<span class="recent-event-badge badge-past">Past</span>',
-      tba:      '<span class="recent-event-badge badge-tba">TBA</span>'
-    };
-    return map[status] || map.upcoming;
-  }
-
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
-
-  function timeAgo(timestamp) {
-    if (!timestamp) return 'Recently';
-    var date;
-    if (timestamp.seconds) {
-      date = new Date(timestamp.seconds * 1000);
-    } else if (timestamp.toDate) {
-      date = timestamp.toDate();
-    } else {
-      return 'Recently';
-    }
-
-    var now = new Date();
-    var diff = Math.floor((now - date) / 1000);
-
-    if (diff < 60) return 'Just now';
-    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
-    if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
-    if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function timeAgo(ts) {
+    if (!ts) return 'Recently';
+    var date = ts.seconds ? new Date(ts.seconds * 1000) : (ts.toDate ? ts.toDate() : null);
+    if (!date) return 'Recently';
+    var diff = Math.floor((new Date() - date) / 1000);
+    if (diff < 60) return 'Just now'; if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+    if (diff < 86400) return Math.floor(diff/3600) + 'h ago'; if (diff < 604800) return Math.floor(diff/86400) + 'd ago';
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   }
-
   function animateNumber(el, target) {
     var current = parseInt(el.textContent, 10) || 0;
     if (current === target) return;
-
-    var diff = target - current;
-    var steps = Math.min(Math.abs(diff), 20);
-    var increment = diff / steps;
-    var step = 0;
-
-    function tick() {
-      step++;
-      if (step >= steps) {
-        el.textContent = target;
-        return;
-      }
-      el.textContent = Math.round(current + increment * step);
-      requestAnimationFrame(tick);
-    }
-
+    var diff = target - current, steps = Math.min(Math.abs(diff), 20), inc = diff / steps, step = 0;
+    function tick() { step++; if (step >= steps) { el.textContent = target; return; } el.textContent = Math.round(current + inc * step); requestAnimationFrame(tick); }
     requestAnimationFrame(tick);
   }
-
-  function showToast(message, type) {
-    var container = document.getElementById('toastContainer');
-    if (!container) return;
-    var toast = document.createElement('div');
-    toast.className = 'toast ' + (type || '');
-    toast.textContent = message;
-    container.appendChild(toast);
-    setTimeout(function () {
-      toast.style.opacity = '0';
-      toast.style.transition = 'opacity .3s';
-      setTimeout(function () { toast.remove(); }, 300);
-    }, 3500);
+  function showToast(msg, type) {
+    var c = document.getElementById('toastContainer'); if (!c) return;
+    var t = document.createElement('div'); t.className = 'toast ' + (type || ''); t.textContent = msg; c.appendChild(t);
+    setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(function () { t.remove(); }, 300); }, 3500);
   }
 
-  /* ── Expose for inline onclick handlers ── */
-  window.AdminEvents = {
-    edit:          editEvent,
-    confirmDelete: confirmDeleteEvent
-  };
+  window.AdminEvents = { edit: function (id) { var ev = allEvents.find(function (e) { return e.id === id; }); if (ev) openModal(ev); }, confirmDelete: confirmDeleteEvent };
 
 })();

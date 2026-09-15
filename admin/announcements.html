@@ -6,61 +6,42 @@
   <title>SK Admin — Announcements</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
   <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
 </head>
 <body class="admin-body">
 
-  <button class="sidebar-toggle" id="sidebarToggle">☰</button>
-
-  <div class="admin-layout">
-
-    <!-- ══ SIDEBAR ══ -->
-    <aside class="admin-sidebar" id="adminSidebar">
-      <div class="sidebar-header">
-        <img src="../images/logo.jpg" alt="SK Seal" />
-        <div>
-          <span class="sh-top">SK Admin</span>
-          <span class="sh-sub">Panicuason</span>
+  <div class="admin-wrapper">
+    <div class="admin-container">
+      <header class="admin-header">
+        <a href="index.html" class="admin-brand"><img src="../images/logo.jpg" alt="SK" class="brand-logo" /><span class="brand-name">SK Admin</span></a>
+        <nav class="admin-nav">
+          <a href="index.html" class="nav-pill">Dashboard</a>
+          <a href="events.html" class="nav-pill">Events</a>
+          <a href="announcements.html" class="nav-pill active">Announcements</a>
+          <a href="gallery-admin.html" class="nav-pill">Gallery</a>
+          <a href="officials.html" class="nav-pill">Officials</a>
+        </nav>
+        <div class="admin-header-right">
+          <div class="header-avatar" id="userAvatar">A</div>
+          <button class="admin-hamburger" id="adminHamburger" aria-label="Menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
         </div>
+      </header>
+      <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+      <div class="mobile-nav-panel" id="mobileNavPanel">
+        <div class="mobile-nav-header"><span>Navigation</span><button class="mobile-nav-close" id="mobileNavClose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+        <nav class="mobile-nav-links"><a href="index.html">Dashboard</a><a href="events.html">Events</a><a href="announcements.html" class="active">Announcements</a><a href="gallery-admin.html">Gallery</a><a href="officials.html">Officials</a></nav>
+        <div class="mobile-nav-footer"><span id="userEmail">Admin</span><button class="btn-signout" id="logoutBtn">Sign Out</button></div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="sidebar-nav-label">Management</div>
-        <a href="index.html"><span class="nav-icon">📊</span> Dashboard</a>
-        <a href="events.html"><span class="nav-icon">📅</span> Events</a>
-        <a href="announcements.html" class="active"><span class="nav-icon">📢</span> Announcements</a>
-        <a href="gallery-admin.html"><span class="nav-icon">🖼️</span> Gallery</a>
-        <a href="officials.html"><span class="nav-icon">👥</span> Officials</a>
-        <div class="sidebar-nav-label">Links</div>
-        <a href="../index.html" target="_blank"><span class="nav-icon">🌐</span> View Website</a>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-info">
-          <div class="user-avatar" id="userAvatar">A</div>
-          <div class="user-email" id="userEmail">Loading…</div>
+      <div class="admin-content">
+        <div class="content-header">
+          <div><h1>Announcements</h1><p class="content-subtitle">Manage community notices and alerts</p></div>
+          <button class="btn-add" id="btnAddAnnouncement"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Announcement</button>
         </div>
-        <button class="btn-logout" id="logoutBtn">Sign Out</button>
+        <div class="admin-table-wrap"><div id="announcementsTableContainer"><div class="loading-spinner"><div class="spinner"></div></div></div></div>
       </div>
-    </aside>
-
-    <!-- ══ MAIN ══ -->
-    <main class="admin-main">
-      <div class="admin-topbar">
-        <div>
-          <h1>Announcements</h1>
-          <span class="breadcrumb"><a href="../index.html">Home</a> / Admin / Announcements</span>
-        </div>
-        <button class="btn-add" id="btnAddAnnouncement">+ Add Announcement</button>
-      </div>
-
-      <div class="admin-table-wrap">
-        <div id="announcementsTableContainer">
-          <div class="loading-spinner"><div class="spinner"></div></div>
-        </div>
-      </div>
-    </main>
+    </div>
   </div>
 
   <!-- ══ ANNOUNCEMENT MODAL ══ -->
@@ -157,6 +138,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-storage-compat.js"></script>
   <script src="../js/firebase-config.js"></script>
   <script src="../js/admin-auth.js"></script>
+  <script src="../js/admin-nav.js"></script>
   <script src="../js/admin-announcements.js"></script>
 </body>
 </html>
