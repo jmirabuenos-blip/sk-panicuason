@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SK Barangay Panicuason — 2025 Accomplishment Report</title>
+  <title>SK Barangay Panicuason — Accomplishment Report</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -70,11 +70,50 @@
       letter-spacing: .06em;
     }
 
+    /* ── Year Toggle ── */
+    .year-toggle {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 32px 0;
+      display: flex;
+      justify-content: center;
+    }
+    .year-toggle-inner {
+      display: flex;
+      gap: 4px;
+      background: var(--offwhite);
+      border: 1px solid var(--lightgray);
+      padding: 4px;
+      border-radius: 10px;
+    }
+    .year-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem;
+      font-weight: 700;
+      padding: 12px 28px;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all .25s;
+      letter-spacing: .06em;
+    }
+    .year-btn.active {
+      background: var(--navy);
+      color: var(--sky300);
+      box-shadow: 0 2px 8px rgba(12,74,110,.2);
+    }
+    .year-btn:hover:not(.active) {
+      background: rgba(12,74,110,.06);
+      color: var(--navy);
+    }
+
     /* ── Gallery Controls ── */
     .report-controls {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 40px 32px 0;
+      padding: 24px 32px 0;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -322,6 +361,7 @@
       }
       .lightbox-prev { left: 10px; }
       .lightbox-next { right: 10px; }
+      .year-btn { padding: 10px 20px; font-size: .8rem; }
     }
     @media (max-width: 560px) {
       .report-grid.view-two,
@@ -332,8 +372,8 @@
 
     @media print {
       .navbar, .footer, .report-controls, .print-all-bar,
-      .lightbox-overlay, .lightbox-nav, .lightbox-close,
-      .lightbox-counter { display: none !important; }
+      .year-toggle, .lightbox-overlay, .lightbox-nav,
+      .lightbox-close, .lightbox-counter { display: none !important; }
       .report-page { break-inside: avoid; page-break-inside: avoid; }
     }
   </style>
@@ -347,17 +387,23 @@
   <section class="report-hero">
     <div class="report-hero-content">
       <div class="gold-bar"></div>
-      <h1>2025 Accomplishment Report</h1>
-      <p>A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2025.</p>
-      <div class="year-badge">📄 Fiscal Year 2025 · 97 Pages</div>
+      <h1 id="reportTitle">Accomplishment Report</h1>
+      <p id="reportDesc">A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason.</p>
+      <div class="year-badge" id="yearBadge">📄 Select a year below</div>
     </div>
   </section>
 
+  <!-- ══ YEAR TOGGLE ══ -->
+  <div class="year-toggle">
+    <div class="year-toggle-inner">
+      <button class="year-btn" data-year="2025">2025</button>
+      <button class="year-btn active" data-year="2026">2026</button>
+    </div>
+  </div>
+
   <!-- ══ CONTROLS ══ -->
   <div class="report-controls">
-    <div class="report-stats">
-      Showing <strong>97</strong> pages · Click any image to enlarge
-    </div>
+    <div class="report-stats" id="reportStats">Loading...</div>
     <div class="view-toggle">
       <button class="view-btn" data-view="single" title="Single view">1 Col</button>
       <button class="view-btn" data-view="two" title="Two columns">2 Col</button>
@@ -386,29 +432,65 @@
     <div class="lightbox-content">
       <img src="" alt="Report page" id="lightboxImg" />
     </div>
-    <div class="lightbox-counter" id="lightboxCounter">1 / 97</div>
+    <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
   </div>
 
   <script>
     (function () {
-      const TOTAL_PAGES = 97;
-      const grid = document.getElementById('reportGrid');
-      const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightboxImg');
-      const lightboxCounter = document.getElementById('lightboxCounter');
-      let currentPage = 0;
+      // ── Report data ──
+      var reports = {
+        '2025': { pages: 97, folder: '2025', title: '2025 Accomplishment Report', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2025.' },
+        '2026': { pages: 92, folder: '2026', title: '2026 Accomplishment Report', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2026.' }
+      };
 
-      // ── Generate gallery items ──
-      for (let i = 1; i <= TOTAL_PAGES; i++) {
-        const page = document.createElement('div');
-        page.className = 'report-page';
-        page.dataset.page = i;
-        page.innerHTML =
-          '<img src="images/accomplishment-report/2025/' + i + '.png" alt="Page ' + i + '" loading="lazy" />' +
-          '<span class="report-page-num">Page ' + i + '</span>';
-        page.addEventListener('click', function () { openLightbox(i); });
-        grid.appendChild(page);
+      var activeYear = '2026';
+      var currentPage = 1;
+      var grid = document.getElementById('reportGrid');
+      var lightbox = document.getElementById('lightbox');
+      var lightboxImg = document.getElementById('lightboxImg');
+      var lightboxCounter = document.getElementById('lightboxCounter');
+      var reportStats = document.getElementById('reportStats');
+      var reportTitle = document.getElementById('reportTitle');
+      var reportDesc = document.getElementById('reportDesc');
+      var yearBadge = document.getElementById('yearBadge');
+
+      // ── Load report for year ──
+      function loadReport(year) {
+        activeYear = year;
+        var report = reports[year];
+        currentPage = 1;
+
+        // Update hero
+        reportTitle.textContent = report.title;
+        reportDesc.textContent = report.desc;
+        yearBadge.textContent = '📄 Fiscal Year ' + year + ' · ' + report.pages + ' Pages';
+        reportStats.innerHTML = 'Showing <strong>' + report.pages + '</strong> pages · Click any image to enlarge';
+
+        // Clear and rebuild grid
+        grid.innerHTML = '';
+        for (var i = 1; i <= report.pages; i++) {
+          var page = document.createElement('div');
+          page.className = 'report-page';
+          page.dataset.page = i;
+          page.innerHTML =
+            '<img src="images/accomplishment-report/' + report.folder + '/' + i + '.png" alt="Page ' + i + '" loading="lazy" />' +
+            '<span class="report-page-num">Page ' + i + '</span>';
+          page.addEventListener('click', function () { openLightbox(parseInt(this.dataset.page)); });
+          grid.appendChild(page);
+        }
+
+        // Update year buttons
+        document.querySelectorAll('.year-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.year === year);
+        });
       }
+
+      // ── Year Toggle ──
+      document.querySelectorAll('.year-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          loadReport(btn.dataset.year);
+        });
+      });
 
       // ── View Toggle ──
       document.querySelectorAll('.view-btn').forEach(function (btn) {
@@ -433,17 +515,20 @@
       }
 
       function updateLightbox() {
-        lightboxImg.src = 'images/accomplishment-report/2025/' + currentPage + '.png';
-        lightboxCounter.textContent = currentPage + ' / ' + TOTAL_PAGES;
+        var report = reports[activeYear];
+        lightboxImg.src = 'images/accomplishment-report/' + report.folder + '/' + currentPage + '.png';
+        lightboxCounter.textContent = currentPage + ' / ' + report.pages;
       }
 
       function prevPage() {
-        currentPage = currentPage > 1 ? currentPage - 1 : TOTAL_PAGES;
+        var total = reports[activeYear].pages;
+        currentPage = currentPage > 1 ? currentPage - 1 : total;
         updateLightbox();
       }
 
       function nextPage() {
-        currentPage = currentPage < TOTAL_PAGES ? currentPage + 1 : 1;
+        var total = reports[activeYear].pages;
+        currentPage = currentPage < total ? currentPage + 1 : 1;
         updateLightbox();
       }
 
@@ -461,6 +546,9 @@
         if (e.key === 'ArrowLeft') prevPage();
         if (e.key === 'ArrowRight') nextPage();
       });
+
+      // ── Init ──
+      loadReport('2026');
     })();
   </script>
 </body>
