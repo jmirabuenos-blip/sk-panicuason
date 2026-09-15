@@ -32,18 +32,20 @@
   ];
 
   /* ── Detect active page ── */
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  const rawPath = window.location.pathname.split('/').pop() || 'index.html';
+  const currentPage = rawPath.replace(/\.html$/, '');
 
   /* ── Build nav links HTML ── */
   const linksHTML = NAV_LINKS.map(link => {
+    const linkPath = link.href.replace(/\.html$/, '');
     if (link.dropdown) {
       /* Check if the active page is this item OR any of its children */
-      const parentActive = currentPage === link.href;
-      const childActive  = link.dropdown.some(d => d.href === currentPage);
+      const parentActive = currentPage === linkPath;
+      const childActive  = link.dropdown.some(d => currentPage === d.href.replace(/\.html$/, ''));
       const activeClass  = (parentActive || childActive) ? ' active' : '';
 
       const dropItems = link.dropdown.map(d => {
-        const dActive = currentPage === d.href ? ' class="active"' : '';
+        const dActive = currentPage === d.href.replace(/\.html$/, '') ? ' class="active"' : '';
         return `<li><a href="${d.href}"${dActive}>${d.label}</a></li>`;
       }).join('');
 
@@ -65,7 +67,7 @@
         </li>`;
     }
 
-    const isActive = currentPage === link.href ? ' class="active"' : '';
+    const isActive = currentPage === linkPath ? ' class="active"' : '';
     return `<li><a href="${link.href}"${isActive}>${link.label}</a></li>`;
   }).join('');
 
@@ -127,7 +129,7 @@
        instead of navigating away                                   */
     toggle.addEventListener('click', function (e) {
       /* Only intercept on narrow screens */
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= 860) {
         e.preventDefault();
         item.classList.toggle('dropdown-open');
       }

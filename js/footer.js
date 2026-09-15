@@ -28,7 +28,7 @@
           <ul class="footer-links">
             <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
-            <li><a href="council.html">Council</a></li>
+            <li><a href="about.html#officials">Council</a></li>
             <li><a href="programs.html">Programs</a></li>
             <li><a href="events.html">Events</a></li>
             <li><a href="gallery.html">Gallery</a></li>

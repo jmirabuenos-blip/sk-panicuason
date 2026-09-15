@@ -164,8 +164,8 @@ h2.section-h {
   border: 2px solid var(--sky300);
   object-fit: cover;
 }
-.nav-logo-text        { display: flex; flex-direction: column; }
-.nav-logo-text .top   { font-family: 'Playfair Display', serif; font-size: .88rem; font-weight: 700; color: var(--sky300); letter-spacing: .02em; line-height: 1.1; }
+.nav-logo-text        { display: flex; flex-direction: column; min-width: 0; }
+.nav-logo-text .top   { font-family: 'Playfair Display', serif; font-size: .88rem; font-weight: 700; color: var(--sky300); letter-spacing: .02em; line-height: 1.1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .nav-logo-text .sub   { font-size: .6rem; color: rgba(255,255,255,.55); letter-spacing: .08em; text-transform: uppercase; }
 
 .nav-links            { list-style: none; display: flex; gap: 6px; }
@@ -284,7 +284,7 @@ h2.section-h {
     margin-left: 32px;
   }
   .has-dropdown.dropdown-open .dropdown-menu {
-    max-height: 200px;
+    max-height: 300px;
     pointer-events: auto;
   }
   .has-dropdown.dropdown-open .arrow-icon {
@@ -857,6 +857,9 @@ img.logo {
     background: var(--navy);
     border-top: 1px solid rgba(255,255,255,.08);
     padding: 16px 0;
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-links.open   { display: flex; }
   .nav-links li     { padding: 0; }
