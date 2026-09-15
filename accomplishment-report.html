@@ -46,7 +46,17 @@
       font-weight: 900;
       color: var(--white);
       line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .report-hero .hero-year {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 900;
+      color: var(--sky400);
+      line-height: 1;
       margin-bottom: 16px;
+      text-shadow: 0 4px 20px rgba(56,189,248,.3);
+      transition: all .4s ease;
     }
     .report-hero p {
       font-size: 1.05rem;
@@ -54,20 +64,6 @@
       max-width: 500px;
       margin: 0 auto;
       line-height: 1.7;
-    }
-    .report-hero .year-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.15);
-      border-radius: 8px;
-      padding: 10px 24px;
-      margin-top: 24px;
-      font-size: .85rem;
-      font-weight: 600;
-      color: var(--sky300);
-      letter-spacing: .06em;
     }
 
     /* ── Year Toggle ── */
@@ -80,33 +76,46 @@
     }
     .year-toggle-inner {
       display: flex;
-      gap: 4px;
+      gap: 0;
       background: var(--offwhite);
-      border: 1px solid var(--lightgray);
-      padding: 4px;
-      border-radius: 10px;
+      border: 2px solid var(--lightgray);
+      border-radius: 12px;
+      overflow: hidden;
     }
     .year-btn {
-      font-family: 'DM Sans', sans-serif;
-      font-size: .85rem;
-      font-weight: 700;
-      padding: 12px 28px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 900;
+      padding: 16px 40px;
       border: none;
       background: transparent;
       color: var(--gray);
       cursor: pointer;
-      border-radius: 8px;
-      transition: all .25s;
-      letter-spacing: .06em;
+      transition: all .3s;
+      letter-spacing: .04em;
+      position: relative;
+    }
+    .year-btn + .year-btn {
+      border-left: 2px solid var(--lightgray);
     }
     .year-btn.active {
       background: var(--navy);
       color: var(--sky300);
-      box-shadow: 0 2px 8px rgba(12,74,110,.2);
     }
     .year-btn:hover:not(.active) {
       background: rgba(12,74,110,.06);
       color: var(--navy);
+    }
+    .year-btn .btn-pages {
+      display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: inherit;
+      opacity: .6;
+      margin-top: 4px;
     }
 
     /* ── Gallery Controls ── */
@@ -361,13 +370,15 @@
       }
       .lightbox-prev { left: 10px; }
       .lightbox-next { right: 10px; }
-      .year-btn { padding: 10px 20px; font-size: .8rem; }
+      .year-btn { padding: 12px 24px; font-size: .95rem; }
     }
     @media (max-width: 560px) {
       .report-grid.view-two,
       .report-grid.view-three {
         grid-template-columns: 1fr;
       }
+      .year-toggle-inner { flex-direction: column; }
+      .year-btn + .year-btn { border-left: none; border-top: 2px solid var(--lightgray); }
     }
 
     @media print {
@@ -387,17 +398,17 @@
   <section class="report-hero">
     <div class="report-hero-content">
       <div class="gold-bar"></div>
-      <h1 id="reportTitle">Accomplishment Report</h1>
+      <h1>Accomplishment Report</h1>
+      <div class="hero-year" id="heroYear">2026</div>
       <p id="reportDesc">A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason.</p>
-      <div class="year-badge" id="yearBadge">📄 Select a year below</div>
     </div>
   </section>
 
   <!-- ══ YEAR TOGGLE ══ -->
   <div class="year-toggle">
     <div class="year-toggle-inner">
-      <button class="year-btn" data-year="2025">2025</button>
-      <button class="year-btn active" data-year="2026">2026</button>
+      <button class="year-btn" data-year="2025">2025<span class="btn-pages">97 Pages</span></button>
+      <button class="year-btn active" data-year="2026">2026<span class="btn-pages">92 Pages</span></button>
     </div>
   </div>
 
@@ -437,10 +448,9 @@
 
   <script>
     (function () {
-      // ── Report data ──
       var reports = {
-        '2025': { pages: 97, folder: '2025', title: '2025 Accomplishment Report', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2025.' },
-        '2026': { pages: 92, folder: '2026', title: '2026 Accomplishment Report', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2026.' }
+        '2025': { pages: 97, folder: '2025', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2025.' },
+        '2026': { pages: 92, folder: '2026', desc: 'A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2026.' }
       };
 
       var activeYear = '2026';
@@ -450,23 +460,18 @@
       var lightboxImg = document.getElementById('lightboxImg');
       var lightboxCounter = document.getElementById('lightboxCounter');
       var reportStats = document.getElementById('reportStats');
-      var reportTitle = document.getElementById('reportTitle');
       var reportDesc = document.getElementById('reportDesc');
-      var yearBadge = document.getElementById('yearBadge');
+      var heroYear = document.getElementById('heroYear');
 
-      // ── Load report for year ──
       function loadReport(year) {
         activeYear = year;
         var report = reports[year];
         currentPage = 1;
 
-        // Update hero
-        reportTitle.textContent = report.title;
+        heroYear.textContent = year;
         reportDesc.textContent = report.desc;
-        yearBadge.textContent = '📄 Fiscal Year ' + year + ' · ' + report.pages + ' Pages';
-        reportStats.innerHTML = 'Showing <strong>' + report.pages + '</strong> pages · Click any image to enlarge';
+        reportStats.innerHTML = 'Showing <strong>' + report.pages + '</strong> pages of <strong>' + year + '</strong> · Click any image to enlarge';
 
-        // Clear and rebuild grid
         grid.innerHTML = '';
         for (var i = 1; i <= report.pages; i++) {
           var page = document.createElement('div');
@@ -479,20 +484,15 @@
           grid.appendChild(page);
         }
 
-        // Update year buttons
         document.querySelectorAll('.year-btn').forEach(function (btn) {
           btn.classList.toggle('active', btn.dataset.year === year);
         });
       }
 
-      // ── Year Toggle ──
       document.querySelectorAll('.year-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          loadReport(btn.dataset.year);
-        });
+        btn.addEventListener('click', function () { loadReport(btn.dataset.year); });
       });
 
-      // ── View Toggle ──
       document.querySelectorAll('.view-btn').forEach(function (btn) {
         btn.addEventListener('click', function () {
           document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('active'); });
@@ -501,7 +501,6 @@
         });
       });
 
-      // ── Lightbox ──
       function openLightbox(page) {
         currentPage = page;
         updateLightbox();
@@ -517,7 +516,7 @@
       function updateLightbox() {
         var report = reports[activeYear];
         lightboxImg.src = 'images/accomplishment-report/' + report.folder + '/' + currentPage + '.png';
-        lightboxCounter.textContent = currentPage + ' / ' + report.pages;
+        lightboxCounter.textContent = activeYear + ' · Page ' + currentPage + ' / ' + report.pages;
       }
 
       function prevPage() {
@@ -535,11 +534,7 @@
       document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
       document.getElementById('lightboxPrev').addEventListener('click', prevPage);
       document.getElementById('lightboxNext').addEventListener('click', nextPage);
-
-      lightbox.addEventListener('click', function (e) {
-        if (e.target === lightbox) closeLightbox();
-      });
-
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
       document.addEventListener('keydown', function (e) {
         if (!lightbox.classList.contains('active')) return;
         if (e.key === 'Escape') closeLightbox();
@@ -547,7 +542,6 @@
         if (e.key === 'ArrowRight') nextPage();
       });
 
-      // ── Init ──
       loadReport('2026');
     })();
   </script>
