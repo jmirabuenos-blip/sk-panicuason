@@ -23,6 +23,7 @@
         { label: 'Programs', href: 'programs.html' },
         { label: 'Events',   href: 'events.html' },
         { label: 'Gallery',  href: 'gallery.html' },
+        { label: 'Accomplishment Report', href: 'accomplishment-report.html' },
       ]
     },
     { label: 'Budget',      href: 'budget.html' },

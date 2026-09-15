@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SK Barangay Panicuason — 2025 Accomplishment Report</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <script src="js/nav.js" defer></script>
+  <script src="js/footer.js" defer></script>
+  <style>
+    /* ── Accomplishment Report Page Styles ── */
+    .report-hero {
+      background: var(--navy);
+      padding: 140px 32px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .report-hero::after {
+      content: '';
+      position: absolute;
+      right: 0; top: 0; bottom: 0;
+      width: 40%;
+      background: var(--navy2);
+      clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%);
+    }
+    .report-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .report-hero .gold-bar {
+      width: 48px;
+      height: 4px;
+      background: var(--sky400);
+      margin: 0 auto 24px;
+    }
+    .report-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .report-hero p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,.55);
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .report-hero .year-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 10px 24px;
+      margin-top: 24px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--sky300);
+      letter-spacing: .06em;
+    }
+
+    /* ── Gallery Controls ── */
+    .report-controls {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 32px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .report-stats {
+      font-size: .85rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+    .report-stats strong {
+      color: var(--navy);
+      font-weight: 700;
+    }
+    .view-toggle {
+      display: flex;
+      gap: 4px;
+      background: var(--offwhite);
+      border: 1px solid var(--lightgray);
+      padding: 4px;
+      border-radius: 8px;
+    }
+    .view-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all .2s;
+      letter-spacing: .04em;
+    }
+    .view-btn.active {
+      background: var(--navy);
+      color: var(--sky300);
+    }
+    .view-btn:hover:not(.active) {
+      background: rgba(12,74,110,.06);
+    }
+
+    /* ── Image Gallery ── */
+    .report-gallery {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px;
+    }
+    .report-grid {
+      display: grid;
+      gap: 12px;
+      transition: all .3s;
+    }
+    .report-grid.view-single {
+      grid-template-columns: 1fr;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .report-grid.view-two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .report-grid.view-three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .report-page {
+      position: relative;
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      cursor: pointer;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .report-page:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.14);
+    }
+    .report-page img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform .3s;
+    }
+    .report-page:hover img {
+      transform: scale(1.02);
+    }
+    .report-page-num {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(12,74,110,.85);
+      color: var(--sky300);
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: .06em;
+      backdrop-filter: blur(4px);
+    }
+
+    /* ── Lightbox ── */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 40, .92);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+      backdrop-filter: blur(6px);
+    }
+    .lightbox-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 10px 50px rgba(0,0,0,.4);
+      transform: scale(.95);
+      transition: transform .3s;
+    }
+    .lightbox-overlay.active .lightbox-content img {
+      transform: scale(1);
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      background: rgba(255,255,255,.15);
+      border: none;
+      color: #fff;
+      font-size: 1.6rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      z-index: 10001;
+    }
+    .lightbox-close:hover {
+      background: rgba(255,255,255,.3);
+    }
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,.12);
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .2s;
+      z-index: 10001;
+    }
+    .lightbox-nav:hover {
+      background: rgba(255,255,255,.28);
+    }
+    .lightbox-prev { left: 20px; }
+    .lightbox-next { right: 20px; }
+    .lightbox-counter {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.5);
+      color: rgba(255,255,255,.8);
+      font-size: .82rem;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 20px;
+      letter-spacing: .06em;
+      z-index: 10001;
+    }
+
+    /* ── Print All Button ── */
+    .print-all-bar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 40px;
+      display: flex;
+      justify-content: center;
+    }
+    .print-all-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--sky400);
+      color: var(--navy);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      text-decoration: none;
+    }
+    .print-all-btn:hover {
+      background: var(--sky300);
+      transform: translateY(-2px);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .report-grid.view-three {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .report-controls {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .lightbox-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+      }
+      .lightbox-prev { left: 10px; }
+      .lightbox-next { right: 10px; }
+    }
+    @media (max-width: 560px) {
+      .report-grid.view-two,
+      .report-grid.view-three {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media print {
+      .navbar, .footer, .report-controls, .print-all-bar,
+      .lightbox-overlay, .lightbox-nav, .lightbox-close,
+      .lightbox-counter { display: none !important; }
+      .report-page { break-inside: avoid; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ NAVBAR (shared) ══ -->
+  <div id="sk-nav"></div>
+
+  <!-- ══ REPORT HERO ══ -->
+  <section class="report-hero">
+    <div class="report-hero-content">
+      <div class="gold-bar"></div>
+      <h1>2025 Accomplishment Report</h1>
+      <p>A comprehensive review of programs, projects, and milestones achieved by SK Barangay Panicuason throughout the year 2025.</p>
+      <div class="year-badge">📄 Fiscal Year 2025 · 97 Pages</div>
+    </div>
+  </section>
+
+  <!-- ══ CONTROLS ══ -->
+  <div class="report-controls">
+    <div class="report-stats">
+      Showing <strong>97</strong> pages · Click any image to enlarge
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn" data-view="single" title="Single view">1 Col</button>
+      <button class="view-btn" data-view="two" title="Two columns">2 Col</button>
+      <button class="view-btn active" data-view="three" title="Three columns">3 Col</button>
+    </div>
+  </div>
+
+  <!-- ══ GALLERY ══ -->
+  <section class="report-gallery">
+    <div class="report-grid view-three" id="reportGrid"></div>
+  </section>
+
+  <!-- ══ PRINT ALL ══ -->
+  <div class="print-all-bar">
+    <button class="print-all-btn" onclick="window.print()">🖨️ Print Report</button>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <div id="sk-footer"></div>
+
+  <!-- ══ LIGHTBOX ══ -->
+  <div class="lightbox-overlay" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
+    <div class="lightbox-content">
+      <img src="" alt="Report page" id="lightboxImg" />
+    </div>
+    <div class="lightbox-counter" id="lightboxCounter">1 / 97</div>
+  </div>
+
+  <script>
+    (function () {
+      const TOTAL_PAGES = 97;
+      const grid = document.getElementById('reportGrid');
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightboxImg');
+      const lightboxCounter = document.getElementById('lightboxCounter');
+      let currentPage = 0;
+
+      // ── Generate gallery items ──
+      for (let i = 1; i <= TOTAL_PAGES; i++) {
+        const page = document.createElement('div');
+        page.className = 'report-page';
+        page.dataset.page = i;
+        page.innerHTML =
+          '<img src="images/accomplishment-report/2025/' + i + '.png" alt="Page ' + i + '" loading="lazy" />' +
+          '<span class="report-page-num">Page ' + i + '</span>';
+        page.addEventListener('click', function () { openLightbox(i); });
+        grid.appendChild(page);
+      }
+
+      // ── View Toggle ──
+      document.querySelectorAll('.view-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          grid.className = 'report-grid view-' + btn.dataset.view;
+        });
+      });
+
+      // ── Lightbox ──
+      function openLightbox(page) {
+        currentPage = page;
+        updateLightbox();
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      function updateLightbox() {
+        lightboxImg.src = 'images/accomplishment-report/2025/' + currentPage + '.png';
+        lightboxCounter.textContent = currentPage + ' / ' + TOTAL_PAGES;
+      }
+
+      function prevPage() {
+        currentPage = currentPage > 1 ? currentPage - 1 : TOTAL_PAGES;
+        updateLightbox();
+      }
+
+      function nextPage() {
+        currentPage = currentPage < TOTAL_PAGES ? currentPage + 1 : 1;
+        updateLightbox();
+      }
+
+      document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+      document.getElementById('lightboxPrev').addEventListener('click', prevPage);
+      document.getElementById('lightboxNext').addEventListener('click', nextPage);
+
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') prevPage();
+        if (e.key === 'ArrowRight') nextPage();
+      });
+    })();
+  </script>
+</body>
+</html>

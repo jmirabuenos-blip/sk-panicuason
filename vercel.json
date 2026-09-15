@@ -23,6 +23,7 @@
     { "source": "/contact",              "destination": "/contact.html" },
     { "source": "/resolutions",          "destination": "/resolutions.html" },
     { "source": "/history",              "destination": "/history.html" },
-    { "source": "/demographics",         "destination": "/demographics.html" }
+    { "source": "/demographics",         "destination": "/demographics.html" },
+    { "source": "/accomplishment-report", "destination": "/accomplishment-report.html" }
   ]
 }
