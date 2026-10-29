@@ -57,7 +57,10 @@
           return Object.assign({ id: doc.id }, doc.data());
         });
         renderTable();
-      });
+      }, function () {
+      if (tableContainer) tableContainer.innerHTML = '<p class="empty-state" role="alert">Unable to load records. Check your connection and account permissions, then reload this page.</p>';
+      showToast('Unable to load records. Please reload to try again.', 'error');
+    });
   }
 
   function loadItems() {
@@ -73,7 +76,7 @@
 
     var rows = allItems.map(function (item) {
       var thumb = item.imageUrl
-        ? '<img class="event-thumb" src="' + esc(item.imageUrl) + '" alt="" />'
+        ? '<img loading="lazy" decoding="async" class="event-thumb" src="' + esc(item.imageUrl) + '" alt="" />'
         : '<div class="event-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--admin-text-muted);">&#128227;</div>';
       var tagStyle = 'background:' + (item.tagColor || '#f1f5f9') + ';color:' + (item.tagColor ? '#fff' : 'var(--admin-text)') + ';';
       var tagHtml = item.tag
@@ -125,6 +128,7 @@
 
   if (modalSave) {
     modalSave.addEventListener('click', async function () {
+      if (form && !form.reportValidity()) return;
       var title = titleInput ? titleInput.value.trim() : '';
       if (!title) { showToast('Please enter a title.', 'error'); return; }
       modalSave.disabled = true;
@@ -133,7 +137,7 @@
         var imageUrl = imageInput ? imageInput.value.trim() : '';
         if (imageFile && imageFile.files.length > 0) {
           try { imageUrl = await uploadImage(imageFile.files[0]); }
-          catch (e) { showToast('Image upload unavailable.', 'error'); imageFile.value = ''; }
+          catch (e) { throw new Error('Image upload failed. Your changes have not been saved. Try again.'); }
         }
         var payload = {
           title: title, tag: tagInput ? tagInput.value.trim() : '',
@@ -156,12 +160,12 @@
 
   function uploadImage(file) {
     return new Promise(function (resolve, reject) {
-      var timeout = setTimeout(function () { reject(new Error('Upload timed out')); }, 10000);
+      var timeout = setTimeout(function () { if (uploadTask) uploadTask.cancel(); reject(new Error('Upload timed out')); }, 60000);
       var name = 'announcements/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
       var ref = storage.ref(name);
       uploadTask = ref.put(file);
       uploadTask.on('state_changed', null, function (e) { clearTimeout(timeout); reject(e); },
-        async function () { clearTimeout(timeout); var url = await ref.getDownloadURL(); uploadTask = null; resolve(url); });
+        async function () { clearTimeout(timeout); try { var url = await ref.getDownloadURL(); uploadTask = null; resolve(url); } catch (error) { reject(error); } });
     });
   }
 
@@ -201,7 +205,7 @@
   if (confirmModal) confirmModal.addEventListener('click', function (e) { if (e.target === confirmModal) { deleteId = null; confirmModal.classList.remove('show'); } });
   if (logoutBtn) logoutBtn.addEventListener('click', function () { AdminAuth.signOut().then(function () { window.location.href = 'login.html'; }); });
 
-  function esc(str) { var d = document.createElement('div'); d.textContent = str; return d.innerHTML; }
+  function esc(str) { var d = document.createElement('div'); d.textContent = str; return d.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
   function showToast(msg, type) {
     var c = document.getElementById('toastContainer'); if (!c) return;
     var t = document.createElement('div'); t.className = 'toast ' + (type || ''); t.textContent = msg; c.appendChild(t);

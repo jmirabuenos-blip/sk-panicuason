@@ -12,37 +12,6 @@
   });
 })();
 
-// ── HAMBURGER MENU ──
-const hamburger = document.getElementById('hamburger');
-const navLinks  = document.getElementById('navLinks');
-
-if (hamburger && navLinks) {
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', navLinks.classList.contains('open'));
-  });
-
-  navLinks.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => navLinks.classList.remove('open'));
-  });
-
-  document.addEventListener('click', (e) => {
-    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
-      navLinks.classList.remove('open');
-    }
-  });
-}
-
-// ── NAVBAR SHADOW ON SCROLL ──
-const navbar = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-  if (navbar) {
-    navbar.style.boxShadow = window.scrollY > 10
-      ? '0 4px 32px rgba(10,22,40,.5)'
-      : 'none';
-  }
-});
-
 // ── SCROLL REVEAL ──
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -83,25 +52,3 @@ const statObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 
 document.querySelectorAll('.stat-num[data-target]').forEach(el => statObserver.observe(el));
-
-// ── GALLERY FILTER (for gallery.html) ──
-const filterBtns   = document.querySelectorAll('.filter-btn');
-const galleryItems = document.querySelectorAll('.gallery-item');
-
-if (filterBtns.length && galleryItems.length) {
-  filterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const filter = btn.dataset.filter;
-          galleryItems.forEach(item => {
-           if (filter === 'all' || item.dataset.cat === filter) {
-             item.classList.remove('hidden');
-           } else {
-             item.classList.add('hidden');
-           }
-        });
-    });
-  });
-}

@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//SK Panicuason//Community events//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:community-event-20261030@sk-panicuason
+DTSTAMP:20261029T000000Z
+DTSTART;VALUE=DATE:20261030
+DTEND;VALUE=DATE:20261031
+SUMMARY:October 30 community event
+DESCRIPTION:Date reminder only. See Facebook for event details and time.
+URL:https://www.facebook.com/share/p/1KFNXN2iKn/
+END:VEVENT
+END:VCALENDAR

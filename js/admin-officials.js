@@ -43,6 +43,9 @@
     db.collection('officials').orderBy('order', 'asc').onSnapshot(function (snap) {
       allItems = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
       renderTable();
+    }, function () {
+      if (tableContainer) tableContainer.innerHTML = '<p class="empty-state" role="alert">Unable to load records. Check your connection and account permissions, then reload this page.</p>';
+      showToast('Unable to load records. Please reload to try again.', 'error');
     });
   }
 
@@ -53,7 +56,7 @@
     if (allItems.length === 0) { tableContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128101;</div><p>No officials yet.</p></div>'; return; }
     var rows = allItems.map(function (item) {
       var thumb = item.imageUrl
-        ? '<img class="event-thumb" src="' + esc(item.imageUrl) + '" alt="" style="height:44px;width:44px;border-radius:50%;object-fit:cover;" />'
+        ? '<img loading="lazy" decoding="async" class="event-thumb" src="' + esc(item.imageUrl) + '" alt="" style="height:44px;width:44px;border-radius:50%;object-fit:cover;" />'
         : '<div class="event-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--admin-text-muted);border-radius:50%;">&#128100;</div>';
       var roleBadge = item.isChairman ? '<span class="badge badge-upcoming">Chairman</span>' : '<span class="badge badge-past">Council</span>';
       return '<tr><td>' + thumb + '</td><td><strong>' + esc(item.name || 'Unnamed') + '</strong></td><td>' + esc(item.position || '—') + '</td><td>' + roleBadge + '</td><td>' + (item.order != null ? item.order : '—') + '</td><td><div class="action-btns"><button class="btn-edit" onclick="OfficialsAdmin.edit(\'' + item.id + '\')">Edit</button><button class="btn-delete" onclick="OfficialsAdmin.confirmDelete(\'' + item.id + '\')">Delete</button></div></td></tr>';
@@ -74,6 +77,7 @@
 
   if (modalSave) {
     modalSave.addEventListener('click', async function () {
+      if (form && !form.reportValidity()) return;
       var name = nameInput ? nameInput.value.trim() : '';
       if (!name) { showToast('Please enter a name.', 'error'); return; }
       modalSave.disabled = true; modalSave.textContent = 'Saving…';
@@ -114,7 +118,7 @@
   if (confirmModal) confirmModal.addEventListener('click', function (e) { if (e.target === confirmModal) { deleteId = null; confirmModal.classList.remove('show'); } });
   if (logoutBtn) logoutBtn.addEventListener('click', function () { AdminAuth.signOut().then(function () { window.location.href = 'login.html'; }); });
 
-  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
   function showToast(msg, type) {
     var c = document.getElementById('toastContainer'); if (!c) return;
     var t = document.createElement('div'); t.className = 'toast ' + (type || ''); t.textContent = msg; c.appendChild(t);

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/admin.css" />
-  <link rel="icon" type="image/jpeg" href="../images/logo.jpg" />
+  <link rel="icon" type="image/webp" href="../images/logo.webp" />
 </head>
 <body class="admin-body">
 
@@ -18,7 +18,7 @@
       <!-- ══ HEADER ══ -->
       <header class="admin-header">
         <a href="index.html" class="admin-brand">
-          <img src="../images/logo.jpg" alt="SK" class="brand-logo" />
+          <img src="../images/logo.webp" alt="SK" class="brand-logo" />
           <span class="brand-name">SK Admin</span>
         </a>
 
@@ -269,29 +269,7 @@
   <script src="../js/firebase-config.js"></script>
   <script src="../js/admin-auth.js"></script>
   <script src="../js/admin-events.js"></script>
-  <script>
-    /* ── Mobile nav toggle ── */
-    (function() {
-      var hamburger = document.getElementById('adminHamburger');
-      var overlay = document.getElementById('mobileNavOverlay');
-      var panel = document.getElementById('mobileNavPanel');
-      var closeBtn = document.getElementById('mobileNavClose');
-
-      function openMobileNav() {
-        overlay.classList.add('show');
-        panel.classList.add('show');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeMobileNav() {
-        overlay.classList.remove('show');
-        panel.classList.remove('show');
-        document.body.style.overflow = '';
-      }
-
-      if (hamburger) hamburger.addEventListener('click', openMobileNav);
-      if (overlay) overlay.addEventListener('click', closeMobileNav);
-      if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
-    })();
-  </script>
+  <script src="../js/admin-nav.js"></script>
+  <script src="../js/admin-tools.js" defer></script>
 </body>
 </html>

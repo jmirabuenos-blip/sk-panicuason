@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <link rel="icon" type="image/webp" href="images/logo.webp" />
 
   <style>
     /* ── FILTER BAR ── */
@@ -214,7 +214,7 @@
         <div class="gallery-item reveal" data-cat="community"
              data-title="Post-Disaster Assessment & Road Clearing"
              data-date="November 10, 2025">
-          <img src="images/post-disaster-road-clearing.jpg" alt="Post-Disaster Road Clearing Operation" />
+          <img loading="lazy" decoding="async" src="images/post-disaster-road-clearing.webp" alt="Post-Disaster Road Clearing Operation" />
           <div class="gallery-overlay">
             <span class="g-cat">Community Service</span>
             <span class="g-title">Post-Disaster Assessment & Road Clearing</span>
@@ -225,7 +225,7 @@
         <div class="gallery-item reveal reveal-delay-1" data-cat="community"
              data-title="Relief Operations"
              data-date="November 12, 2025">
-          <img src="images/relief-operations.jpg" alt="Relief Operations" />
+          <img loading="lazy" decoding="async" src="images/relief-operations.webp" alt="Relief Operations" />
           <div class="gallery-overlay">
             <span class="g-cat">Community Service</span>
             <span class="g-title">Relief Operations</span>
@@ -236,7 +236,7 @@
         <div class="gallery-item reveal reveal-delay-2" data-cat="events"
              data-title="Pagsalingoy 2025"
              data-date="December 22, 2025">
-          <img src="images/pagsalingoy.jpg" alt="Pagsalingoy 2025" />
+          <img loading="lazy" decoding="async" src="images/pagsalingoy.webp" alt="Pagsalingoy 2025" />
           <div class="gallery-overlay">
             <span class="g-cat">Events</span>
             <span class="g-title">Pagsalingoy 2025</span>
@@ -247,7 +247,7 @@
         <div class="gallery-item reveal reveal-delay-1" data-cat="council"
              data-title="Year-End Evaluation & Assessment"
              data-date="December 30, 2025">
-          <img src="images/yearend-evaluation.jpg" alt="Year-End Evaluation and Assessment" />
+          <img loading="lazy" decoding="async" src="images/yearend-evaluation.webp" alt="Year-End Evaluation and Assessment" />
           <div class="gallery-overlay">
             <span class="g-cat">Council</span>
             <span class="g-title">Year-End Evaluation & Assessment</span>
@@ -258,7 +258,7 @@
         <div class="gallery-item reveal reveal-delay-2" data-cat="events"
              data-title="52nd Barangay Foundation Anniversary"
              data-date="2025">
-          <img src="images/52nd-foundation.jpg" alt="52nd Foundation Anniversary" />
+          <img loading="lazy" decoding="async" src="images/52nd-foundation.webp" alt="52nd Foundation Anniversary" />
           <div class="gallery-overlay">
             <span class="g-cat">Events</span>
             <span class="g-title">52nd Barangay Foundation Anniversary</span>
@@ -269,7 +269,7 @@
         <div class="gallery-item reveal reveal-delay-3" data-cat="sports"
              data-title="Milo Sports Program"
              data-date="2025">
-          <img src="images/milo.jpg" alt="Milo Sports Program" />
+          <img loading="lazy" decoding="async" src="images/milo.webp" alt="Milo Sports Program" />
           <div class="gallery-overlay">
             <span class="g-cat">Sports</span>
             <span class="g-title">Milo Sports Program</span>
@@ -280,7 +280,7 @@
         <div class="gallery-item reveal reveal-delay-1" data-cat="council"
              data-title="SK Assembly"
              data-date="2025">
-          <img src="images/KK-assembly.jpg" alt="SK Assembly" />
+          <img loading="lazy" decoding="async" src="images/KK-assembly.webp" alt="SK Assembly" />
           <div class="gallery-overlay">
             <span class="g-cat">Council</span>
             <span class="g-title">SK Assembly</span>
@@ -291,7 +291,7 @@
         <div class="gallery-item reveal reveal-delay-2" data-cat="programs"
              data-title="Hearts & Minds Seminar"
              data-date="May 14, 2026">
-          <img src="images/hearts-seminar.jpg" alt="Hearts and Minds Seminar" />
+          <img loading="lazy" decoding="async" src="images/hearts-seminar.webp" alt="Hearts and Minds Seminar" />
           <div class="gallery-overlay">
             <span class="g-cat">Programs</span>
             <span class="g-title">Hearts & Minds Seminar</span>
@@ -312,14 +312,14 @@
         <h2>More on Our Facebook Page</h2>
         <p>Follow us for real-time photos and updates from all our activities.</p>
       </div>
-      <a href="https://www.facebook.com/skpanicuason2023" target="_blank" class="btn btn-white">Visit Our Page</a>
+      <a href="https://www.facebook.com/skpanicuason2023" target="_blank" rel="noopener noreferrer" class="btn btn-white">Visit Our Page</a>
     </div>
   </section>
 
   <!-- ══ LIGHTBOX ══ -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" id="lightboxClose">&times;</button>
-    <img src="" alt="" id="lightboxImg" />
+    <img loading="lazy" decoding="async" src="" alt="" id="lightboxImg" />
     <div class="lightbox-caption">
       <div class="lc-title" id="lightboxTitle"></div>
       <div class="lc-date" id="lightboxDate"></div>
@@ -342,12 +342,15 @@
         .then(function(snap) {
           if (snap.empty) { container.innerHTML = ''; return; }
           var html = '';
+          function esc(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;', "'":'&#39;'}[c])); }
           snap.forEach(function(doc) {
             var g = doc.data();
+            ['imageUrl','linkUrl'].forEach(function(key) { if (g[key] && !/^https?:\/\//i.test(g[key]) && !/^images\//.test(g[key])) g[key] = ''; });
+            ['title','category','caption','imageUrl'].forEach(key => { g[key] = esc(g[key] || ''); });
             if (!g.imageUrl) return;
             var cat = (g.category || 'Other').toLowerCase();
             html += '<div class="gallery-item" data-cat="' + cat + '" data-title="' + (g.title || '') + '" data-date="">' +
-              '<img src="' + g.imageUrl + '" alt="' + (g.title || '') + '" />' +
+              '<img loading="lazy" decoding="async" src="' + g.imageUrl + '" alt="' + (g.title || '') + '" />' +
               '<div class="gallery-overlay">' +
               (g.category ? '<span class="g-cat">' + g.category + '</span>' : '') +
               '<span class="g-title">' + (g.title || '') + '</span>' +

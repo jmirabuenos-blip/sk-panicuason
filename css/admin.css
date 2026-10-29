@@ -1134,3 +1134,19 @@
   .admin-table-wrap { overflow-x: auto; }
   .admin-table { min-width: 560px; }
 }
+/* Shared content-management tools. */
+.admin-list-tools { display: flex; align-items: end; flex-wrap: wrap; gap: 16px; padding: 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+.admin-list-tools label { display: grid; gap: 6px; flex: 1; min-width: 200px; color: #334155; font-size: 14px; font-weight: 600; }
+.admin-list-tools input { width: 100%; padding: 12px; border: 1px solid #94a3b8; border-radius: 6px; font: inherit; font-size: 16px; }
+.admin-list-tools button { min-height: 44px; cursor: pointer; padding: 10px 16px; background: #f1f5f9; border: 1px solid #94a3b8; border-radius: 6px; font: inherit; color: #1e293b; }
+.admin-list-tools [role="status"] { font-size: 14px; color: #475569; }
+[id$="TableContainer"] { overflow-x: auto; }
+.admin-table tr[hidden] { display: none; }
+.password-toggle { background: none; border: 0; color: #175c85; padding: 10px 0; cursor: pointer; font: inherit; }
+:focus-visible { outline: 3px solid #1684bb; outline-offset: 3px; }
+@media (max-width: 600px) {
+  input, textarea, select { font-size: 16px !important; }
+  .admin-list-tools { padding: 16px; }
+  .admin-list-tools label { min-width: 100%; }
+  .modal { max-height: 90dvh; overflow-y: auto; }
+}

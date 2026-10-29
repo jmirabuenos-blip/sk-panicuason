@@ -15,7 +15,7 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <a href="index.html" class="nav-logo">
-            <img src="images/logo.jpg" alt="SK seal" />
+            <img src="images/logo.webp" alt="SK seal" />
             <div class="nav-logo-text">
               <span class="top">Sangguniang Kabataan</span>
               <span class="sub">Barangay Panicuason · Naga City</span>

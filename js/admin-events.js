@@ -12,8 +12,8 @@
   });
 
   /* ── DOM refs ── */
-  var logoutBtn      = document.getElementById('mobileLogoutBtn');
-  var userEmail      = document.getElementById('mobileUserEmail');
+  var logoutBtn      = document.getElementById('mobileLogoutBtn') || document.getElementById('logoutBtn');
+  var userEmail      = document.getElementById('mobileUserEmail') || document.getElementById('userEmail');
   var userAvatar     = document.getElementById('userAvatar');
   var topbarName     = document.getElementById('topbarName');
 
@@ -87,7 +87,10 @@
         allEvents = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
         updateDashboard();
         if (tableContainer) renderTable();
-      });
+      }, function () {
+      if (tableContainer) tableContainer.innerHTML = '<p class="empty-state" role="alert">Unable to load records. Check your connection and account permissions, then reload this page.</p>';
+      showToast('Unable to load records. Please reload to try again.', 'error');
+    });
 
     /* Announcements */
     db.collection('announcements').orderBy('order', 'asc')
@@ -95,14 +98,20 @@
         allAnnouncements = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
         var active = allAnnouncements.filter(function (a) { return a.active !== false; }).length;
         if (statAnnouncements) animateNumber(statAnnouncements, active);
-      });
+      }, function () {
+      if (tableContainer) tableContainer.innerHTML = '<p class="empty-state" role="alert">Unable to load records. Check your connection and account permissions, then reload this page.</p>';
+      showToast('Unable to load records. Please reload to try again.', 'error');
+    });
 
     /* Gallery */
     db.collection('gallery').orderBy('order', 'asc')
       .onSnapshot(function (snap) {
         allGallery = snap.docs.map(function (d) { return Object.assign({ id: d.id }, d.data()); });
         if (statGallery) animateNumber(statGallery, allGallery.length);
-      });
+      }, function () {
+      if (tableContainer) tableContainer.innerHTML = '<p class="empty-state" role="alert">Unable to load records. Check your connection and account permissions, then reload this page.</p>';
+      showToast('Unable to load records. Please reload to try again.', 'error');
+    });
   }
 
   /* ═══════════════════════════════════════════
@@ -245,7 +254,7 @@
     var rows = allEvents.map(function (ev) {
       var dateStr = ev.date ? formatDate(ev.date) : 'TBA';
       var thumb = ev.imageUrl
-        ? '<img class="event-thumb" src="' + esc(ev.imageUrl) + '" alt="" />'
+        ? '<img loading="lazy" decoding="async" class="event-thumb" src="' + esc(ev.imageUrl) + '" alt="" />'
         : '<div class="event-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--admin-text-muted);">&#128197;</div>';
       var badge = getStatusBadge(ev.status);
       return '<tr><td>' + thumb + '</td><td><strong>' + esc(ev.title || 'Untitled') + '</strong></td>' +
@@ -294,6 +303,7 @@
 
   if (modalSave) {
     modalSave.addEventListener('click', async function () {
+      if (eventForm && !eventForm.reportValidity()) return;
       var title = titleInput ? titleInput.value.trim() : '';
       if (!title) { showToast('Please enter a title.', 'error'); return; }
       modalSave.disabled = true;
@@ -302,7 +312,7 @@
         var imageUrl = imageInput ? imageInput.value.trim() : '';
         if (imageFile && imageFile.files.length > 0) {
           try { imageUrl = await uploadImage(imageFile.files[0]); }
-          catch (e) { showToast('Image upload unavailable.', 'error'); imageFile.value = ''; }
+          catch (e) { throw new Error('Image upload failed. Your changes have not been saved. Try again.'); }
         }
         var data = {
           title: title, description: descInput ? descInput.value.trim() : '',
@@ -322,12 +332,12 @@
 
   function uploadImage(file) {
     return new Promise(function (resolve, reject) {
-      var timeout = setTimeout(function () { reject(new Error('Upload timed out')); }, 10000);
+      var timeout = setTimeout(function () { if (uploadTask) uploadTask.cancel(); reject(new Error('Upload timed out')); }, 60000);
       var name = 'events/' + Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
       var ref = storage.ref(name);
       uploadTask = ref.put(file);
       uploadTask.on('state_changed', null, function (e) { clearTimeout(timeout); reject(e); },
-        async function () { clearTimeout(timeout); var url = await ref.getDownloadURL(); uploadTask = null; resolve(url); });
+        async function () { clearTimeout(timeout); try { var url = await ref.getDownloadURL(); uploadTask = null; resolve(url); } catch (error) { reject(error); } });
     });
   }
 
@@ -378,7 +388,7 @@
     var m = { upcoming: '<span class="badge badge-upcoming">Upcoming</span>', ongoing: '<span class="badge badge-ongoing">Ongoing</span>', past: '<span class="badge badge-past">Past</span>', tba: '<span class="badge badge-tba">TBA</span>' };
     return m[st] || m.upcoming;
   }
-  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML.replace(/"/g, "&quot;").replace(/'/g, "&#39;"); }
   function timeAgo(ts) {
     if (!ts) return 'Recently';
     var date = ts.seconds ? new Date(ts.seconds * 1000) : (ts.toDate ? ts.toDate() : null);

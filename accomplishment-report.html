@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
-  <link rel="icon" type="image/jpeg" href="images/logo.jpg" />
+  <link rel="icon" type="image/webp" href="images/logo.webp" />
   <script src="js/nav.js" defer></script>
   <script src="js/footer.js" defer></script>
   <style>
@@ -441,7 +441,7 @@
     <button class="lightbox-nav lightbox-prev" id="lightboxPrev">‹</button>
     <button class="lightbox-nav lightbox-next" id="lightboxNext">›</button>
     <div class="lightbox-content">
-      <img src="" alt="Report page" id="lightboxImg" />
+      <img loading="lazy" decoding="async" src="" alt="Report page" id="lightboxImg" />
     </div>
     <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
   </div>
@@ -478,7 +478,7 @@
           page.className = 'report-page';
           page.dataset.page = i;
           page.innerHTML =
-            '<img src="images/accomplishment-report/' + report.folder + '/' + i + '.png" alt="Page ' + i + '" loading="lazy" />' +
+            '<img src="images/accomplishment-report/' + report.folder + '/' + i + '.webp" alt="Page ' + i + '" loading="lazy" />' +
             '<span class="report-page-num">Page ' + i + '</span>';
           page.addEventListener('click', function () { openLightbox(parseInt(this.dataset.page)); });
           grid.appendChild(page);

@@ -51,7 +51,7 @@
 
       return `
         <li class="has-dropdown${activeClass}">
-          <a href="${link.href}" class="dropdown-toggle">
+          <a href="${link.href}" class="dropdown-toggle" aria-expanded="false">
             ${link.label}
             <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg"
                  width="12" height="12" viewBox="0 0 24 24"
@@ -76,7 +76,7 @@
     <nav class="navbar" id="sk-navbar">
       <div class="nav-inner">
         <a href="index.html" class="nav-logo">
-          <img src="images/logo.jpg" alt="SK Barangay Panicuason seal" />
+          <img src="images/logo.webp" alt="SK Barangay Panicuason seal" />
           <div class="nav-logo-text">
             <span class="top">Sangguniang Kabataan</span>
             <span class="sub">Barangay Panicuason · Naga City</span>
@@ -86,7 +86,7 @@
           ${linksHTML}
         </ul>
         <button class="nav-hamburger" id="hamburger"
-                aria-label="Toggle menu" aria-expanded="false">
+                aria-controls="navLinks" aria-label="Open menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -110,6 +110,7 @@
     hamburger.addEventListener('click', function () {
       const isOpen = navLinks.classList.toggle('open');
       hamburger.setAttribute('aria-expanded', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
     });
 
     /* Close menu when a non-dropdown link is clicked (mobile) */
@@ -131,7 +132,8 @@
       /* Only intercept on narrow screens */
       if (window.innerWidth <= 860) {
         e.preventDefault();
-        item.classList.toggle('dropdown-open');
+        const expanded = item.classList.toggle('dropdown-open');
+        toggle.setAttribute('aria-expanded', expanded);
       }
     });
   });
@@ -144,6 +146,24 @@
       });
     }
   });
+
+
+  function closeNavigation() {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open menu');
+    document.querySelectorAll('.has-dropdown').forEach(item => {
+      item.classList.remove('dropdown-open');
+      item.querySelector('.dropdown-toggle').setAttribute('aria-expanded', 'false');
+    });
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#sk-navbar')) closeNavigation();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeNavigation(); hamburger.focus(); }
+  });
+  window.matchMedia('(max-width: 860px)').addEventListener('change', closeNavigation);
 
   /* ── Scroll shadow ── */
   window.addEventListener('scroll', function () {
